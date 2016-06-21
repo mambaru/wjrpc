@@ -150,7 +150,7 @@ void workflow::create_wrn_timer_(const workflow_options& opt)
   if ( _wrn_timer != 0 )
     wrkf.release_timer(_wrn_timer);
 
-  if ( opt.wrnsize == 0 && opt.maxsize==0 || opt.show_wrn_ms==0)
+  if ( ( opt.wrnsize == 0 && opt.maxsize==0) || opt.show_wrn_ms==0)
     return;
 
   size_t wrnsize = opt.wrnsize;
