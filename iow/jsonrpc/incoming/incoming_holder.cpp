@@ -30,20 +30,22 @@ incoming_holder::data_ptr incoming_holder::parse(outgoing_handler_t error_handle
   if ( _data == nullptr )
     return nullptr;
 
-  _begin = ::iow::json::parser::parse_space(_data->begin(), _data->end());
-  try
+  iow::json::json_error e;
+  _begin = ::iow::json::parser::parse_space(_data->begin(), _data->end(), &e);
+  if ( !e )
   {
-    _end = incoming_json::serializer()( _incoming, _begin, _data->end());
+    _end = incoming_json::serializer()( _incoming, _begin, _data->end(), &e);
     _parsed = true;
   }
-  catch( ::iow::json::json_error& )
+  
+  if ( e )
   {
     incoming_holder eh( this->detach() );
     aux::send_error( std::move(eh), std::make_unique<parse_error>(), error_handler );
     return nullptr;
   }
   
-  iterator next = ::iow::json::parser::parse_space( _end, _data->end());
+  iterator next = ::iow::json::parser::parse_space( _end, _data->end(), nullptr);
   if ( next == _data->end() || *next=='\0')
     return nullptr;
 

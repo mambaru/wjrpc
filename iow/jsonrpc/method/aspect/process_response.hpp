@@ -22,44 +22,30 @@ struct process_response
     // получатель
     if ( holder.is_response() )
     {
-      try
+      json::json_error e;
+      auto pres = holder.template get_result<JResult>(&e);
+      if ( !e )
       {
-        auto pres = holder.template get_result<JResult>();
         callback( std::move(pres), nullptr);
       }
-      catch(::iow::json::json_error& e)
+      else
       {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (result): json exception: " << e.what() << std::endl << holder.result_error_message(e) );
+        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (result): json error: " << e.what() << std::endl << holder.result_error_message(e) );
         callback( nullptr, nullptr);
-      }
-      catch(std::exception& e)
-      {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (result): exception: " << e.what());
-      }
-      catch(...)
-      {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (result): unhandled exception");
       }
     }
     else if ( holder.is_error() )
     {
-      try
+      json::json_error e;
+      auto perr = holder.template get_error<JError>(&e);
+      if ( !e )
       {
-        auto perr = holder.template get_error<JError>();
         callback( nullptr, std::move(perr) );
       }
-      catch(::iow::json::json_error& e)
+      else
       {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (error): json exception: " << e.what() << std::endl << holder.result_error_message(e) );
+        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (error): json error: " << e.what() << std::endl << holder.result_error_message(e) );
         callback( nullptr, nullptr);
-      }
-      catch(std::exception& e)
-      {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (error): exception: " << e.what());
-      }
-      catch(...)
-      {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (error): unhandled exception");
       }
     }
     else

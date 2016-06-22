@@ -3,7 +3,7 @@
 #include <iow/io/client/options_json.hpp>
 #include <iow/ip/tcp/client/options.hpp>
 #include <iow/ip/tcp/connection/options_json.hpp>
-#include <iow/json/json.hpp>
+#include <iow/json2/json.hpp>
 
 namespace iow{ namespace ip{ namespace tcp{ namespace client{
 

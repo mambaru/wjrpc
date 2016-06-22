@@ -68,18 +68,18 @@ public:
   raw_t raw_id() const;
 
   template<typename V, typename J = json::value<V> >
-  V get_id() const
+  V get_id(::iow::json::json_error* e) const
   {
     V id = V();
     if ( ready_() )
     {
-      typename J::serializer()( id, _incoming.id.first, _incoming.id.second );
+      typename J::serializer()( id, _incoming.id.first, _incoming.id.second, e );
     }
     return id;
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_result() const
+  std::unique_ptr<typename J::target> get_result(::iow::json::json_error* e) const
   {
     if ( !this->has_result() )
       return nullptr;
@@ -92,31 +92,34 @@ public:
         return std::move(result);
     }
 
-    typename J::serializer()(*result, _incoming.result.first, _incoming.result.second);
+    typename J::serializer()(*result, _incoming.result.first, _incoming.result.second, e);
+    if ( e && *e) return nullptr;
     return std::move(result);
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_params() const
+  std::unique_ptr<typename J::target> get_params(::iow::json::json_error* e) const
   {
     if ( !this->has_params() )
       return nullptr;
     if ( 'n'==*_incoming.params.first)
       return nullptr; // is null 
     auto result = std::make_unique<typename J::target>();
-    typename J::serializer()(*result, _incoming.params.first, _incoming.params.second);
+    typename J::serializer()(*result, _incoming.params.first, _incoming.params.second, e);
+    if ( e && *e) return nullptr;
     return std::move(result);
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_error() const
+  std::unique_ptr<typename J::target> get_error(::iow::json::json_error* e) const
   {
     if ( !this->has_error() )
       return nullptr;
     if ( 'n'==*_incoming.error.first)
       return nullptr; // is null 
     auto result = std::make_unique<typename J::target>();
-    typename J::serializer()(*result, _incoming.error.first, _incoming.error.second);
+    typename J::serializer()(*result, _incoming.error.first, _incoming.error.second, e);
+    if ( e && *e) return nullptr;
     return std::move(result);
   }
 

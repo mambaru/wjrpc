@@ -3,8 +3,8 @@
 #include <iow/jsonrpc/outgoing/outgoing_error.hpp>
 #include <iow/jsonrpc/outgoing/version_member.hpp>
 #include <iow/jsonrpc/basic_types.hpp>
-#include <iow/json/json.hpp>
-#include <iow/json/name.hpp>
+#include <iow/json2/json.hpp>
+#include <iow/json2/name.hpp>
 
 namespace iow{ namespace jsonrpc{
 

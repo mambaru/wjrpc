@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iow/jsonrpc/outgoing/outgoing.hpp>
-#include <iow/json/json.hpp>
-#include <iow/json/name.hpp>
+#include <iow/json2/json.hpp>
+#include <iow/json2/name.hpp>
 
 namespace iow{ namespace jsonrpc{
 

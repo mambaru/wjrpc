@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iow/io/aux/write_buffer_options.hpp>
-#include <iow/json/json.hpp>
+#include <iow/json2/json.hpp>
 
 namespace iow{ namespace io{
     

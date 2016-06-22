@@ -3,7 +3,7 @@
 #include <iow/io/stream/options.hpp>
 #include <iow/io/reader/stream/options_json.hpp>
 #include <iow/io/writer/stream/options_json.hpp>
-#include <iow/json/name.hpp>
+#include <iow/json2/name.hpp>
 
 
 namespace iow{ namespace io{ namespace stream{

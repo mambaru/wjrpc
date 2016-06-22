@@ -2,8 +2,8 @@
 
 #include <iow/jsonrpc/outgoing/outgoing_request.hpp>
 #include <iow/jsonrpc/outgoing/version_member.hpp>
-#include <iow/json/name.hpp>
-#include <iow/json/json.hpp>
+#include <iow/json2/name.hpp>
+#include <iow/json2/json.hpp>
 
 namespace iow{ namespace jsonrpc{
 

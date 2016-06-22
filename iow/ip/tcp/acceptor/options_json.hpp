@@ -4,7 +4,7 @@
 #include <iow/ip/tcp/connection/options_json.hpp>
 #include <iow/ip/tcp/connection/connection.hpp>
 #include <iow/io/acceptor/options_json.hpp>
-#include <iow/json/json.hpp>
+#include <iow/json2/json.hpp>
 
 namespace iow{ namespace ip{ namespace tcp{ namespace acceptor{
 
