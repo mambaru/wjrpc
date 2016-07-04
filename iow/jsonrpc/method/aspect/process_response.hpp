@@ -24,13 +24,17 @@ struct process_response
     {
       try
       {
-        auto pres = holder.template get_result<JResult>();
-        callback( std::move(pres), nullptr);
-      }
-      catch(::iow::json::json_error& e)
-      {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (result): json exception: " << e.what() << std::endl << holder.result_error_message(e) );
-        callback( nullptr, nullptr);
+        ::iow::json::json_error e;
+        auto pres = holder.template get_result<JResult>(&e);
+        if ( !e )
+        {
+          callback( std::move(pres), nullptr);
+        }
+        else
+        {
+          JSONRPC_LOG_ERROR("iow::jsonrpc::process_response result json error: " << std::endl << holder.result_error_message(e) );
+          callback( nullptr, nullptr);
+        }
       }
       catch(std::exception& e)
       {
@@ -45,13 +49,17 @@ struct process_response
     {
       try
       {
-        auto perr = holder.template get_error<JError>();
-        callback( nullptr, std::move(perr) );
-      }
-      catch(::iow::json::json_error& e)
-      {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (error): json exception: " << e.what() << std::endl << holder.result_error_message(e) );
-        callback( nullptr, nullptr);
+        ::iow::json::json_error e;
+        auto perr = holder.template get_error<JError>(&e);
+        if ( !e ) 
+        {
+          callback( nullptr, std::move(perr) );
+        }
+        else
+        {
+          JSONRPC_LOG_ERROR("iow::jsonrpc::process_response error json error: " << std::endl << holder.result_error_message(e) );
+          callback( nullptr, nullptr);
+        }
       }
       catch(std::exception& e)
       {

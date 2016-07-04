@@ -10,7 +10,7 @@ namespace iow{ namespace jsonrpc{
 struct incoming_json
 {
   typedef incoming::pair_type pair_type;
-  typedef json::raw_pair<pair_type> pair_json;
+  typedef json::iterator_pair<pair_type> pair_json;
 
   JSON_NAME(id)
   JSON_NAME(method)

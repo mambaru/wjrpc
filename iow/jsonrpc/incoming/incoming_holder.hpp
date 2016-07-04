@@ -21,6 +21,7 @@ public:
   typedef std::function< void(outgoing_holder) > outgoing_handler_t;
   typedef std::function< void(incoming_holder, io_id_t, outgoing_handler_t )> incoming_handler_t;
 
+  typedef ::iow::json::json_error json_error;
   typedef ::iow::jsonrpc::data_type data_type;
   typedef ::iow::jsonrpc::data_ptr  data_ptr;
   typedef data_type::iterator  iterator;
@@ -37,7 +38,7 @@ public:
   operator bool () const{ return ready_();}
 
   bool ready() const { return this->ready_();}
-
+  
   bool has_method() const { return ready_() && _incoming.method.first!=_incoming.method.second; }
   bool has_result() const { return ready_() && _incoming.result.first!=_incoming.result.second; }
   bool has_error() const  { return ready_() && _incoming.error.first!=_incoming.error.second;   }
@@ -68,18 +69,18 @@ public:
   raw_t raw_id() const;
 
   template<typename V, typename J = json::value<V> >
-  V get_id() const
+  V get_id(json_error* e) const
   {
     V id = V();
     if ( ready_() )
     {
-      typename J::serializer()( id, _incoming.id.first, _incoming.id.second );
+      typename J::serializer()( id, _incoming.id.first, _incoming.id.second, e );
     }
     return id;
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_result() const
+  std::unique_ptr<typename J::target> get_result(json_error* e) const
   {
     if ( !this->has_result() )
       return nullptr;
@@ -92,31 +93,31 @@ public:
         return std::move(result);
     }
 
-    typename J::serializer()(*result, _incoming.result.first, _incoming.result.second);
+    typename J::serializer()(*result, _incoming.result.first, _incoming.result.second, e);
     return std::move(result);
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_params() const
+  std::unique_ptr<typename J::target> get_params(json_error* e) const
   {
     if ( !this->has_params() )
       return nullptr;
     if ( 'n'==*_incoming.params.first)
       return nullptr; // is null 
     auto result = std::make_unique<typename J::target>();
-    typename J::serializer()(*result, _incoming.params.first, _incoming.params.second);
+    typename J::serializer()(*result, _incoming.params.first, _incoming.params.second, e);
     return std::move(result);
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_error() const
+  std::unique_ptr<typename J::target> get_error(json_error* e) const
   {
     if ( !this->has_error() )
       return nullptr;
     if ( 'n'==*_incoming.error.first)
       return nullptr; // is null 
     auto result = std::make_unique<typename J::target>();
-    typename J::serializer()(*result, _incoming.error.first, _incoming.error.second);
+    typename J::serializer()(*result, _incoming.error.first, _incoming.error.second, e);
     return std::move(result);
   }
 

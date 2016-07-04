@@ -204,7 +204,7 @@ public:
     using namespace std::placeholders;
     if ( _allow_non_jsonrpc )
     {
-      auto beg = json::parser::parse_space( d->begin(), d->end() );
+      auto beg = json::parser::parse_space( d->begin(), d->end(), nullptr );
       if ( beg!=d->end() && *beg!='{' )
       {
         if ( auto h = _handler_map.find(io_id) )
@@ -270,7 +270,7 @@ private:
 
   void perform_response_(incoming_holder holder, io_id_t /*io_id*/, jsonrpc_outgoing_handler_t handler) 
   {
-    call_id_t call_id = holder.template get_id<call_id_t>();
+    call_id_t call_id = holder.template get_id<call_id_t>(nullptr);
     if ( auto result_handler = _call_map.detach(call_id) )
     {
       result_handler(std::move(holder));
@@ -408,7 +408,7 @@ private:
 
           if ( holder.is_response() || holder.is_error() )
           {
-            if ( auto h = pthis->_call_map.detach( holder.get_id<call_id_t>() ) )
+            if ( auto h = pthis->_call_map.detach( holder.get_id<call_id_t>(nullptr) ) )
             {
               h(std::move(holder) );
             }
