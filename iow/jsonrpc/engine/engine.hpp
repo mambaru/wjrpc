@@ -5,6 +5,8 @@
 #include <iow/jsonrpc/engine/engine_options.hpp>
 #include <iow/jsonrpc/incoming/incoming_holder.hpp>
 #include <iow/jsonrpc/outgoing/outgoing_holder.hpp>
+#include <iow/jsonrpc/outgoing/outgoing_error.hpp>
+#include <iow/jsonrpc/outgoing/outgoing_error_json.hpp>
 #include <iow/jsonrpc/types.hpp>
 #include <iow/jsonrpc/incoming/aux.hpp>
 #include <iow/owner/owner.hpp>
@@ -131,7 +133,7 @@ public:
           {
             if ( size_t count = this->remove_outdated() )
             {
-              COMMON_LOG_WARNING( count << " calls is outdated.");
+              JSONRPC_LOG_WARNING( count << " calls is outdated.");
             }
             return true;
           }
