@@ -1,7 +1,6 @@
 #pragma once
 
 #include <iow/jsonrpc/method/mem_fun/mem_fun_helper.hpp>
-#include <wfc/logger.hpp>
 
 namespace iow{ namespace jsonrpc{
 

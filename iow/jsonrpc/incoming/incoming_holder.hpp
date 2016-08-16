@@ -4,12 +4,12 @@
 #include <iow/jsonrpc/errors/errors.hpp>
 #include <iow/jsonrpc/incoming/incoming.hpp>
 #include <iow/jsonrpc/incoming/incoming_json.hpp>
-#include <iow/memory.hpp>
+#include <iow/jsonrpc/memory.hpp>
 
 #include <chrono>
 #include <cstring>
 
-#define IOW_JSON_EMPTY_OBJECT_STRING "\"~~iow-empty-object~~\""
+//#define IOW_JSON_EMPTY_OBJECT_STRING "\"~~iow-empty-object~~\""
 
 namespace iow{ namespace jsonrpc{
 
@@ -87,11 +87,11 @@ public:
     if ( 'n'==*_incoming.result.first)
       return nullptr; // is null 
     auto result = std::make_unique<typename J::target>();
-    if ( '"'==_incoming.result.first[0] && '~'==_incoming.result.first[1])
+    /*if ( '"'==_incoming.result.first[0] && '~'==_incoming.result.first[1])
     {
       if ( 0 == std::strncmp( &(_incoming.result.first[0]), IOW_JSON_EMPTY_OBJECT_STRING, std::strlen(IOW_JSON_EMPTY_OBJECT_STRING) ) )
         return std::move(result);
-    }
+    }*/
 
     typename J::serializer()(*result, _incoming.result.first, _incoming.result.second, e);
     if ( e && *e) return nullptr;

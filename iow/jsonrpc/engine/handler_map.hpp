@@ -1,9 +1,9 @@
 #pragma once
 
 #include <fas/aop.hpp>
-#include <iow/mutex.hpp>
-#include <iow/memory.hpp>
 #include <mutex>
+#include <memory>
+
 
 
 namespace iow{ namespace jsonrpc{
@@ -24,7 +24,7 @@ public:
 
   handler_ptr find(io_id_t io_id) const
   {
-    read_lock< mutex_type > lk(_mutex);
+    std::lock_guard< mutex_type > lk(_mutex);
     auto itr = _handlers.find(io_id);
     if ( itr == _handlers.end() )
       return nullptr;
@@ -78,7 +78,7 @@ public:
 
 private:
   typedef std::map<io_id_t, data > handler_map_t;
-  typedef rwlock<std::mutex> mutex_type;
+  typedef std::mutex mutex_type;
   handler_map_t _handlers;
   mutable mutex_type _mutex;
 };

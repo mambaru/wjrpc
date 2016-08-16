@@ -3,7 +3,6 @@
 #include <iow/jsonrpc/incoming/incoming_holder.hpp>
 #include <iow/jsonrpc/outgoing/outgoing_holder.hpp>
 
-
 #include <iow/jsonrpc/method/aspect/tags.hpp>
 #include <iow/jsonrpc/errors/errors.hpp>
 #include <iow/jsonrpc/errors/error_json.hpp>

@@ -1,9 +1,8 @@
 #pragma once
 
 #include <iow/jsonrpc/method/mem_fun/mem_fun_helper.hpp>
-#include <iow/logger/logger.hpp>
-namespace iow{ namespace jsonrpc{
 
+namespace iow{ namespace jsonrpc{
 
 template<
   typename Params, 

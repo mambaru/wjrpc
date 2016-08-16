@@ -18,7 +18,7 @@ add_library(
   iow/workflow/thread_pool_base.cpp
   iow/jsonrpc/incoming/incoming_holder.cpp
   iow/jsonrpc/outgoing/outgoing_holder.cpp
-  iow/jsonrpc/incoming/aux.cpp
+  iow/jsonrpc/incoming/send_error.cpp
 )
 
 target_link_libraries(iow ${Boost_LIBRARIES} )

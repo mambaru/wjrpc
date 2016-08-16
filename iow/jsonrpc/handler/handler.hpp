@@ -74,29 +74,45 @@ public:
     std::lock_guard< mutex_type > lk( super::mutex() );
     super::get_aspect().template get<_invoke_>()(*this, std::move(holder), std::move(outgoing_handler) );
   }
+  
+  bool status() const 
+  {
+    return _io_id!=0;
+  }
+  
+  io_id_t get_id() const
+  {
+    return _io_id;
+  }
 
   template<typename O>
-  void start(O&& opt)
+  void start(O&& opt, io_id_t io_id)
   {
     std::lock_guard< mutex_type > lk( super::mutex() );
-    super::start_(*this, std::forward<O>(opt));
-    this->get_aspect().template get<_connect_>()(*this, super::get_id() );
+    _io_id = io_id;
+    // super::start_(*this, std::forward<O>(opt));
+    
+    
+    this->get_aspect().template get<_initialize_>()(*this, std::move(opt) );
+    this->get_aspect().template get<_connect_>()(*this, io_id );
   }
 
   void stop()
   {
     std::lock_guard< mutex_type > lk( super::mutex() );
-    this->get_aspect().template get<_disconnect_>()(*this, super::get_id() );
-    super::stop_(*this);
+    this->get_aspect().template get<_disconnect_>()(*this, _io_id );
+    //super::stop_(*this);
   }
 
   template<typename O>
   void reconfigure(O&& opt)
   {
     std::lock_guard< mutex_type > lk( super::mutex() );
-    super::reconfigure_(*this, std::forward<O>(opt));
+    this->get_aspect().template get<_initialize_>()(*this, std::move(opt) );
+    //super::reconfigure_(*this, std::forward<O>(opt));
   }
-
+private:
+  io_id_t _io_id = 0;
 };
 
 }} // iow

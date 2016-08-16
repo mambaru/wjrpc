@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iow/mutex.hpp>
 #include <iow/jsonrpc/incoming/incoming_holder.hpp>
 
 #include <queue>
@@ -16,7 +15,7 @@ public:
   typedef std::function<void(incoming_holder holder)> result_handler_t;
   typedef outgoing_holder::call_id_t call_id_t; 
   typedef std::map<call_id_t, result_handler_t> result_map;
-  typedef ::iow::rwlock<std::mutex> mutex_type;
+  typedef std::mutex mutex_type;
 
   typedef std::pair<time_t, call_id_t> time_pair;
   typedef std::priority_queue< time_pair > time_queue;
@@ -47,7 +46,7 @@ public:
   
   result_handler_t detach(call_id_t call_id)
   {
-    if ( _everytime ) this->remove_outdated();
+    //if ( _everytime ) this->remove_outdated();
     std::lock_guard<mutex_type> lk(_mutex);
     result_handler_t result = nullptr;
     auto itr = _result_map.find(call_id);

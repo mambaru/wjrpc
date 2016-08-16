@@ -8,10 +8,7 @@
 #include <iow/jsonrpc/outgoing/outgoing_error.hpp>
 #include <iow/jsonrpc/outgoing/outgoing_error_json.hpp>
 #include <iow/jsonrpc/types.hpp>
-#include <iow/jsonrpc/incoming/aux.hpp>
-#include <iow/owner/owner.hpp>
-#include <iow/io/io_id.hpp>
-
+#include <iow/jsonrpc/incoming/send_error.hpp>
 #include <wjson/strerror.hpp>
 
 #include <type_traits>
@@ -88,14 +85,16 @@ public:
     , _timer_id(0)
   {
   }
+
   /***************************************************************/
   /* Управляющие методы                                          */
   /***************************************************************/
 
   template<typename O>
-  void start(O&& opt)
+  void start(O&& opt, io_id_t io_id)
   {
-    _io_id = ::iow::io::create_id<size_t>();
+    _io_id = io_id;
+    //_io_id = ::iow::io::create_id<size_t>();
     this->reconfigure( std::forward<O>(opt) );
   }
 
@@ -103,7 +102,7 @@ public:
   void reconfigure(O&& opt1)
   {
     typename std::decay<O>::type opt = opt1;
-    _workflow = opt.engine_args.workflow;
+    //_workflow = opt.engine_args.workflow;
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
     _allow_non_jsonrpc = opt.allow_non_jsonrpc;
     
@@ -112,16 +111,17 @@ public:
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
 
-    _incoming_io_factory = [opt, this](io_id_t io_id, ::iow::io::incoming_handler_t handler, bool reg_io) -> handler_ptr
+    _incoming_io_factory = [opt, this](io_id_t io_id, raw_incoming_handler_t handler, bool reg_io) -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
  
-    _outgoing_io_factory = [opt, this](io_id_t io_id, ::iow::io::outgoing_handler_t handler, bool reg_io) -> handler_ptr
+    _outgoing_io_factory = [opt, this](io_id_t io_id, raw_outgoing_handler_t handler, bool reg_io) -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
 
+    /*
     if ( auto wf = _workflow.lock() )
     {
       wf->release_timer( _timer_id );
@@ -139,14 +139,15 @@ public:
           }
         );
       }
-    }
+    }*/
 
   }
 
   void stop()
   {
-    if ( auto wf = _workflow.lock() )
+    /*if ( auto wf = _workflow.lock() )
       wf->release_timer(_timer_id);
+      */
     _handler_map.stop();
     _call_map.clear();
   }
@@ -181,7 +182,7 @@ public:
   /***************************************************************/
   
   
-  jsonrpc_outgoing_handler_t io2rpc( ::iow::io::outgoing_handler_t handler )
+  jsonrpc_outgoing_handler_t io2rpc( raw_outgoing_handler_t handler )
   {
     if ( handler == nullptr )
       return nullptr;
@@ -193,7 +194,7 @@ public:
     };
   }
 
-  void reg_io( io_id_t io_id, ::iow::io::incoming_handler_t handler )
+  void reg_io( io_id_t io_id, raw_incoming_handler_t handler )
   {
     this->_incoming_io_factory(io_id, handler, true);
   }
@@ -203,7 +204,7 @@ public:
     _handler_map.erase(io_id);
   }
 
-  void perform_io(data_ptr d, io_id_t io_id, ::iow::io::outgoing_handler_t handler) 
+  void perform_io(data_ptr d, io_id_t io_id, raw_outgoing_handler_t handler) 
   {
     using namespace std::placeholders;
     if ( _allow_non_jsonrpc )
@@ -218,7 +219,21 @@ public:
         }
       }
     }
-    aux::perform( std::move(d), io_id, handler, std::bind(&engine::perform_io_once_, this, _1, _2, _3 ));
+
+    while ( d != nullptr )
+    {
+      incoming_holder holder(std::move(d));
+      ::wjson::json_error e;
+      d = holder.parse( [handler](outgoing_holder holder) 
+      {
+        auto d = holder.detach();
+        JSONRPC_LOG_ERROR("JSON-RPC error:" << d)
+        handler( std::move(d) );
+      });
+
+      if ( d!=nullptr )
+        this->perform_io_once_( std::move(holder), io_id, handler );
+    }
   }
 
   io_id_t get_id() const
@@ -233,7 +248,7 @@ public:
 
 private:
   
-  void perform_io_once_(incoming_holder holder, io_id_t io_id, ::iow::io::outgoing_handler_t handler)
+  void perform_io_once_(incoming_holder holder, io_id_t io_id, raw_outgoing_handler_t handler)
   {
     this->perform_incoming_( std::move(holder), io_id, [handler](outgoing_holder holder)
     {
@@ -458,7 +473,7 @@ private:
       this->upgrate_options_(opt, std::move(handler));
       if ( !ph->status() )
       {
-        ph->start(opt);
+        ph->start(opt, io_id);
       }
       else if ( reinit )
       {
@@ -480,10 +495,10 @@ private:
   std::atomic<int> _call_counter;
   std::atomic<io_id_t> _io_id;
   timer_id_t _timer_id;
-  owner_type _owner;
+  //owner_type _owner;
   
   bool _allow_non_jsonrpc = false;
-  std::weak_ptr< ::iow::workflow > _workflow;
+  //std::weak_ptr< ::iow::workflow > _workflow;
 };
 
 }}

@@ -4,7 +4,6 @@
 #include <iow/jsonrpc/outgoing/outgoing_request_json.hpp>
 #include <iow/jsonrpc/incoming/incoming_holder.hpp>
 #include <iow/jsonrpc/basic_types.hpp>
-#include <iow/memory.hpp>
 
 #include <chrono>
 #include <cstring>

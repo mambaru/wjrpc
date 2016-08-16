@@ -1,8 +1,7 @@
 #pragma once
 
 #include <iow/jsonrpc/errors.hpp>
-#include <iow/io/types.hpp>
-#include <iow/memory.hpp>
+#include <iow/jsonrpc/memory.hpp>
 #include <functional>
 
 namespace iow{ namespace jsonrpc{

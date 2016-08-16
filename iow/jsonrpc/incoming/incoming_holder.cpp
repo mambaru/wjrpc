@@ -1,7 +1,7 @@
 #include <iow/jsonrpc/incoming/incoming_holder.hpp>
 #include <iow/jsonrpc/outgoing/outgoing_holder.hpp>
 #include <iow/jsonrpc/method/aspect/send_error.hpp>
-#include <iow/jsonrpc/incoming/aux.hpp>
+#include <iow/jsonrpc/incoming/send_error.hpp>
 #include <iow/jsonrpc/errors.hpp>
 #include <iow/jsonrpc/types.hpp>
 #include <iow/logger/logger.hpp>
@@ -38,10 +38,13 @@ incoming_holder::data_ptr incoming_holder::parse(outgoing_handler_t error_handle
     _end = incoming_json::serializer()( _incoming, _begin, _data->end(), &e);
     _parsed = true;
   }
-  if ( e )
+  else 
   {
-    incoming_holder eh( this->detach() );
-    aux::send_error( std::move(eh), std::make_unique<parse_error>(), error_handler );
+    if ( error_handler!=nullptr )
+    {
+      incoming_holder eh( this->detach() );
+      aux::send_error( std::move(eh), std::make_unique<parse_error>(), error_handler );
+    }
     return nullptr;
   }
 

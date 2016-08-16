@@ -1,16 +1,20 @@
 #pragma once
 
-#include <iow/io/types.hpp>
+#include <vector>
+#include <memory>
 
 namespace iow{ namespace jsonrpc{
 
-typedef ::iow::io::io_id_t   io_id_t;
-typedef ::iow::io::data_type data_type;
-typedef ::iow::io::data_ptr  data_ptr;
+typedef size_t io_id_t;
+typedef std::vector<char> data_type;
+typedef std::unique_ptr<data_type> data_ptr;
 
 typedef data_ptr incoming_call_id_t;
 typedef int      call_id_t;
 typedef int      error_code_t;
+
+typedef std::function< void(data_ptr) > raw_outgoing_handler_t;
+typedef std::function< void(data_ptr, io_id_t, raw_outgoing_handler_t )> raw_incoming_handler_t;
 
 
 }}

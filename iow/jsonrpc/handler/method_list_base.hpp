@@ -12,11 +12,13 @@ namespace iow{ namespace jsonrpc{
 
 template< typename A = fas::aspect<> >
 class method_list_base
-  : public ::iow::io::io_base<A>
+  : public ::fas::aspect_class<A>
+  //: public ::iow::io::io_base<A>
   // , std::enable_shared_from_this< method_list_base<A> >
 {
 public:
-  typedef ::iow::io::io_base<A> super;
+  typedef ::fas::aspect_class<A> super;
+  //typedef ::iow::io::io_base<A> super;
   typedef method_list_base<A> self;
     
   typedef typename super::aspect::template advice_cast<_handler_types_>
@@ -29,7 +31,9 @@ public:
                         ::type  interface_type;
   typedef typename super::aspect::template advice_cast<_context_>
                         ::type  context_type;
-  
+  typedef typename super::aspect::template advice_cast<_mutex_type_>
+                        ::type  mutex_type;
+
   typedef typename handler_types::call_id_t        call_id_t;
   typedef typename handler_types::io_id_t          io_id_t;
   typedef typename handler_types::data_type        data_type;
@@ -150,6 +154,12 @@ public:
       std::move(callback)
     );
   }
+  
+  mutex_type& mutex() const
+  {
+    return _mutex;
+  }
+
 
 private:
   
@@ -171,11 +181,11 @@ private:
   }
   
 private:
-  friend struct super::aspect::template advice_cast< ::iow::io::_initialize_ >::type;
+  friend struct super::aspect::template advice_cast< /*::iow::io::*/_initialize_ >::type;
 
   typedef typename handler_types::sender_handler_t   sender_handler_t;
   sender_handler_t _sender_handler = sender_handler_t(nullptr);
-
+  mutable mutex_type _mutex;
 };
 
 }} // iow

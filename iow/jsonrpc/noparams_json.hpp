@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iow/jsonrpc/noparams.hpp>
-#include <iow/json/json.hpp>
+#include <wjson/json.hpp>
 
 namespace iow{ namespace jsonrpc{
 
