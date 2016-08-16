@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iow/jsonrpc/errors/errors.hpp>
-#include <iow/json/json.hpp>
-#include <iow/json/name.hpp>
+#include <wjson/json.hpp>
+#include <wjson/name.hpp>
 
 namespace iow{ namespace jsonrpc{
 
@@ -11,11 +11,11 @@ struct error_json
   JSON_NAME(code)
   JSON_NAME(message)
 
-  typedef json::object<
+  typedef ::wjson::object<
     error,
-    json::member_list<
-      json::member<n_code,    error, error_code_t,      &error::code>,
-      json::member<n_message, error, std::string,       &error::message>
+    ::wjson::member_list<
+      ::wjson::member<n_code,    error, error_code_t,      &error::code>,
+      ::wjson::member<n_message, error, std::string,       &error::message>
     >
   > type;
 

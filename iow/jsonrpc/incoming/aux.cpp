@@ -36,7 +36,7 @@ namespace iow{ namespace jsonrpc{ namespace aux{
       {
         d = holder.parse(nullptr);
       }
-      catch(const json::json_error& er)
+      catch(const ::wjson::json_error& er)
       {
         JSONRPC_LOG_WARNING( "jsonrpc::incoming_holder: parse error: " << holder.error_message(er) )
         send_error( std::move(holder), std::make_unique<parse_error>(), std::move(outgoing_handler));

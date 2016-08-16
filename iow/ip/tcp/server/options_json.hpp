@@ -3,7 +3,8 @@
 #include <iow/ip/tcp/connection/options_json.hpp>
 #include <iow/ip/tcp/acceptor/options_json.hpp>
 #include <iow/ip/tcp/server/options.hpp>
-#include <iow/json/json.hpp>
+#include <wjson/json.hpp>
+#include <wjson/name.hpp>
 
 namespace iow{ namespace ip{ namespace tcp{ namespace server{
  
@@ -15,12 +16,12 @@ struct options_json
 {
   JSON_NAME(threads)
   
-  typedef json::object<
+  typedef ::wjson::object<
     ServerOptions,
-    json::member_list<
-      json::base< AcceptorJson >,
+    ::wjson::member_list<
+      ::wjson::base< AcceptorJson >,
       // перенести в общий серевер
-      json::member<n_threads, ServerOptions, int, &ServerOptions::threads>
+      ::wjson::member<n_threads, ServerOptions, int, &ServerOptions::threads>
     >
   > type;
   typedef typename type::target target;

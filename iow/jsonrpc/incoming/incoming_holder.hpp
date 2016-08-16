@@ -21,7 +21,7 @@ public:
   typedef std::function< void(outgoing_holder) > outgoing_handler_t;
   typedef std::function< void(incoming_holder, io_id_t, outgoing_handler_t )> incoming_handler_t;
 
-  typedef ::iow::json::json_error json_error;
+  typedef ::wjson::json_error json_error;
   typedef ::iow::jsonrpc::data_type data_type;
   typedef ::iow::jsonrpc::data_ptr  data_ptr;
   typedef data_type::iterator  iterator;
@@ -68,8 +68,8 @@ public:
 
   raw_t raw_id() const;
 
-  template<typename V, typename J = json::value<V> >
-  V get_id(json_error* e) const
+  template<typename V, typename J = ::wjson::value<V> >
+  V get_id( ::wjson::json_error* e) const
   {
     V id = V();
     if ( ready_() )
@@ -80,7 +80,7 @@ public:
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_result(json_error* e) const
+  std::unique_ptr<typename J::target> get_result( ::wjson::json_error* e) const
   {
     if ( !this->has_result() )
       return nullptr;
@@ -94,11 +94,12 @@ public:
     }
 
     typename J::serializer()(*result, _incoming.result.first, _incoming.result.second, e);
+    if ( e && *e) return nullptr;
     return std::move(result);
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_params(json_error* e) const
+  std::unique_ptr<typename J::target> get_params( ::wjson::json_error* e) const
   {
     if ( !this->has_params() )
       return nullptr;
@@ -106,11 +107,12 @@ public:
       return nullptr; // is null 
     auto result = std::make_unique<typename J::target>();
     typename J::serializer()(*result, _incoming.params.first, _incoming.params.second, e);
+    if ( e && *e) return nullptr;
     return std::move(result);
   }
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_error(json_error* e) const
+  std::unique_ptr<typename J::target> get_error( ::wjson::json_error* e) const
   {
     if ( !this->has_error() )
       return nullptr;
@@ -118,20 +120,21 @@ public:
       return nullptr; // is null 
     auto result = std::make_unique<typename J::target>();
     typename J::serializer()(*result, _incoming.error.first, _incoming.error.second, e);
+    if ( e && *e) return nullptr;
     return std::move(result);
   }
 
   std::string str() const;
   
-  std::string error_message(const json::json_error& e) const;
+  std::string error_message(const ::wjson::json_error& e) const;
 
-  std::string params_error_message(const json::json_error& e) const;
+  std::string params_error_message(const ::wjson::json_error& e) const;
 
-  std::string result_error_message(const json::json_error& e) const;
+  std::string result_error_message(const ::wjson::json_error& e) const;
 
-  std::string error_error_message(const json::json_error& e) const;
+  std::string error_error_message(const ::wjson::json_error& e) const;
 
-  std::string id_error_message(const json::json_error& e) const;
+  std::string id_error_message(const ::wjson::json_error& e) const;
 
   const incoming& get() const ;
 

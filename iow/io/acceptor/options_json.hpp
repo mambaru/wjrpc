@@ -2,7 +2,8 @@
 
 #include <string>
 #include <iow/io/acceptor/options.hpp>
-#include <iow/json/json.hpp>
+#include <wjson/json.hpp>
+#include <wjson/name.hpp>
 
 namespace iow{ namespace io{ namespace acceptor{
 
@@ -19,14 +20,14 @@ struct options_json
   JSON_NAME(port)
   JSON_NAME(backlog)
   
-  typedef json::object<
+  typedef ::wjson::object<
     options_type,
-    json::member_list<
-      json::member< n_connection, options_type, connection_options_type, &options_type::connection, connection_options_json>,
-      json::member< n_max_connections, options_type, int, &options_type::max_connections >,
-      json::member< n_addr, options_type, std::string, &options_type::addr>,
-      json::member< n_port, options_type, std::string, &options_type::port>,
-      json::member< n_backlog, options_type, int, &options_type::backlog >
+    ::wjson::member_list<
+      ::wjson::member< n_connection, options_type, connection_options_type, &options_type::connection, connection_options_json>,
+      ::wjson::member< n_max_connections, options_type, int, &options_type::max_connections >,
+      ::wjson::member< n_addr, options_type, std::string, &options_type::addr>,
+      ::wjson::member< n_port, options_type, std::string, &options_type::port>,
+      ::wjson::member< n_backlog, options_type, int, &options_type::backlog >
     >
   > type;
   typedef typename type::target target;

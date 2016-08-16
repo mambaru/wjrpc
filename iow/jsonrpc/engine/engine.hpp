@@ -10,6 +10,8 @@
 #include <iow/owner/owner.hpp>
 #include <iow/io/io_id.hpp>
 
+#include <wjson/strerror.hpp>
+
 #include <type_traits>
 
 namespace iow{ namespace jsonrpc{
@@ -204,7 +206,7 @@ public:
     using namespace std::placeholders;
     if ( _allow_non_jsonrpc )
     {
-      auto beg = json::parser::parse_space( d->begin(), d->end(), nullptr );
+      auto beg = ::wjson::parser::parse_space( d->begin(), d->end(), nullptr );
       if ( beg!=d->end() && *beg!='{' )
       {
         if ( auto h = _handler_map.find(io_id) )
@@ -270,14 +272,19 @@ private:
 
   void perform_response_(incoming_holder holder, io_id_t /*io_id*/, jsonrpc_outgoing_handler_t handler) 
   {
-    call_id_t call_id = holder.template get_id<call_id_t>(nullptr);
+    ::wjson::json_error e;
+    call_id_t call_id = holder.template get_id<call_id_t>(&e);
+
     if ( auto result_handler = _call_map.detach(call_id) )
     {
       result_handler(std::move(holder));
     }
     else if ( handler!=nullptr )
     {
-      JSONRPC_LOG_WARNING("jsonrpc::engind incoming response with call_id=" << call_id << " not found")
+      if ( !e )
+        JSONRPC_LOG_WARNING("jsonrpc::engind incoming response with call_id=" << call_id << " not found")
+      else
+        JSONRPC_LOG_WARNING("jsonrpc::engind incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
       handler( outgoing_holder() );
     }
   }
@@ -353,7 +360,7 @@ private:
             outgoing_error<error> err;
             
             data_ptr pid = std::make_unique<data_type>();
-            iow::json::value<int>::serializer()( call_id, std::back_inserter(*pid));
+            ::wjson::value<int>::serializer()( call_id, std::back_inserter(*pid));
             err.error = std::make_unique<service_unavailable>();
             err.id = std::move(pid);
             

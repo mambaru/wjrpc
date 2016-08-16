@@ -3,8 +3,7 @@
 #include <iow/jsonrpc/outgoing/outgoing_error.hpp>
 #include <iow/jsonrpc/outgoing/version_member.hpp>
 #include <iow/jsonrpc/basic_types.hpp>
-#include <iow/json/json.hpp>
-#include <iow/json/name.hpp>
+#include <wjson/json.hpp>
 
 namespace iow{ namespace jsonrpc{
 
@@ -16,21 +15,21 @@ struct outgoing_error_json
   typedef typename T::target target;
   typedef outgoing_error<target> error_type;
   typedef typename error_type::version_type version_type;
-  typedef ::iow::json::pointer<std::unique_ptr<target>, T> error_json;
-  typedef ::iow::json::pointer<
+  typedef ::wjson::pointer<std::unique_ptr<target>, T> error_json;
+  typedef ::wjson::pointer<
               std::unique_ptr<data_type>, 
-              ::iow::json::raw_value< data_type> 
+              ::wjson::raw_value< data_type> 
           > id_json;
   
   JSON_NAME(error)
   JSON_NAME(id)
   
-  typedef ::iow::json::object<
+  typedef ::wjson::object<
     error_type,
-    json::member_list<
+    ::wjson::member_list<
       version_member::type,
-      ::iow::json::member<n_error, error_type, std::unique_ptr<target>, &error_type::error, error_json >,
-      ::iow::json::member<n_id,    error_type, data_ptr, &error_type::id,  id_json >
+      ::wjson::member<n_error, error_type, std::unique_ptr<target>, &error_type::error, error_json >,
+      ::wjson::member<n_id,    error_type, data_ptr, &error_type::id,  id_json >
     >
   > type;
 

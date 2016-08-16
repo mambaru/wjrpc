@@ -2,6 +2,7 @@
 
 #include <iow/io/reader/stream/options.hpp>
 #include <iow/io/aux/read_buffer_options_json.hpp>
+#include <wjson/json.hpp>
 
 namespace iow{ namespace io{ namespace reader{ namespace stream{
 
@@ -12,10 +13,10 @@ struct options_json
   typedef ::iow::io::reader::stream::options<data_type>  options_type;
   typedef ::iow::io::read_buffer_options_json<data_type> buffer_json;
 
-  typedef json::object<
+  typedef ::wjson::object<
     options_type,
-    json::member_list<
-      json::base<buffer_json>
+    ::wjson::member_list<
+      ::wjson::base<buffer_json>
     >
   > type;
   typedef typename type::target target;

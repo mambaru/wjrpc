@@ -12,10 +12,10 @@ struct options_json
   typedef ::iow::io::writer::stream::options<data_type>  options_type;
   typedef ::iow::io::write_buffer_options_json<data_type> buffer_json;
 
-  typedef json::object<
+  typedef ::wjson::object<
     options_type,
-    json::member_list<
-      json::base<buffer_json>
+    ::wjson::member_list<
+      ::wjson::base<buffer_json>
     >
   > type;
   typedef typename type::target target;

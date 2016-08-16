@@ -5,7 +5,7 @@
 #include <iow/jsonrpc/errors.hpp>
 #include <iow/jsonrpc/types.hpp>
 #include <iow/logger/logger.hpp>
-#include <iow/json/strerror.hpp>
+#include <wjson/strerror.hpp>
 
 namespace iow{ namespace jsonrpc{
 
@@ -31,14 +31,13 @@ incoming_holder::data_ptr incoming_holder::parse(outgoing_handler_t error_handle
   if ( _data == nullptr )
     return nullptr;
 
-  ::iow::json::json_error e;
-  _begin = ::iow::json::parser::parse_space(_data->begin(), _data->end(), &e);
+  ::wjson::json_error e;
+  _begin = ::wjson::parser::parse_space(_data->begin(), _data->end(), &e);
   if ( !e )
   {
     _end = incoming_json::serializer()( _incoming, _begin, _data->end(), &e);
     _parsed = true;
   }
-
   if ( e )
   {
     incoming_holder eh( this->detach() );
@@ -46,7 +45,7 @@ incoming_holder::data_ptr incoming_holder::parse(outgoing_handler_t error_handle
     return nullptr;
   }
 
-  iterator next = ::iow::json::parser::parse_space( _end, _data->end(), nullptr);
+  iterator next = ::wjson::parser::parse_space( _end, _data->end(), nullptr);
   if ( next == _data->end() || *next=='\0')
     return nullptr;
 
@@ -93,31 +92,31 @@ std::string incoming_holder::str() const
 }
 
 
-std::string incoming_holder::error_message(const json::json_error& e) const
+std::string incoming_holder::error_message(const ::wjson::json_error& e) const
 {
   if ( _data != nullptr   )
-    return ::iow::json::strerror::message_trace( e, _data->begin(), _data->end() );
-  return ::iow::json::strerror::message(e);
+    return ::wjson::strerror::message_trace( e, _data->begin(), _data->end() );
+  return ::wjson::strerror::message(e);
 }
 
-std::string incoming_holder::params_error_message(const json::json_error& e) const
+std::string incoming_holder::params_error_message(const ::wjson::json_error& e) const
 {
-  return ::iow::json::strerror::message_trace( e, _incoming.params.first, _incoming.params.second);
+  return ::wjson::strerror::message_trace( e, _incoming.params.first, _incoming.params.second);
 }
 
-std::string incoming_holder::result_error_message(const json::json_error& e) const
+std::string incoming_holder::result_error_message(const ::wjson::json_error& e) const
 {
-  return ::iow::json::strerror::message_trace( e, _incoming.result.first, _incoming.result.second);
+  return ::wjson::strerror::message_trace( e, _incoming.result.first, _incoming.result.second);
 }
 
-std::string incoming_holder::error_error_message(const json::json_error& e) const
+std::string incoming_holder::error_error_message(const ::wjson::json_error& e) const
 {
-  return ::iow::json::strerror::message_trace( e, _incoming.error.first, _incoming.error.second);
+  return ::wjson::strerror::message_trace( e, _incoming.error.first, _incoming.error.second);
 }
 
-std::string incoming_holder::id_error_message(const json::json_error& e) const
+std::string incoming_holder::id_error_message(const ::wjson::json_error& e) const
 {
-  return ::iow::json::strerror::message_trace( e, _incoming.id.first, _incoming.id.second);
+  return ::wjson::strerror::message_trace( e, _incoming.id.first, _incoming.id.second);
 }
 
 const incoming& incoming_holder::get()  const 

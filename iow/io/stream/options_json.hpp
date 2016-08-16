@@ -3,7 +3,8 @@
 #include <iow/io/stream/options.hpp>
 #include <iow/io/reader/stream/options_json.hpp>
 #include <iow/io/writer/stream/options_json.hpp>
-#include <iow/json/name.hpp>
+#include <wjson/json.hpp>
+#include <wjson/name.hpp>
 
 
 namespace iow{ namespace io{ namespace stream{
@@ -21,11 +22,11 @@ struct options_json
   JSON_NAME(reader)
   JSON_NAME(writer)
 
-  typedef json::object<
+  typedef ::wjson::object<
     options_type,
-    json::member_list<
-        json::member<n_reader, options_type, reader_options, &options_type::reader, reader_options_json >,
-        json::member<n_writer, options_type, writer_options, &options_type::writer, writer_options_json >
+    ::wjson::member_list<
+        ::wjson::member<n_reader, options_type, reader_options, &options_type::reader, reader_options_json >,
+        ::wjson::member<n_writer, options_type, writer_options, &options_type::writer, writer_options_json >
     >
   > type;
   typedef typename type::target target;

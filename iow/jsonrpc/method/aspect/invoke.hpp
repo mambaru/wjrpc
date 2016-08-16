@@ -89,9 +89,9 @@ struct invoke: Handler
   {
     params_ptr req = nullptr;
 
-    json::json_error e;
+    ::wjson::json_error e;
     req = holder.template get_params<params_json>(&e);
-    
+
     if ( e )
     {
       JSONRPC_LOG_ERROR("jsonrpc::invoke Invalid Params: " << holder.params_error_message(e) )

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <iow/io/aux/read_buffer_options.hpp>
-#include <iow/json/json.hpp>
+#include <wjson/json.hpp>
+#include <wjson/name.hpp>
 
 namespace iow{ namespace io{
     
@@ -17,14 +18,14 @@ struct read_buffer_options_json
   JSON_NAME(minbuf)
   JSON_NAME(trimsep)
 
-  typedef json::object<
+  typedef ::wjson::object<
     options_type,
-    json::member_list<
-      json::member< n_sep,      options_type, std::string, &options_type::sep     >,
-      json::member< n_bufsize,  options_type, size_t,      &options_type::bufsize >,
-      json::member< n_maxbuf,   options_type, size_t,      &options_type::maxbuf  >,
-      json::member< n_minbuf,   options_type, size_t,      &options_type::minbuf  >,
-      json::member< n_trimsep,  options_type, bool,        &options_type::trimsep >
+    ::wjson::member_list<
+      ::wjson::member< n_sep,      options_type, std::string, &options_type::sep     >,
+      ::wjson::member< n_bufsize,  options_type, size_t,      &options_type::bufsize >,
+      ::wjson::member< n_maxbuf,   options_type, size_t,      &options_type::maxbuf  >,
+      ::wjson::member< n_minbuf,   options_type, size_t,      &options_type::minbuf  >,
+      ::wjson::member< n_trimsep,  options_type, bool,        &options_type::trimsep >
     >
   > type;
   

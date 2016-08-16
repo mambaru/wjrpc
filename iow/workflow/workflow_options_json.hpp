@@ -15,16 +15,14 @@ struct workflow_options_json
   JSON_NAME(show_wrn_ms)
 
  
-  typedef json::object<
+  typedef ::wjson::object<
     workflow_options,
-    json::member_list<
-      /*json::member< n_enabled, workflow_options, bool, &workflow_options::enabled >,*/
-      /*json::base< queue_options_json >,*/
-      json::member< n_wrnsize, workflow_options, size_t, &workflow_options::wrnsize >,
-      json::member< n_maxsize, workflow_options, size_t, &workflow_options::maxsize >,
-      json::member< n_show_wrn_ms, workflow_options, time_t, &workflow_options::show_wrn_ms >,
-      json::member< n_threads, workflow_options, int,  &workflow_options::threads >,
-      json::member< n_use_io_service, workflow_options, bool, &workflow_options::use_io_service >
+    ::wjson::member_list<
+      ::wjson::member< n_wrnsize, workflow_options, size_t, &workflow_options::wrnsize >,
+      ::wjson::member< n_maxsize, workflow_options, size_t, &workflow_options::maxsize >,
+      ::wjson::member< n_show_wrn_ms, workflow_options, time_t, &workflow_options::show_wrn_ms >,
+      ::wjson::member< n_threads, workflow_options, int,  &workflow_options::threads >,
+      ::wjson::member< n_use_io_service, workflow_options, bool, &workflow_options::use_io_service >
     >
   > type;
   typedef typename type::target target;
@@ -37,12 +35,12 @@ struct workflow_options2_json
   JSON_NAME(post_delay_ms)
   JSON_NAME(rate_limit)
 
-  typedef json::object<
+  typedef ::wjson::object<
     workflow_options,
-    json::member_list<
-      json::base< workflow_options_json >,
-      json::member< n_post_delay_ms, workflow_options, time_t, &workflow_options::post_delay_ms >,
-      json::member< n_rate_limit, workflow_options, size_t, &workflow_options::rate_limit >
+    ::wjson::member_list<
+      ::wjson::base< workflow_options_json >,
+      ::wjson::member< n_post_delay_ms, workflow_options, time_t, &workflow_options::post_delay_ms >,
+      ::wjson::member< n_rate_limit, workflow_options, size_t, &workflow_options::rate_limit >
     >
   > type;
 
@@ -56,12 +54,11 @@ struct workflow_options_on_json
   JSON_NAME(threads)
   JSON_NAME(use_io_service)
  
-  typedef json::object<
+  typedef ::wjson::object<
     workflow_options,
-    json::member_list<
-      //json::base< ::iow::queue_options_json >,
-      json::member< n_threads, workflow_options, int,  &workflow_options::threads >,
-      json::member< n_use_io_service, workflow_options, bool, &workflow_options::use_io_service >
+    ::wjson::member_list<
+      ::wjson::member< n_threads, workflow_options, int,  &workflow_options::threads >,
+      ::wjson::member< n_use_io_service, workflow_options, bool, &workflow_options::use_io_service >
     >
   > type;
   typedef typename type::target target;

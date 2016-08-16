@@ -2,8 +2,8 @@
 
 #include <iow/jsonrpc/outgoing/outgoing_request.hpp>
 #include <iow/jsonrpc/outgoing/version_member.hpp>
-#include <iow/json/name.hpp>
-#include <iow/json/json.hpp>
+#include <wjson/name.hpp>
+#include <wjson/json.hpp>
 
 namespace iow{ namespace jsonrpc{
 
@@ -13,19 +13,19 @@ struct outgoing_request_json
   typedef typename T::target target;
   typedef outgoing_request<target> request_type;
   typedef typename request_type::version_type version_type;
-  typedef ::iow::json::pointer<std::unique_ptr<target>, T> params_json;
+  typedef wjson::pointer<std::unique_ptr<target>, T> params_json;
   
   JSON_NAME(method)
   JSON_NAME(params)
   JSON_NAME(id)
 
-  typedef ::iow::json::object<
+  typedef ::wjson::object<
     request_type,
     typename fas::type_list_n<
       version_member::type,
-      ::iow::json::member<n_method, request_type, std::string, &request_type::method>,
-      ::iow::json::member<n_params, request_type, std::unique_ptr<target>, &request_type::params, params_json >,
-      ::iow::json::member<n_id, request_type, int, &request_type::id>
+      ::wjson::member<n_method, request_type, std::string, &request_type::method>,
+      ::wjson::member<n_params, request_type, std::unique_ptr<target>, &request_type::params, params_json >,
+      ::wjson::member<n_id, request_type, int, &request_type::id>
     >::type
   > type;
 

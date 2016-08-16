@@ -95,7 +95,7 @@ data_ptr outgoing_holder::detach()
       auto result = std::make_unique<data_type>();
       result->reserve(_data->size() + 50);
       outgoing_request<data_type> request;
-      outgoing_request_json< ::iow::json::raw_value<data_type> >::serializer serializer;
+      outgoing_request_json< ::wjson::raw_value<data_type> >::serializer serializer;
       request.method = _name;
       request.id = _call_id;
       request.params = std::move(_data);
