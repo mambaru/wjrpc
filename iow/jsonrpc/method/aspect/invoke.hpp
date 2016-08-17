@@ -2,13 +2,14 @@
 
 #include <iow/jsonrpc/errors.hpp>
 #include <iow/jsonrpc/method/aspect/tags.hpp>
-#include <iow/logger/logger.hpp>
+#include <iow/jsonrpc/logger.hpp>
 #include <iow/jsonrpc/memory.hpp>
 #include <fas/aop.hpp>
 #include <functional>
 
 namespace iow{ namespace jsonrpc{
   
+  /*
 namespace{
   
   template<
@@ -44,17 +45,17 @@ namespace{
     }
     catch(const std::exception& e)
     {
-      JSONRPC_LOG_FATAL("jsonrpc invoke exception: " << e.what() )
+      //!!! JSONRPC_LOG_FATAL("jsonrpc invoke exception: " << e.what() )
       abort();
     }
     catch(...)
     {
-      JSONRPC_LOG_FATAL("jsonrpc invoke unhandled exception")
+      //!!! JSONRPC_LOG_FATAL("jsonrpc invoke unhandled exception")
       abort();
     }
   }
 }
-
+*/
 
 template<typename JParams, typename JResult, typename Handler, typename JError = error_json>
 struct invoke: Handler
@@ -82,7 +83,7 @@ struct invoke: Handler
   template<typename T, typename TT>
   void operator()(
     T& t, 
-    TT&,
+    TT& ,
     incoming_holder holder, 
     typename T::outgoing_handler_t outgoing_handler
   ) 
@@ -94,7 +95,8 @@ struct invoke: Handler
 
     if ( e )
     {
-      JSONRPC_LOG_ERROR("jsonrpc::invoke Invalid Params: " << holder.params_error_message(e) )
+      JSONRPC_LOG_ERROR( &t, "jsonrpc::invoke Invalid Params: " << holder.params_error_message(e) );
+      
       if ( holder.has_id() )
       {
         TT::template send_error<T, error_json>( 
@@ -119,14 +121,14 @@ struct invoke: Handler
         Handler::operator()( t, std::move(req), 
           [ph, outgoing_handler]( result_ptr result, error_ptr err )
           {
-            invoke_callback_<T, TT, result_json, error_json>(ph, outgoing_handler, std::move(result), std::move(err) );
+            self::callback_<T, TT/*, result_json, error_json*/>(ph, outgoing_handler, std::move(result), std::move(err) );
           }
         );
       }
     }
     catch(const std::exception& e)
     {
-      JSONRPC_LOG_ERROR("iow::jsonrpc::invoke::operator() : " << e.what() )
+      JSONRPC_LOG_ERROR(&t, "iow::jsonrpc::invoke::operator() : " << e.what() )
       // Ахтунг! holder перемещен
       holder = decltype(holder)(nullptr);
       TT::template send_error<T, error_json>( 
@@ -138,7 +140,7 @@ struct invoke: Handler
     }
     catch(...)
     {
-      JSONRPC_LOG_ERROR("iow::jsonrpc::invoke::operator() : unhandled exception (Server Error)")
+      JSONRPC_LOG_ERROR(&t, "iow::jsonrpc::invoke::operator() : unhandled exception (Server Error)")
       // Ахтунг! holder перемещен
       holder = decltype(holder)(nullptr);
       TT::template send_error<T, error_json>( 
@@ -150,6 +152,7 @@ struct invoke: Handler
     }
   }
 private:
+  
   
   template<typename T, typename TT, typename HolderPtr, typename OutgoingHandler, typename Result, typename Error>
   static void callback_( HolderPtr ph, OutgoingHandler outgoing_handler, Result result, Error err )
@@ -175,16 +178,16 @@ private:
     }
     catch(const std::exception& e)
     {
-      JSONRPC_LOG_FATAL("jsonrpc service exception: " << e.what() )
+      ///!! JSONRPC_LOG_FATAL(&tt, "jsonrpc service exception: " << e.what() )
       abort();
     }
     catch(...)
     {
-      JSONRPC_LOG_FATAL("jsonrpc service unhandled exception")
+      ///!! JSONRPC_LOG_FATAL(&tt, "jsonrpc service unhandled exception")
       abort();
     }
   }
-
+  
 };
 
 

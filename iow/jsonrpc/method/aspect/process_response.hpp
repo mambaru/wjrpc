@@ -32,7 +32,7 @@ struct process_response
       }
       else
       {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (result): json error: " << ::wjson::strerror::what( e ) << std::endl << holder.result_error_message(e) );
+        //!! JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (result): json error: " << ::wjson::strerror::what( e ) << std::endl << holder.result_error_message(e) );
         callback( nullptr, nullptr);
       }
     }
@@ -46,7 +46,7 @@ struct process_response
       }
       else
       {
-        JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (error): json error: " << ::wjson::strerror::what(e) << std::endl << holder.result_error_message(e) );
+        //!! JSONRPC_LOG_ERROR("iow::jsonrpc::process_response (error): json error: " << ::wjson::strerror::what(e) << std::endl << holder.result_error_message(e) );
         callback( nullptr, nullptr);
       }
     }

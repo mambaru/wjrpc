@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iow/logger/logger.hpp>
+#include <iow/jsonrpc/logger.hpp>
 #include <fas/aop.hpp>
 #include <memory>
 
@@ -58,7 +58,7 @@ struct ad_invoke
 
     if ( !holder.has_method() )
     {
-      JSONRPC_LOG_WARNING( "jsonrpc::invoke: Invalid Request " )
+      JSONRPC_LOG_WARNING( &t, "jsonrpc::invoke: Invalid Request " );
       t.get_aspect().template get<_invoke_error_>()
         (t, std::move(holder), std::make_unique<invalid_request>(), std::move(outgoing_handler));
       return;
@@ -66,7 +66,7 @@ struct ad_invoke
 
     if ( !fas::for_each_group<_method_>(t, f( holder, outgoing_handler ) ) )
     {
-      JSONRPC_LOG_WARNING( "jsonrpc::invoke: Procedure Not Found: " << holder.method() )
+      JSONRPC_LOG_WARNING( &t, "jsonrpc::invoke: Procedure Not Found: " << holder.method() );
 
       t.get_aspect().template get<_invoke_error_>()
         (t, std::move(holder), std::make_unique<procedure_not_found>(), std::move(outgoing_handler));

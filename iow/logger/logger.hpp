@@ -49,6 +49,7 @@ inline void only_for_log( Args&& ... ){}
 # endif
 #endif
 
+/*
 #define JSONRPC_LOG_ERROR(X)    IOW_WRITE_LOG_ERROR( "jsonrpc", X )
 #define JSONRPC_LOG_WARNING(X)  IOW_WRITE_LOG_WARNING( "jsonrpc", X )
 #define JSONRPC_LOG_MESSAGE(X)  IOW_WRITE_LOG_MESSAGE( "jsonrpc", X )
@@ -58,7 +59,7 @@ inline void only_for_log( Args&& ... ){}
 #define JSONRPC_LOG_DEBUG(X)    IOW_WRITE_LOG_DEBUG( "jsonrpc", X )
 #define JSONRPC_LOG_TRACE(X)    IOW_WRITE_LOG_TRACE( "jsonrpc", X )
 #define JSONRPC_LOG_PROGRESS(X) IOW_WRITE_LOG_PROGRESS( "jsonrpc", X )
-
+*/
 
 #define IOW_LOG_ERROR(X)    IOW_WRITE_LOG_ERROR( "iow", X )
 #define IOW_LOG_WARNING(X)  IOW_WRITE_LOG_WARNING( "iow", X )

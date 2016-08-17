@@ -57,7 +57,7 @@ struct mem_fun_handler2
           }
           else
           {
-            JSONRPC_LOG_FATAL("mem_fun_handler2: pthis = nullptr");
+            JSONRPC_LOG_FATAL(&t, "mem_fun_handler2: pthis = nullptr");
             abort();
           }
         }

@@ -127,7 +127,7 @@ void send_error( incoming_holder holder, std::unique_ptr<error> err, outgoing_ha
   d->reserve(80);
   typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
   
-  JSONRPC_LOG_ERROR( "jsonrpc-broker: " << d )
+  //JSONRPC_LOG_ERROR( "jsonrpc-broker: " << d )
   outgoing_holder out(std::move(d));
   outgoing_handler( std::move(out) );
 }
@@ -151,7 +151,7 @@ void send_error( incoming_holder holder, std::unique_ptr<error> err, iow::io::ou
   d->reserve(80);
   typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
 
-  JSONRPC_LOG_ERROR( "jsonrpc-broker: " << d )
+  //JSONRPC_LOG_ERROR( "jsonrpc-broker: " << d )
   outgoing_handler( std::move(d) );
 }
 

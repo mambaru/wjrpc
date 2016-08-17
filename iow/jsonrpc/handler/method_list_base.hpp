@@ -161,6 +161,9 @@ public:
   }
 
 
+  void log_error(const std::string& )
+  {}
+  
 private:
   
   template<typename Tg>

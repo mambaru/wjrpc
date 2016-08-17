@@ -204,6 +204,8 @@ public:
     _handler_map.erase(io_id);
   }
 
+  void log_error( const std::string& ) const
+  {}
   void perform_io(data_ptr d, io_id_t io_id, raw_outgoing_handler_t handler) 
   {
     using namespace std::placeholders;
@@ -224,10 +226,10 @@ public:
     {
       incoming_holder holder(std::move(d));
       ::wjson::json_error e;
-      d = holder.parse( [handler](outgoing_holder holder) 
+      d = holder.parse( [handler, this](outgoing_holder holder) 
       {
         auto d = holder.detach();
-        JSONRPC_LOG_ERROR("JSON-RPC error:" << d)
+        JSONRPC_LOG_ERROR(this, "JSON-RPC error:" << d)
         handler( std::move(d) );
       });
 
@@ -271,11 +273,11 @@ private:
       auto errreq = holder.str();
       if ( errreq.empty() )
       {
-        JSONRPC_LOG_ERROR( "jsonrpc::engine: Bad Gateway" )
+        JSONRPC_LOG_ERROR( this, "jsonrpc::engine: Bad Gateway" )
       }
       else
       {
-        JSONRPC_LOG_ERROR( "jsonrpc::engine: Invalid Request: " << errreq << " : " << holder.is_error() )
+        JSONRPC_LOG_ERROR( this, "jsonrpc::engine: Invalid Request: " << errreq << " : " << holder.is_error() )
       }
       aux::send_error( std::move(holder), std::make_unique<invalid_request>(), std::move(handler) );
     }
@@ -299,9 +301,13 @@ private:
     else if ( handler!=nullptr )
     {
       if ( !e )
-        JSONRPC_LOG_WARNING("jsonrpc::engind incoming response with call_id=" << call_id << " not found")
+      {  
+        JSONRPC_LOG_WARNING( this, "jsonrpc::engind incoming response with call_id=" << call_id << " not found")
+      }
       else
-        JSONRPC_LOG_WARNING("jsonrpc::engind incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
+      {
+        JSONRPC_LOG_WARNING(this, "jsonrpc::engind incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
+      }
       handler( outgoing_holder() );
     }
   }
