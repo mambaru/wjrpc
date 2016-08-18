@@ -1,32 +1,39 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(iow)
+project(wjrpc)
 
 include_directories(.)
+include_directories(../wjson/)
+include_directories(../faslib/)
+
+
+if ( NOT FAS_TESTING_CPP )
+  set( FAS_TESTING_CPP ${CMAKE_SOURCE_DIR}/../faslib/fas/testing/testing.cpp )
+  include_directories(${CMAKE_SOURCE_DIR})
+  include_directories(${CMAKE_SOURCE_DIR}/../faslib)
+endif()
+
+
+SET(WJRPC_CXX_STANDARD    "-std=c++11")
+SET(WJRPC_CXX_WARN_FLAGS  "-W -Wall -pedantic -Wextra")
+if ( NOT ${gcc_version_number} LESS 4008 )
+  SET(WJRPC_CXX_WARN_FLAGS    "${WJRPC_CXX_WARN_FLAGS} -ftemplate-backtrace-limit=0 ")
+endif()
+
+SET(CMAKE_CXX_FLAGS "${CXX_FLAGS} ${WJRPC_CXX_STANDARD} ${WJRPC_CXX_WARN_FLAGS} ${WJRPC_CXX_DEFINES}")
+SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
+SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -ggdb -DNDEBUG -march=core2")
+SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -ggdb -DNDEBUG -march=core2")
 
 add_library(
-  iow
-  iow/logger/global_log.cpp
-  iow/workflow/workflow.cpp
-  iow/workflow/delayed_queue.cpp
-  iow/workflow/asio_queue.cpp
-  iow/workflow/bique.cpp
-  iow/workflow/timer.cpp
-  iow/workflow/task_manager.cpp
-  iow/workflow/timer_manager_base.cpp
-  iow/workflow/timer_manager.cpp
-  iow/workflow/thread_pool_base.cpp
-  iow/jsonrpc/incoming/incoming_holder.cpp
-  iow/jsonrpc/outgoing/outgoing_holder.cpp
-  iow/jsonrpc/incoming/send_error.cpp
+  wjrpc
+  wjrpc/incoming/incoming_holder.cpp
+  wjrpc/outgoing/outgoing_holder.cpp
+  wjrpc/incoming/send_error.cpp
 )
 
-target_link_libraries(iow ${Boost_LIBRARIES} )
-
-if ( IOW_BUILD_TEST OR IOW_BUILD_ALL )
-  if( IOW_BUILD_TEST )
-    enable_testing()
-    add_subdirectory(tests)
-  endif() # IOW_BUILD_TEST
+if ( WJRPC_BUILD_TEST OR WJRPC_BUILD_ALL )
+  enable_testing()
+  add_subdirectory(tests)
 endif()
 

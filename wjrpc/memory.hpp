@@ -1,5 +1,5 @@
 //
-// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2013-2015
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2013-2016
 //
 // Copyright: See COPYING file that comes with this distribution
 //
@@ -9,22 +9,14 @@
 #include <memory>
 #include <utility>
 
-
 #if __cplusplus <= 201103
 #ifndef DEF_MAKE_UNIQUE
 #define DEF_MAKE_UNIQUE
 
+
 namespace std{
 
-  /*
-template<typename T, typename ...Args>
-std::unique_ptr<T> make_unique( Args&& ...args )
-{
-  return std::unique_ptr<T>( new T( std::forward<Args>(args)... ) );
-}
-  */
-  
-      template<class T> struct _Unique_if {
+    template<class T> struct _Unique_if {
         typedef unique_ptr<T> _Single_object;
     };
 
@@ -52,8 +44,6 @@ std::unique_ptr<T> make_unique( Args&& ...args )
     template<class T, class... Args>
         typename _Unique_if<T>::_Known_bound
         make_unique(Args&&...) = delete;
-
-
 }
 
 #endif

@@ -1,9 +1,19 @@
-enable_testing()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${IOW_TEST_DIR})
+message(STATUS "---++++++++++++++++++---")
+message(STATUS "---${FAS_TESTING_CPP}---")
 
-add_subdirectory(owner)
-add_subdirectory(aux)
-add_subdirectory(io)
-add_subdirectory(workflow)
-add_subdirectory(jsonrpc)
+include_directories(../../wjson/)
+
+add_executable(benchmark1 benchmark.cpp)
+
+add_executable(
+  test_jsonrpc
+  test_jsonrpc.cpp
+  outgoing_suite.cpp
+  method_suite.cpp
+  handler_suite.cpp
+  ${FAS_TESTING_CPP}
+)
+
+target_link_libraries(test_jsonrpc wjrpc)
+add_test( test_jsonrpc test_jsonrpc)
