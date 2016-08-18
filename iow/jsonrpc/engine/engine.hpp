@@ -1,5 +1,5 @@
 #pragma once
-#include <iow/logger/logger.hpp>
+#include <iow/jsonrpc/logger.hpp>
 #include <iow/jsonrpc/engine/call_map.hpp>
 #include <iow/jsonrpc/engine/handler_map.hpp>
 #include <iow/jsonrpc/engine/engine_options.hpp>
@@ -52,6 +52,7 @@ namespace iow{ namespace jsonrpc{
 template<typename JsonrpcHandler>
 class engine
   : public std::enable_shared_from_this< engine<JsonrpcHandler> >
+  , public ::wjrpc::logger
 {
 public:
   typedef engine<JsonrpcHandler> self;
@@ -102,6 +103,8 @@ public:
   void reconfigure(O&& opt1)
   {
     typename std::decay<O>::type opt = opt1;
+    logger::initialize(opt);
+
     //_workflow = opt.engine_args.workflow;
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
     _allow_non_jsonrpc = opt.allow_non_jsonrpc;
@@ -133,7 +136,7 @@ public:
           {
             if ( size_t count = this->remove_outdated() )
             {
-              JSONRPC_LOG_WARNING( count << " calls is outdated.");
+              WJRPC_LOG_WARNING( count << " calls is outdated.");
             }
             return true;
           }
@@ -229,7 +232,7 @@ public:
       d = holder.parse( [handler, this](outgoing_holder holder) 
       {
         auto d = holder.detach();
-        JSONRPC_LOG_ERROR(this, "JSON-RPC error:" << d)
+        WJRPC_LOG_ERROR(this, "JSON-RPC error:" << d)
         handler( std::move(d) );
       });
 
@@ -273,11 +276,11 @@ private:
       auto errreq = holder.str();
       if ( errreq.empty() )
       {
-        JSONRPC_LOG_ERROR( this, "jsonrpc::engine: Bad Gateway" )
+        WJRPC_LOG_ERROR( this, "jsonrpc::engine: Bad Gateway" )
       }
       else
       {
-        JSONRPC_LOG_ERROR( this, "jsonrpc::engine: Invalid Request: " << errreq << " : " << holder.is_error() )
+        WJRPC_LOG_ERROR( this, "jsonrpc::engine: Invalid Request: " << errreq << " : " << holder.is_error() )
       }
       aux::send_error( std::move(holder), std::make_unique<invalid_request>(), std::move(handler) );
     }
@@ -302,11 +305,11 @@ private:
     {
       if ( !e )
       {  
-        JSONRPC_LOG_WARNING( this, "jsonrpc::engind incoming response with call_id=" << call_id << " not found")
+        WJRPC_LOG_DEBUG( this, "jsonrpc::engind incoming response with call_id=" << call_id << " not found")
       }
       else
       {
-        JSONRPC_LOG_WARNING(this, "jsonrpc::engind incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
+        WJRPC_LOG_DEBUG(this, "jsonrpc::engind incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
       }
       handler( outgoing_holder() );
     }
@@ -475,6 +478,7 @@ private:
     auto ph = _handler_map.findocre(io_id, reg_io, reinit);
     if ( reinit )
     {
+      ph->initialize(opt);
       // специализация в зависимости от типа OutgoingHandler
       this->upgrate_options_(opt, std::move(handler));
       if ( !ph->status() )

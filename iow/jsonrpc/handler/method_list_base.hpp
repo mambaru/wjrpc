@@ -3,8 +3,8 @@
 #include <iow/jsonrpc/handler/aspect/tags.hpp>
 #include <iow/jsonrpc/handler/handler_options.hpp>
 #include <iow/jsonrpc/outgoing/outgoing_holder.hpp>
-#include <iow/logger/logger.hpp>
-#include <iow/io/io_base.hpp>
+#include <iow/jsonrpc/logger.hpp>
+//#include <iow/io/io_base.hpp>
 #include <fas/aop.hpp>
 #include <functional>
 
@@ -13,6 +13,7 @@ namespace iow{ namespace jsonrpc{
 template< typename A = fas::aspect<> >
 class method_list_base
   : public ::fas::aspect_class<A>
+  , public ::wjrpc::logger
   //: public ::iow::io::io_base<A>
   // , std::enable_shared_from_this< method_list_base<A> >
 {
@@ -86,7 +87,7 @@ public:
     }
     else
     {
-      IOW_LOG_FATAL(" (ABORT) iow::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
+      WJRPC_LOG_FATAL(this, " (ABORT) iow::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
       abort();
     }
   }
@@ -161,8 +162,9 @@ public:
   }
 
 
-  void log_error(const std::string& )
+  /*void log_error(const std::string& )
   {}
+  */
   
 private:
   

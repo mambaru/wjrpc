@@ -36,7 +36,7 @@ namespace iow{ namespace jsonrpc{ namespace aux{
     }
       catch(const ::wjson::json_error& er)
       {
-        JSONRPC_LOG_WARNING( "jsonrpc::incoming_holder: parse error: " << holder.error_message(er) )
+        WJRPC_LOG_WARNING( "jsonrpc::incoming_holder: parse error: " << holder.error_message(er) )
         send_error( std::move(holder), std::make_unique<parse_error>(), std::move(outgoing_handler));
         return nullptr;
       }
@@ -59,13 +59,13 @@ namespace iow{ namespace jsonrpc{ namespace aux{
       /*
       else if ( holder )
       {
-        JSONRPC_LOG_WARNING( "jsonrpc error: " << holder.str() );
+        WJRPC_LOG_WARNING( "jsonrpc error: " << holder.str() );
         send_error( std::move(holder), std::make_unique<invalid_request>(), std::move(outgoing_handler));
         return nullptr;
       }
       else
       {
-        JSONRPC_LOG_WARNING( "Parse Error: " << holder.str() )
+        WJRPC_LOG_WARNING( "Parse Error: " << holder.str() )
         send_error( std::move(holder), std::make_unique<parse_error>(), std::move(outgoing_handler));
         return nullptr;
       }*/
@@ -95,12 +95,12 @@ namespace iow{ namespace jsonrpc{ namespace aux{
       }
       catch(const std::exception& ex)
       {
-        JSONRPC_LOG_ERROR( "jsonrpc::engine: server error: " << ex.what() )
+        WJRPC_LOG_ERROR( "jsonrpc::engine: server error: " << ex.what() )
         send_error( std::move(incoming_holder(nullptr)),  std::make_unique<server_error>(), std::move(outgoing_handler));
       }
       catch(...)
       {
-        JSONRPC_LOG_ERROR( "jsonrpc::engine: server error: " << "unhandler exception" )
+        WJRPC_LOG_ERROR( "jsonrpc::engine: server error: " << "unhandler exception" )
         send_error( std::move(incoming_holder(nullptr)), std::make_unique<server_error>(), std::move(outgoing_handler));
       }
       */
@@ -127,7 +127,7 @@ void send_error( incoming_holder holder, std::unique_ptr<error> err, outgoing_ha
   d->reserve(80);
   typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
   
-  //JSONRPC_LOG_ERROR( "jsonrpc-broker: " << d )
+  //WJRPC_LOG_ERROR( "jsonrpc-broker: " << d )
   outgoing_holder out(std::move(d));
   outgoing_handler( std::move(out) );
 }
@@ -151,7 +151,7 @@ void send_error( incoming_holder holder, std::unique_ptr<error> err, iow::io::ou
   d->reserve(80);
   typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
 
-  //JSONRPC_LOG_ERROR( "jsonrpc-broker: " << d )
+  //WJRPC_LOG_ERROR( "jsonrpc-broker: " << d )
   outgoing_handler( std::move(d) );
 }
 

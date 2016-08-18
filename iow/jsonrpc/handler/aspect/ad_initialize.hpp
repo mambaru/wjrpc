@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iow/jsonrpc/handler/aspect/tags.hpp>
+#include <iow/jsonrpc/logger.hpp>
 #include <iostream>
 
 namespace iow{ namespace jsonrpc{
@@ -13,6 +14,7 @@ struct ad_initialize
     t._sender_handler = opt.sender_handler;
     t.get_aspect().template get<_target_>() = opt.target;
     t.get_aspect().template get<_peeper_>() = opt.peeper;
+    static_cast< ::wjrpc::logger&  >(t).initialize(opt);
   }
 };
 

@@ -189,7 +189,7 @@ namespace{
     }
     catch(const json::json_error& er)
     {
-      JSONRPC_LOG_WARNING( "jsonrpc::incoming_holder: parse error: " << holder.error_message(er) )
+      WJRPC_LOG_WARNING( "jsonrpc::incoming_holder: parse error: " << holder.error_message(er) )
       incoming_holder::send_error( std::move(holder), std::make_unique<parse_error>(), std::move(outgoing_handler));
       return nullptr;
     }
@@ -221,13 +221,13 @@ void incoming_holder::perform(
   }
   catch(const std::exception& ex)
   {
-    JSONRPC_LOG_ERROR( "jsonrpc::engine: server error: " << ex.what() )
+    WJRPC_LOG_ERROR( "jsonrpc::engine: server error: " << ex.what() )
     incoming_holder::send_error( std::move(incoming_holder(nullptr)), std::make_unique<server_error>(), std::move(outgoing_handler));
     return;
   }
   catch(...)
   {
-    JSONRPC_LOG_ERROR( "jsonrpc::engine: server error: " << "unhandler exception" )
+    WJRPC_LOG_ERROR( "jsonrpc::engine: server error: " << "unhandler exception" )
     incoming_holder::send_error( std::move(incoming_holder(nullptr)), std::make_unique<server_error>(), std::move(outgoing_handler));
     return;
   }

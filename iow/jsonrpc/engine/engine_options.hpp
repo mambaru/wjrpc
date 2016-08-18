@@ -1,11 +1,13 @@
 #pragma once
 #include <iow/jsonrpc/types.hpp>
+#include <iow/jsonrpc/logger.hpp>
 //#include <iow/workflow/workflow.hpp>
 
 namespace iow{ namespace jsonrpc{
   
 template<typename HandlerOptions>
-struct engine_options: HandlerOptions
+struct engine_options
+  : HandlerOptions
 {
   typedef HandlerOptions handler_options;
   bool allow_non_jsonrpc = false;
