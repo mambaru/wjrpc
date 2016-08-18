@@ -18,6 +18,7 @@ class outgoing_holder;
 class incoming_holder
 {
 public:
+  typedef ::wjrpc::call_id_t call_id_t ;
   typedef std::function< void(outgoing_holder) > outgoing_handler_t;
   typedef std::function< void(incoming_holder, io_id_t, outgoing_handler_t )> incoming_handler_t;
 
