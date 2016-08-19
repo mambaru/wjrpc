@@ -4,7 +4,6 @@
 #include <wjson/json.hpp>
 #include <wjson/name.hpp>
 
-
 namespace wjrpc{
 
 struct incoming_json
@@ -32,8 +31,6 @@ struct incoming_json
   typedef type::target target;
   typedef type::member_list member_list;
   typedef type::serializer  serializer;
-
 };
 
-  
 }
