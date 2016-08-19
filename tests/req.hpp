@@ -51,7 +51,6 @@ std::string bad_request[][2] = {
 
 
 std::string good_request[][2] = {
-  
   { 
     "{\"method\":\"method1\",\"params\":[1,2,3,4,5],\"id\":1}",
     "{\"jsonrpc\":\"2.0\",\"result\":[5,4,3,2,1],\"id\":1}"
