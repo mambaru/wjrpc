@@ -9,15 +9,30 @@
 
 namespace wjrpc{
 
-incoming_holder::incoming_holder(data_ptr d, bool timepoint )
+incoming_holder::incoming_holder()
+  : _parsed(false)
+{}
+
+incoming_holder::incoming_holder(data_ptr d, time_point tp)
   : _parsed(false)
   , _data(std::move(d))
+  , _time_point(tp)
 {
-  if ( timepoint )
-    _time_point = clock_t::now();
 }
 
-void incoming_holder::attach(data_ptr d, bool timepoint)
+incoming_holder::incoming_holder(data_type   d,  time_point tp )
+  : incoming_holder( std::make_unique<data_type>( std::move(d) ), tp )
+{
+  
+}
+
+incoming_holder::incoming_holder(std::string d,  time_point tp )
+  : incoming_holder( std::make_unique<data_type>( d.begin(), d.end() ), tp )
+{
+  
+}
+
+void incoming_holder::attach(data_ptr d,  time_point tp)
 {
   if ( _data==nullptr || _data->empty() )
     _data = std::move(d);
@@ -25,8 +40,7 @@ void incoming_holder::attach(data_ptr d, bool timepoint)
     std::move( d->begin(), d->end(), std::back_inserter(*_data) );
 
   _parsed = false;
-  if ( timepoint )
-    _time_point = clock_t::now();
+  _time_point = tp;
 }
 
 
@@ -108,6 +122,31 @@ data_ptr incoming_holder::parse(outgoing_handler_t error_handler)
   return std::make_unique<data_type>(next, _data->end());
 }
 */
+
+  incoming_holder::operator bool () const{ return this->ready_();}
+  bool incoming_holder::ready() const { return this->ready_();}
+
+  bool incoming_holder::has_method() const { return ready_() && _incoming.method.first!=_incoming.method.second; }
+  bool incoming_holder::has_result() const { return ready_() && _incoming.result.first!=_incoming.result.second; }
+  bool incoming_holder::has_error() const  { return ready_() && _incoming.error.first!=_incoming.error.second;   }
+  bool incoming_holder::has_id() const     { return ready_() && _incoming.id.first!=_incoming.id.second;         }
+  bool incoming_holder::has_params() const { return ready_() && _incoming.params.first!=_incoming.params.second; }
+
+  bool incoming_holder::is_request() const       { return this->has_method() && this->has_id();   }
+  bool incoming_holder::is_response() const      { return this->has_result() && this->has_id();   }
+  bool incoming_holder::is_notify() const        { return this->has_method() && !this->has_id();  }
+  bool incoming_holder::is_error() const         { return this->has_error();                      }
+  bool incoming_holder::is_request_error() const { return this->has_error() && this->has_id() && 'n'!=*_incoming.params.first;}
+  bool incoming_holder::is_other_error() const   { return this->has_error() && !this->has_id();   }
+
+  bool incoming_holder::is_valid() const 
+  {
+    return this->is_request()
+        || this->is_response()
+        || this->is_notify()
+        || this->is_error();
+  }
+
 bool incoming_holder::method_equal_to(const char* name)  const
 {
   if ( !this->ready_() )
@@ -180,7 +219,7 @@ const incoming& incoming_holder::get()  const
   return _incoming;
 }
 
-incoming_holder::clock_t::time_point incoming_holder::time_point() const 
+incoming_holder::time_point incoming_holder::get_time_point() const 
 {
   return _time_point;
 }
@@ -189,6 +228,17 @@ data_ptr incoming_holder::detach()
 {
   _incoming = incoming();
   return std::move(_data);
+}
+
+incoming_holder incoming_holder::clone() const
+{
+  return incoming_holder(*_data, _time_point);
+  /*
+  incoming_holder h;
+  h.attach( std::make_unique<data_type>(*_data) );
+  h._time_point = this->_time_point;
+  return std::move(h);
+  */
 }
 
 data_ptr incoming_holder::acquire_params()
