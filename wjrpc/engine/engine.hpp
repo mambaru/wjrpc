@@ -235,7 +235,7 @@ public:
       }
       else
       {
-        aux::send_error( std::move(holder), std::make_unique<parse_error>(), handler );
+        aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), handler );
       }
       /*
       d = holder.parse( [handler, this](outgoing_holder holder) 

@@ -132,7 +132,7 @@ void send_error( incoming_holder holder, std::unique_ptr<error> err, outgoing_ha
   outgoing_handler( std::move(out) );
 }
 
-void send_error( incoming_holder holder, std::unique_ptr<error> err, raw_outgoing_handler_t outgoing_handler)
+void send_error_raw( incoming_holder holder, std::unique_ptr<error> err, raw_outgoing_handler_t outgoing_handler)
 {
   typedef outgoing_error_json< error_json > message_json;
   outgoing_error<error> error_message;
