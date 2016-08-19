@@ -19,13 +19,66 @@ incoming_holder::incoming_holder(data_ptr d, bool timepoint )
 
 void incoming_holder::attach(data_ptr d, bool timepoint)
 {
-  _data = std::move(d);
+  if ( _data==nullptr || _data->empty() )
+    _data = std::move(d);
+  else if ( d!=nullptr )
+    std::move( d->begin(), d->end(), std::back_inserter(*_data) );
+
   _parsed = false;
   if ( timepoint )
     _time_point = clock_t::now();
 }
 
 
+data_ptr incoming_holder::parse(::wjson::json_error* e)
+{
+  if ( _data == nullptr )
+    return nullptr;
+
+  _begin = ::wjson::parser::parse_space(_data->begin(), _data->end(), nullptr);
+  _end = incoming_json::serializer()( _incoming, _begin, _data->end(), e);
+  _parsed = !e || !*e;
+
+  /* не нужно, следующий может быть валидный 
+  if ( !_parsed )
+    return nullptr;
+  */
+
+  auto next = ::wjson::parser::parse_space( _end, _data->end(), nullptr);
+  while ( next!=_data->end() && *next=='\0' ) ++next;
+  if ( next != _data->end() )
+  {
+     auto res =  std::make_unique<data_type>(next, _data->end());
+    _data->resize( std::distance(_data->begin(), next) );
+    return std::move(res);
+  }
+  return nullptr;
+  
+  /*
+  if ( !e )
+  {
+    _end = incoming_json::serializer()( _incoming, _begin, _data->end(), &e);
+    _parsed = true;
+  }
+  else 
+  {
+    if ( error_handler!=nullptr )
+    {
+      incoming_holder eh( this->detach() );
+      aux::send_error( std::move(eh), std::make_unique<parse_error>(), error_handler );
+    }
+    return nullptr;
+  }
+
+  iterator next = ::wjson::parser::parse_space( _end, _data->end(), nullptr);
+  if ( next == _data->end() || *next=='\0')
+    return nullptr;
+
+  return std::make_unique<data_type>(next, _data->end());
+  */
+}
+
+/*
 data_ptr incoming_holder::parse(outgoing_handler_t error_handler)
 {
   if ( _data == nullptr )
@@ -54,7 +107,7 @@ data_ptr incoming_holder::parse(outgoing_handler_t error_handler)
 
   return std::make_unique<data_type>(next, _data->end());
 }
-
+*/
 bool incoming_holder::method_equal_to(const char* name)  const
 {
   if ( !this->ready_() )

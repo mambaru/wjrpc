@@ -32,7 +32,9 @@ public:
 
   void attach(data_ptr d, bool timepoint=false );
 
-  data_ptr parse(outgoing_handler_t error_handler);
+  data_ptr parse(::wjson::json_error* e);
+  
+ // data_ptr parse(outgoing_handler_t error_handler);
 
   operator bool () const{ return ready_();}
 

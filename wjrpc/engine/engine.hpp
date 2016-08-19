@@ -207,8 +207,7 @@ public:
     _handler_map.erase(io_id);
   }
 
-  void log_error( const std::string& ) const
-  {}
+  
   void perform_io(data_ptr d, io_id_t io_id, raw_outgoing_handler_t handler) 
   {
     using namespace std::placeholders;
@@ -229,15 +228,26 @@ public:
     {
       incoming_holder holder(std::move(d));
       ::wjson::json_error e;
+      d = holder.parse(&e);
+      if ( !e && holder )
+      {
+        this->perform_io_once_( std::move(holder), io_id, handler );
+      }
+      else
+      {
+        aux::send_error( std::move(holder), std::make_unique<parse_error>(), handler );
+      }
+      /*
       d = holder.parse( [handler, this](outgoing_holder holder) 
       {
         auto d = holder.detach();
         WJRPC_LOG_ERROR(this, "JSON-RPC error:" << d)
         handler( std::move(d) );
       });
+      */
 
-      if ( d!=nullptr )
-        this->perform_io_once_( std::move(holder), io_id, handler );
+      /*if ( d!=nullptr )
+        this->perform_io_once_( std::move(holder), io_id, handler );*/
     }
   }
 
