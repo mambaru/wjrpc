@@ -10,11 +10,6 @@
 
 namespace wjrpc{
 
-const char* outgoing_holder::name() const
-{
-  return _name;
-}
-
 outgoing_holder::outgoing_holder()
   : _name(nullptr)
   , _data(nullptr)
@@ -67,6 +62,11 @@ outgoing_holder::outgoing_holder(
   , _result_handler(rh)
   , _call_id(call_id)
 {
+}
+
+const char* outgoing_holder::name() const
+{
+  return _name;
 }
 
 data_ptr outgoing_holder::detach()

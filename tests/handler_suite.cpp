@@ -8,7 +8,8 @@
 
 struct nomethod:
   ::wjrpc::method_list<>
-{};
+{
+};
 
 typedef wjrpc::handler<nomethod> nohandler;
 

@@ -8,54 +8,6 @@
 #include <functional>
 
 namespace wjrpc{
-  
-  /*
-namespace{
-  
-  template<
-    typename T, 
-    typename TT,
-    typename ResultJson,
-    typename ErrorJson, 
-    typename HolderPtr, 
-    typename OutgoingHandler, 
-    typename Result, 
-    typename Error
-  >
-  inline void invoke_callback_( HolderPtr ph, OutgoingHandler outgoing_handler, Result result, Error err )
-  {
-    try
-    {
-      if (err == nullptr )
-      {
-        TT::template send_result<T, ResultJson>( 
-          std::move(*ph),
-          std::move(result),
-          std::move(outgoing_handler) 
-        );
-      }
-      else
-      {
-        TT::template send_error<T, ErrorJson>( 
-          std::move(*ph), 
-          std::move(err), 
-          std::move(outgoing_handler)
-        );
-      }
-    }
-    catch(const std::exception& e)
-    {
-      //!!! WJRPC_LOG_FATAL("jsonrpc invoke exception: " << e.what() )
-      abort();
-    }
-    catch(...)
-    {
-      //!!! WJRPC_LOG_FATAL("jsonrpc invoke unhandled exception")
-      abort();
-    }
-  }
-}
-*/
 
 template<typename JParams, typename JResult, typename Handler, typename JError = error_json>
 struct invoke: Handler
