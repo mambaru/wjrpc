@@ -1,3 +1,9 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2011-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #pragma once
 
 #include <wjrpc/method/aspect/tags.hpp>
@@ -14,11 +20,11 @@ template<size_t ReserveSize>
 struct send_result
   : fas::type<_send_result_, send_result<ReserveSize> >
 {
-  template<typename T, typename JResult>
+  template<typename T, typename JResult, typename OutgoingHandler>
   static inline void send(
     incoming_holder holder, 
     std::unique_ptr<typename JResult::target> result, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   )
   {
     typedef JResult result_json;
@@ -41,26 +47,18 @@ struct send_result
       result_message, 
       std::inserter( *d, d->end() )
     );
-    if ( outgoing_handler != nullptr )
-    {
-      outgoing_handler( std::move(d) );
-    }
-    else
-    {
-      ///!!! IOW_LOG_FATAL("iow::jsonrpc::send_result outgoing_handler==nullptr")
-      abort();
-    }
+    outgoing_handler( std::move(d) );
   }
 };
 
 struct send_result_proxy
   : fas::type<_send_result_, send_result_proxy >
 {
-  template<typename T, typename JResult>
+  template<typename T, typename JResult, typename OutgoingHandler>
   static inline void send(
     incoming_holder holder, 
     std::unique_ptr<typename JResult::target> res, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   )
   {
     return T::aspect::template advice_cast<_send_result_>::type

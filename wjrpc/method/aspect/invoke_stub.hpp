@@ -1,3 +1,9 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2011-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #pragma once
 
 #include <wjrpc/errors.hpp>
@@ -15,13 +21,12 @@ struct invoke_stub
   advice_class& get_advice() { return *this;}
   const advice_class& get_advice() const { return *this;}
   
-  template<typename T, typename TT>
+  template<typename T, typename TT, typename OutgoingHandler>
   void operator()(
     T&, 
     TT&, 
     incoming_holder holder,
-    //typename T::holder_type holder, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   ) const
   {
     TT::template send_error<T, error_json>( 

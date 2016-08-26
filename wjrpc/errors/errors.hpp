@@ -20,6 +20,7 @@ struct error
     , message(message)
   {}
 
+  typedef std::unique_ptr<error> ptr;
 };
 
 struct parse_error: error

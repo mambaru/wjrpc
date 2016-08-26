@@ -13,7 +13,7 @@ UNIT(incoming1, "")
   using namespace fas::testing;
   using namespace ::wjrpc;
   //std::string data = "{\"method\":\"test\"}";
-  
+  t << is_true<expect>(true) ;
   for (auto r : good_parse )
   {
     incoming_holder h( std::make_unique<data_type>(r.begin(), r.end()) );
@@ -24,17 +24,24 @@ UNIT(incoming1, "")
   
   for (auto r : bad_parse )
   {
+    t << message("bad parse: [") <<  r << "]";
     incoming_holder h( std::make_unique<data_type>(r.begin(), r.end()) );
+    ::wjson::json_error e;
+    h.parse(&e);
+    t << is_true<expect>( e ) << FAS_FL;
+    t << message("JSON-RPC error: ") << ::wjson::strerror::message_trace(e, r.begin(), r.end() );
+
+    /*
     try
     {
-      t << message("bad parse: ") <<  r;
-      h.parse(nullptr);
-      t << fatal("GOOD PARSE");
+      t << message("bad parse: [") <<  r << "]";
+      t << fatal("GOOD PARSE: [") << r << "]";
     }
     catch(const ::wjson::json_error& e)
     {
       t << message("parse error: ") <<  h.error_message(e);
     }
+    */
   }
 
   /*

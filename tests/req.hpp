@@ -8,7 +8,8 @@ std::string good_parse[] = {
   "{\"jsonrpc\":\"2.0\",\"method\":\"test1\",\"params\":[1,2,3,4,5],\"id\":1}",
   "{\"result\":[1,2,{},4,5],\"id\":\"id\",\"id1\":\"id1\"}",
   "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"Procedure not found.\"},\"id\":1}",
-  "{\"jsonrpc\":\"2.0\"}"
+  "{\"jsonrpc\":\"2.0\"}",
+  "[]" /*фича для пустого массива*/
 };
 
 std::string bad_parse[] = {

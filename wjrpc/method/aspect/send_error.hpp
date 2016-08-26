@@ -1,3 +1,9 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2011-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #pragma once
 
 #include <wjrpc/method/aspect/tags.hpp>
@@ -14,11 +20,11 @@ template<size_t ReserveSize>
 struct send_error
   : fas::type<_send_error_, send_error<ReserveSize> >
 {
-  template<typename T, typename JError>
+  template<typename T, typename JError, typename OutgoingHandler>
   static inline void send(
     incoming_holder holder, 
     std::unique_ptr<typename JError::target> err, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   )
   {
 
@@ -42,26 +48,19 @@ struct send_error
     d->clear();
     d->reserve(ReserveSize);
     typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
-    
-    if ( outgoing_handler != nullptr )
-    {
-      outgoing_handler( std::move(d) );
-    }
-    else
-    {
-      abort();
-    }
+
+    outgoing_handler( std::move(d) );
   }
 };
 
 struct send_error_proxy
   : fas::type<_send_error_, send_error_proxy >
 {
-  template<typename T, typename JError>
+  template<typename T, typename JError, typename OutgoingHandler>
   static inline void send(
     incoming_holder holder, 
     std::unique_ptr<typename JError::target> err, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   )
   {
     return T::aspect::template advice_cast<_send_error_>::type

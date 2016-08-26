@@ -1,3 +1,9 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2011-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #pragma once
 
 #include <wjrpc/method/aspect/call.hpp>

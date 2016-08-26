@@ -1,10 +1,15 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2011-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #pragma once
 
 #include <wjrpc/handler/aspect/tags.hpp>
 #include <wjrpc/handler/handler_options.hpp>
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/logger.hpp>
-//#include <iow/io/io_base.hpp>
 #include <fas/aop.hpp>
 #include <functional>
 
@@ -12,14 +17,11 @@ namespace wjrpc{
 
 template< typename A = fas::aspect<> >
 class method_list_base
-  : public ::fas::aspect_class<A>
-  , public ::wjrpc::logger
-  //: public ::iow::io::io_base<A>
-  // , std::enable_shared_from_this< method_list_base<A> >
+  : public ::fas::aspect_class< typename fas::merge_aspect<A, ::wjrpc::log_aspect>::type >
+ // , public ::wjrpc::logger
 {
 public:
-  typedef ::fas::aspect_class<A> super;
-  //typedef ::iow::io::io_base<A> super;
+  typedef ::fas::aspect_class< typename fas::merge_aspect<A, ::wjrpc::log_aspect>::type > super;
   typedef method_list_base<A> self;
     
   typedef typename super::aspect::template advice_cast<_handler_types_>
@@ -140,34 +142,24 @@ public:
       typename call_result_ptr<Tg>::type, 
       typename call_error_ptr<Tg>::type
     )> callback_type;
-    
+
     using namespace std::placeholders;
-    callback_type callback = /*nullptr;
-    if ( result_callback!=nullptr )
-    {
-      callback =*/ std::bind( self::response_handler<Tg>, _1, _2, 
-                            result_callback, error_callback);
-    /*}*/
-    
+    callback_type callback = std::bind( self::response_handler<Tg>, _1, _2, result_callback, error_callback );
+
     this->get_aspect().template get<Tg>().call( 
       *this, 
       std::move(req),
       std::move(callback)
     );
   }
-  
+
   mutex_type& mutex() const
   {
     return _mutex;
   }
 
-
-  /*void log_error(const std::string& )
-  {}
-  */
-  
 private:
-  
+
   template<typename Tg>
   static inline void response_handler(
     typename call_result_ptr<Tg>::type res,
@@ -186,7 +178,7 @@ private:
   }
   
 private:
-  friend struct super::aspect::template advice_cast< /*::iow::io::*/_initialize_ >::type;
+  friend struct super::aspect::template advice_cast< _initialize_ >::type;
 
   typedef typename handler_types::sender_handler_t   sender_handler_t;
   sender_handler_t _sender_handler = sender_handler_t(nullptr);

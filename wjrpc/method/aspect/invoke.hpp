@@ -1,3 +1,9 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2011-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #pragma once
 
 #include <wjrpc/errors.hpp>
@@ -32,12 +38,12 @@ struct invoke: Handler
   typedef typename std::unique_ptr<result_type> result_ptr;
   typedef typename std::unique_ptr<error_type>  error_ptr;
 
-  template<typename T, typename TT>
+  template<typename T, typename TT, typename OutgoingHandler>
   void operator()(
     T& t, 
     TT& ,
     incoming_holder holder, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   ) 
   {
     params_ptr req = nullptr;
@@ -73,7 +79,7 @@ struct invoke: Handler
         Handler::operator()( t, std::move(req), 
           [ph, outgoing_handler]( result_ptr result, error_ptr err )
           {
-            self::callback_<T, TT/*, result_json, error_json*/>(ph, outgoing_handler, std::move(result), std::move(err) );
+            self::callback_<T, TT>(ph, outgoing_handler, std::move(result), std::move(err) );
           }
         );
       }
@@ -82,7 +88,7 @@ struct invoke: Handler
     {
       WJRPC_LOG_ERROR(&t, "iow::jsonrpc::invoke::operator() : " << e.what() )
       // Ахтунг! holder перемещен
-      holder = decltype(holder)(nullptr);
+      holder = decltype(holder)( data_ptr() );
       TT::template send_error<T, error_json>( 
         std::move(holder), 
         std::make_unique<server_error>(),
@@ -94,7 +100,7 @@ struct invoke: Handler
     {
       WJRPC_LOG_ERROR(&t, "iow::jsonrpc::invoke::operator() : unhandled exception (Server Error)")
       // Ахтунг! holder перемещен
-      holder = decltype(holder)(nullptr);
+      holder = decltype(holder)( data_ptr() );
       TT::template send_error<T, error_json>( 
         std::move(holder), 
         std::make_unique<server_error>(),

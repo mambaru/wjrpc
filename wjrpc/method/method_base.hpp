@@ -1,6 +1,13 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2011-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #pragma once
 
 #include <wjrpc/method/aspect/tags.hpp>
+#include <wjrpc/logger.hpp>
 #include <fas/aop.hpp>
 #include <memory>
 
@@ -17,6 +24,12 @@ public:
   typedef method_base<A> self;
   typedef AspectClass<A> super;
 
+  
+  // TODO: в _method_types_;
+  typedef ::wjrpc::data_type data_type;
+  typedef ::wjrpc::data_ptr  data_ptr;
+
+  
   typedef fas::metalist::advice metatype;
   typedef typename super::aspect::template advice_cast<_name_>::type::name_type tag;
   typedef self advice_class;
@@ -37,11 +50,11 @@ public:
   /// ///////////////////////////////////////////////////
   /// ///////////////////////////////////////////////////
 
-  template<typename T>
+  template<typename T, typename OutgoingHandler>
   void operator()(
     T& t, 
     incoming_holder holder, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   ) 
   {
     this->get_aspect().template get<_invoke_>()(
@@ -127,11 +140,11 @@ public:
   /// ///////////////////////////////////////////////////
 
   
-  template<typename T, typename ResultJson>
+  template<typename T, typename ResultJson, typename OutgoingHandler>
   static inline void send_result(
     incoming_holder holder, 
     std::unique_ptr<typename ResultJson::target> result, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   )
   {
     return super::aspect::template advice_cast<_send_result_>::type
@@ -148,11 +161,11 @@ public:
   /// ///////////////////////////////////////////////////
 
 
-  template<typename T, typename ErrorJson>
+  template<typename T, typename ErrorJson, typename OutgoingHandler>
   static inline void send_error(
     incoming_holder holder, 
     std::unique_ptr<typename ErrorJson::target> err, 
-    typename T::outgoing_handler_t outgoing_handler
+    OutgoingHandler outgoing_handler
   )
   {
     return super::aspect::template advice_cast<_send_error_>::type
