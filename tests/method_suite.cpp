@@ -80,13 +80,6 @@ struct plus_handler
   template<typename T>
   void operator() ( T&, request::plus::ptr req, response::plus::callback2 cb)
   {
-    
-    /*
-    using namespace fas::testing;
-    t << is_true<assert>( req!=nullptr ) << FAS_FL;
-    t << is_true<assert>( cb!=nullptr ) << FAS_FL;
-    t << stop;
-    */
     auto res = std::make_unique<response::plus>();
     res->value = req->first + req->second;
     cb( std::move(res), nullptr );
@@ -96,7 +89,7 @@ struct plus_handler
 JSONRPC_TAG(plus)
 JSONRPC_TAG(minus)
 
-struct method_plus:
+struct invoke_method_plus:
   ::wjrpc::basic_method<
     ::wjrpc::name<_plus_>,
     ::wjrpc::invoke< request::plus_json, response::plus_json, plus_handler >,
@@ -105,6 +98,12 @@ struct method_plus:
 >
 {};
 
+struct call_method_plus:
+  ::wjrpc::basic_method<
+    ::wjrpc::name<_plus_>,
+    ::wjrpc::call< request::plus_json, response::plus_json>
+  >
+  {};
 
 UNIT(method1, "")
 {
@@ -112,22 +111,53 @@ UNIT(method1, "")
   //using namespace ::wjrpc;
 
   ::wjrpc::handler< ::wjrpc::method_list<> > h;
-  std::string sreq="{\"method\":\"plus\", \"id\":1, \"params\":{\"first\":1, \"first\":2}}";
-  method_plus m;
+  std::string sreq="{\"method\":\"plus\",\"id\":1,\"params\":{\"first\":1,\"second\":2}}";
+  invoke_method_plus im;
   ::wjrpc::incoming_holder holder( std::make_unique<::wjrpc::data_type>( sreq.begin(), sreq.end() ) );
   ::wjson::json_error e;
   holder.parse(&e);
   t << is_false<assert>( e ) << FAS_FL;
   t << stop;
-  m( h, std::move(holder), [&t]( ::wjrpc::outgoing_holder res )
+  im( h, std::move(holder), [&t]( ::wjrpc::outgoing_holder res )
   {
     auto d = res.detach();
     t << message("TRACE:") << std::string(d->begin(), d->end() );
   } );
   
+}
+
+UNIT(method2, "")
+{
+  using namespace fas::testing;
+  
+  ::wjrpc::handler< ::wjrpc::method_list<call_method_plus> > h;
+  ::wjrpc::handler_options<> opt;
+  opt.sender_handler = []( 
+    const char* , 
+    ::wjrpc::handler_types::notify_serializer_t, 
+    ::wjrpc::handler_types::request_serializer_t, 
+    ::wjrpc::handler_types::result_handler_t
+  )
+  {
+    
+  };
+  h.start(opt, 1);
+  //std::string sreq="{\"method\":\"plus\",\"id\":1,\"params\":{\"first\":1,\"first\":2}}";
+  call_method_plus cm;
+  auto req = std::make_unique< request::plus >();
+  req->first=1; req->second=2;
+  cm.call( h, std::move(req), [&t]( response::plus::ptr res, ::wjrpc::error::ptr err )
+  {
+    t << equal<expect>( res->value, 2 ) << FAS_FL;
+    ::wjrpc::error::ptr errchk;
+    t << equal<expect>( err, errchk ) << FAS_FL;
+  });
+  
   t << nothing;
+  
 }
 
 BEGIN_SUITE(method_suite, "")
   ADD_UNIT(method1)
+  ADD_UNIT(method2)
 END_SUITE(method_suite)

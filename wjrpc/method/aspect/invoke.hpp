@@ -66,8 +66,10 @@ struct invoke: Handler
       return;
     }
 
+    /*
     try // server_error
     {
+    */
       if ( holder.is_notify() )
       {
         Handler::operator()( t, std::move(req), nullptr);
@@ -83,6 +85,7 @@ struct invoke: Handler
           }
         );
       }
+    /*
     }
     catch(const std::exception& e)
     {
@@ -108,6 +111,7 @@ struct invoke: Handler
       );
       throw;
     }
+    */
   }
 private:
   
@@ -115,8 +119,8 @@ private:
   template<typename T, typename TT, typename HolderPtr, typename OutgoingHandler, typename Result, typename Error>
   static void callback_( HolderPtr ph, OutgoingHandler outgoing_handler, Result result, Error err )
   {
-    try
-    {
+    /*try
+    {*/
       if (err == nullptr )
       {
         TT::template send_result<T, result_json>( 
@@ -133,7 +137,7 @@ private:
           std::move(outgoing_handler)
         );
       }
-    }
+    /*}
     catch(const std::exception& e)
     {
       ///!! WJRPC_LOG_FATAL(&tt, "jsonrpc service exception: " << e.what() )
@@ -143,7 +147,7 @@ private:
     {
       ///!! WJRPC_LOG_FATAL(&tt, "jsonrpc service unhandled exception")
       abort();
-    }
+    }*/
   }
   
 };

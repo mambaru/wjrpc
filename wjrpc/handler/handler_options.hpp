@@ -10,7 +10,10 @@
 
 namespace wjrpc{
 
-template<typename T, typename P>
+template<
+  typename T = std::shared_ptr< fas::empty_type>, 
+  typename P = std::shared_ptr< fas::empty_type>
+>
 struct handler_options: handler_base_options
 {
   T target; 

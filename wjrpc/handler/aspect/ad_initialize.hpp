@@ -19,7 +19,8 @@ struct ad_initialize
     t._sender_handler = opt.sender_handler;
     t.get_aspect().template get<_target_>() = opt.target;
     t.get_aspect().template get<_peeper_>() = opt.peeper;
-    static_cast< ::wjrpc::logger&  >(t).initialize(opt);
+    t.get_aspect().template get<_init_log_>()(t, opt);
+    //static_cast< ::wjrpc::logger&  >(t).initialize(opt);
   }
 };
 
