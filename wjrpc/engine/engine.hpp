@@ -214,7 +214,7 @@ public:
   void perform_io(data_ptr d, io_id_t io_id, raw_outgoing_handler_t handler) 
   {
     using namespace std::placeholders;
-    if ( _allow_non_jsonrpc )
+/*    if ( _allow_non_jsonrpc )
     {
       auto beg = ::wjson::parser::parse_space( d->begin(), d->end(), nullptr );
       if ( beg!=d->end() && *beg!='{' )
@@ -226,6 +226,7 @@ public:
         }
       }
     }
+    */
 
     while ( d != nullptr )
     {
@@ -264,6 +265,11 @@ public:
     return _call_map.remove_outdated();
   }
 
+  std::shared_ptr<handler_type> find(io_id_t io_id) const
+  {
+    return _handler_map.find(io_id);
+  }
+  
 private:
   
   void perform_io_once_(incoming_holder holder, io_id_t io_id, raw_outgoing_handler_t handler)
