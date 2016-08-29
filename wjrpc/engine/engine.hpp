@@ -110,7 +110,7 @@ public:
 
     //_workflow = opt.engine_args.workflow;
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
-    _allow_non_jsonrpc = opt.allow_non_jsonrpc;
+    //_allow_non_jsonrpc = opt.allow_non_jsonrpc;
     
     _outgoing_rpc_factory = [opt, this](io_id_t io_id, jsonrpc_outgoing_handler_t handler, bool reg_io) -> handler_ptr
     {
@@ -520,7 +520,7 @@ private:
   //timer_id_t _timer_id;
   //owner_type _owner;
   
-  bool _allow_non_jsonrpc = false;
+  //bool _allow_non_jsonrpc = false;
   //std::weak_ptr< ::iow::workflow > _workflow;
 };
 
