@@ -110,7 +110,7 @@ public:
   }
 
   template<typename O>
-  void reconfigure(O&& opt)
+  void initialize(O&& opt)
   {
     std::lock_guard< mutex_type > lk( super::mutex() );
     this->get_aspect().template get<_initialize_>()(*this, std::move(opt) );

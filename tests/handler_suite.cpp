@@ -26,8 +26,9 @@ UNIT(nohandler_unit, "")
     auto req = std::make_unique<data_type>( r[0].begin(), r[0].end() );
     incoming_holder hold( std::move(req) );
     hold.parse(nullptr);
-    h.invoke(std::move(hold), [&t, r](data_ptr res)
+    h.invoke(std::move(hold), [&t, r](outgoing_holder holder)
     {
+      data_ptr res = holder.detach();
       t << message("request: ") << r[0];
       t << message("response: ") << std::string(res->begin(), res->end());
       if ( std::string(res->begin(), res->end()) != r[1] )
@@ -64,6 +65,7 @@ struct itest1
   virtual void method2(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) = 0;
 };
 
+/*
 template<typename R, typename Callback>
 std::function<void()> check_method(const R& r, const Callback& call)
 {
@@ -73,9 +75,10 @@ std::function<void()> check_method(const R& r, const Callback& call)
   return [call]()
   {
     if ( call!=nullptr )
-      call( nullptr );
+      call( std::make_unique<R>() );
   };
 }
+*/
 
 class test1: public itest1
 {
@@ -83,8 +86,12 @@ public:
   
   virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
   {
-    if ( auto bad = check_method(req, callback) )
-      return bad();
+    if ( req==nullptr  )
+    {
+      if (callback!=nullptr) 
+        return callback( std::make_unique<test1_params>() );
+      return;
+    }
     
     std::reverse(req->begin(), req->end());
     
@@ -161,8 +168,9 @@ UNIT(handler2_unit, "")
     incoming_holder hold( std::move(req) );
     hold.parse(nullptr);
     
-    h.invoke( std::move(hold), [&t,r](data_ptr res)
+    h.invoke( std::move(hold), [&t,r](outgoing_holder holder)
     {
+      data_ptr res = holder.detach();
       t << message("request: ") << r[0];
       t << message("response: ") << std::string(res->begin(), res->end());
       if ( std::string(res->begin(), res->end()) != r[1] )
@@ -227,7 +235,7 @@ UNIT(handler4_unit, "")
 }
 
 BEGIN_SUITE(handler_suite, "")
-//  ADD_UNIT(nohandler_unit)
-//  ADD_UNIT(handler2_unit)
-//  ADD_UNIT(handler4_unit)
+  ADD_UNIT(nohandler_unit)
+  ADD_UNIT(handler2_unit)/*
+  ADD_UNIT(handler4_unit)*/
 END_SUITE(handler_suite)

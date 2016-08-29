@@ -7,8 +7,13 @@
 #include <fas/testing.hpp>
 #include "req.hpp"
 
+namespace 
+{
+
+
 namespace request{
 
+  
 template<typename T>
 struct base 
 {
@@ -154,7 +159,8 @@ UNIT(method2, "")
   });
   
   t << nothing;
-  
+}
+
 }
 
 BEGIN_SUITE(method_suite, "")

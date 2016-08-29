@@ -12,6 +12,7 @@
 #include <wjson/strerror.hpp>
 
 #include <type_traits>
+#include <atomic>
 
 namespace wjrpc{
 
@@ -70,11 +71,13 @@ public:
   typedef typename handler_type::outgoing_handler_t jsonrpc_outgoing_handler_t;
   typedef typename handler_type::data_ptr data_ptr;
   typedef typename outgoing_holder::call_id_t call_id_t;
-  
+
+/*  
   typedef ::iow::workflow workflow_type;
   typedef workflow_type::timer_id_t timer_id_t;
   
   typedef ::iow::owner owner_type;
+  */
 
   ~engine()
   {
@@ -83,7 +86,7 @@ public:
   
   engine()
     : _call_counter(1)
-    , _timer_id(0)
+    //, _timer_id(0)
   {
   }
 
@@ -331,7 +334,7 @@ private:
 
   
   template<typename O>
-  void upgrate_options_(O& opt, ::iow::io::outgoing_handler_t handler)
+  void upgrate_options_(O& opt, raw_outgoing_handler_t handler)
   {
     std::weak_ptr<self> wthis = this->shared_from_this();
     opt.sender_handler = [handler, wthis](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)
@@ -360,7 +363,7 @@ private:
   }
   
   template<typename O>
-  void upgrate_options_(O& opt, ::iow::io::incoming_handler_t handler)
+  void upgrate_options_(O& opt, raw_incoming_handler_t handler)
   {
     io_id_t io_id = this->_io_id;
     std::weak_ptr<self> wthis = this->shared_from_this();
@@ -488,7 +491,7 @@ private:
     auto ph = _handler_map.findocre(io_id, reg_io, reinit);
     if ( reinit )
     {
-      ph->initialize(opt);
+      // ph->initialize(opt);
       // специализация в зависимости от типа OutgoingHandler
       this->upgrate_options_(opt, std::move(handler));
       if ( !ph->status() )
@@ -497,7 +500,7 @@ private:
       }
       else if ( reinit )
       {
-        ph->reconfigure(opt);
+        ph->initialize(opt);
       }
     }
     return ph;
@@ -506,15 +509,15 @@ private:
 private:
 
   std::function<handler_ptr(io_id_t, jsonrpc_outgoing_handler_t, bool)> _outgoing_rpc_factory;
-  std::function<handler_ptr(io_id_t, ::iow::io::outgoing_handler_t, bool)> _outgoing_io_factory;
-  std::function<handler_ptr(io_id_t, ::iow::io::incoming_handler_t, bool)> _incoming_io_factory;
+  std::function<handler_ptr(io_id_t, raw_outgoing_handler_t, bool)> _outgoing_io_factory;
+  std::function<handler_ptr(io_id_t, raw_incoming_handler_t, bool)> _incoming_io_factory;
 
   typedef handler_map<handler_type> handler_map_t;
   handler_map_t _handler_map;
   call_map _call_map;
   std::atomic<int> _call_counter;
   std::atomic<io_id_t> _io_id;
-  timer_id_t _timer_id;
+  //timer_id_t _timer_id;
   //owner_type _owner;
   
   bool _allow_non_jsonrpc = false;

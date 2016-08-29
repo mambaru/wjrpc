@@ -70,7 +70,7 @@ public:
     {
       if (tmp.second != nullptr ) 
       {
-        tmp.second( incoming_holder(nullptr) );
+        tmp.second( incoming_holder( data_ptr() ) );
       }
     }
   }
@@ -83,7 +83,7 @@ public:
     {
       if ( auto handler = this->detach(call_id) )
       {
-        handler( incoming_holder(nullptr) );
+        handler( incoming_holder( data_ptr() ) );
         ++count;
       }
     }

@@ -12,6 +12,7 @@ add_executable(
   outgoing_suite.cpp
   method_suite.cpp
   handler_suite.cpp
+  engine_suite.cpp
   ${FAS_TESTING_CPP}
   test_jsonrpc.cpp
 )
