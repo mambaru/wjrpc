@@ -25,7 +25,6 @@ struct ilogger
 
 struct logger_options
 {
-  
   log_fun_t log_error;
   log_fun_t log_fatal;
   log_fun_t log_debug;
