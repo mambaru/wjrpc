@@ -108,59 +108,62 @@ private:
   time_point _time_point;
 };
 
+/// /////////////////////////////////////
+/// /////////////////////////////////////
+/// /////////////////////////////////////
 
-  template<typename V, typename J /*= ::wjson::value<V>*/ >
-  V incoming_holder::get_id( ::wjson::json_error* e) const
+template<typename V, typename J /*= ::wjson::value<V>*/ >
+V incoming_holder::get_id( ::wjson::json_error* e) const
+{
+  V id = V();
+  if ( this->ready_() )
   {
-    V id = V();
-    if ( this->ready_() )
-    {
-      typename J::serializer()( id, _incoming.id.first, _incoming.id.second, e );
-    }
-    return id;
+    typename J::serializer()( id, _incoming.id.first, _incoming.id.second, e );
   }
+  return id;
+}
 
-  template<typename J>
-  std::unique_ptr<typename J::target> incoming_holder::get_result( ::wjson::json_error* e) const
-  {
-    if ( !this->has_result() )
-      return nullptr;
-    if ( 'n'==*_incoming.result.first)
-      return nullptr; // is null 
-    auto result = std::make_unique<typename J::target>();
+template<typename J>
+std::unique_ptr<typename J::target> incoming_holder::get_result( ::wjson::json_error* e) const
+{
+  if ( !this->has_result() )
+    return nullptr;
+  if ( 'n'==*_incoming.result.first)
+    return nullptr; // is null 
+  auto result = std::make_unique<typename J::target>();
 
-    typename J::serializer()(*result, _incoming.result.first, _incoming.result.second, e);
+  typename J::serializer()(*result, _incoming.result.first, _incoming.result.second, e);
 
-    if ( e && *e)
-      return nullptr;
+  if ( e && *e)
+    return nullptr;
 
-    return std::move(result);
-  }
+  return std::move(result);
+}
 
-  template<typename J>
-  std::unique_ptr<typename J::target> incoming_holder::get_params( ::wjson::json_error* e) const
-  {
-    if ( !this->has_params() )
-      return nullptr;
-    if ( 'n'==*_incoming.params.first)
-      return nullptr; // is null 
-    auto result = std::make_unique<typename J::target>();
-    typename J::serializer()(*result, _incoming.params.first, _incoming.params.second, e);
-    if ( e && *e) return nullptr;
-    return std::move(result);
-  }
+template<typename J>
+std::unique_ptr<typename J::target> incoming_holder::get_params( ::wjson::json_error* e) const
+{
+  if ( !this->has_params() )
+    return nullptr;
+  if ( 'n'==*_incoming.params.first)
+    return nullptr; // is null 
+  auto result = std::make_unique<typename J::target>();
+  typename J::serializer()(*result, _incoming.params.first, _incoming.params.second, e);
+  if ( e && *e) return nullptr;
+  return std::move(result);
+}
 
-  template<typename J>
-  std::unique_ptr<typename J::target> incoming_holder::get_error( ::wjson::json_error* e) const
-  {
-    if ( !this->has_error() )
-      return nullptr;
-    if ( 'n'==*_incoming.error.first)
-      return nullptr; // is null 
-    auto result = std::make_unique<typename J::target>();
-    typename J::serializer()(*result, _incoming.error.first, _incoming.error.second, e);
-    if ( e && *e) return nullptr;
-    return std::move(result);
-  }
+template<typename J>
+std::unique_ptr<typename J::target> incoming_holder::get_error( ::wjson::json_error* e) const
+{
+  if ( !this->has_error() )
+    return nullptr;
+  if ( 'n'==*_incoming.error.first)
+    return nullptr; // is null 
+  auto result = std::make_unique<typename J::target>();
+  typename J::serializer()(*result, _incoming.error.first, _incoming.error.second, e);
+  if ( e && *e) return nullptr;
+  return std::move(result);
+}
 
 }

@@ -9,8 +9,8 @@ include_directories(../faslib/)
 
 if ( NOT FAS_TESTING_CPP )
   set( FAS_TESTING_CPP ${CMAKE_SOURCE_DIR}/../faslib/fas/testing/testing.cpp )
-  include_directories(${CMAKE_SOURCE_DIR})
-  include_directories(${CMAKE_SOURCE_DIR}/../faslib)
+  include_directories( ${CMAKE_SOURCE_DIR} )
+  include_directories( ${CMAKE_SOURCE_DIR}/../faslib )
 endif()
 
 
