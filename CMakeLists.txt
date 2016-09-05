@@ -35,5 +35,6 @@ add_library(
 if ( WJRPC_BUILD_TEST OR WJRPC_BUILD_ALL )
   enable_testing()
   add_subdirectory(tests)
+  add_subdirectory(examples)
 endif()
 

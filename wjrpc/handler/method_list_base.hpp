@@ -18,7 +18,6 @@ namespace wjrpc{
 template< typename A = fas::aspect<> >
 class method_list_base
   : public ::fas::aspect_class< typename fas::merge_aspect<A, ::wjrpc::log_aspect>::type >
- // , public ::wjrpc::logger
 {
 public:
   typedef ::fas::aspect_class< typename fas::merge_aspect<A, ::wjrpc::log_aspect>::type > super;

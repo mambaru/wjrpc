@@ -6,8 +6,6 @@
 #include <algorithm>
 #include <memory>
 
-namespace 
-{
 
 
 namespace request{
@@ -125,14 +123,10 @@ struct method_list: wjrpc::method_list
 
 struct handler: ::wjrpc::handler<method_list> {};
 
-
-UNIT(engine1, "")
+int main()
 {
-  using namespace ::fas::testing;
-  using namespace ::wjrpc;
   typedef ::wjrpc::engine< handler > engine_type;
-  typedef std::shared_ptr<engine_type> engine_ptr;
-  engine_type::options_type opt;
+    engine_type::options_type opt;
   auto pcalc = std::make_shared<calc>();
   opt.target = pcalc;
   /*opt.sender_handler = [](const char*, notify_serializer_t, request_serializer_t, result_handler_t )
@@ -141,18 +135,12 @@ UNIT(engine1, "")
   };*/
   auto e = std::make_shared<engine_type>();
   e->start(opt, 1);
-  std::string sreq = "{\"method\":\"test1\",\"params\":{\"first\":2, \"first\":3},\"id\":1}";
-  e->perform_io( std::make_unique<data_type>(sreq.begin(), sreq.end()), 1, [&t](data_ptr d) 
+  std::string sreq = "{\"method\":\"plus\",\"params\":{\"first\":2, \"first\":3},\"id\":1}";
+  e->perform_io( std::make_unique< wjrpc::data_type >(sreq.begin(), sreq.end()), 1, []( wjrpc::data_ptr d) 
   {
     using namespace ::fas::testing;
-    t << message("responce: ") << std::string( d->begin(), d->end() );
+    std::cout << "responce: " << std::string( d->begin(), d->end() ) << std::endl;
   });
-  
-  t << nothing;
 }
 
-}
 
-BEGIN_SUITE(engine_suite, "")
-  ADD_UNIT(engine1)
-END_SUITE(engine_suite)

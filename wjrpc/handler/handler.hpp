@@ -17,18 +17,6 @@
 
 namespace wjrpc{
 
-struct f_get_methods
-{
-  std::vector<std::string> result;
-  
-  template<typename T, typename Tg>
-  void operator()(T& t, fas::tag<Tg> )
-  {
-    result.push_back( t.get_aspect().template get<Tg>().name() );
-  }
-};
-
-
 template<typename MethodList>
 class handler
   : public MethodList
@@ -116,7 +104,20 @@ public:
     this->get_aspect().template get<_initialize_>()(*this, std::move(opt) );
     //super::reconfigure_(*this, std::forward<O>(opt));
   }
+  
 private:
+  struct f_get_methods
+  {
+    std::vector<std::string> result;
+    template<typename T, typename Tg>
+    void operator()(T& t, fas::tag<Tg> )
+    {
+      result.push_back( t.get_aspect().template get<Tg>().name() );
+    }
+  };
+
+private:
+  
   io_id_t _io_id = 0;
 };
 
