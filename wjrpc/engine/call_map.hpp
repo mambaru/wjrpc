@@ -13,7 +13,6 @@ class call_map
 {
 public:
   typedef std::function<void(incoming_holder holder)> result_handler_t;
-  typedef outgoing_holder::call_id_t call_id_t; 
   typedef std::map<call_id_t, result_handler_t> result_map;
   typedef std::mutex mutex_type;
 

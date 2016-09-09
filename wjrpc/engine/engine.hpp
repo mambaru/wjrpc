@@ -70,7 +70,7 @@ public:
   typedef typename handler_type::io_id_t io_id_t;
   typedef typename handler_type::outgoing_handler_t jsonrpc_outgoing_handler_t;
   typedef typename handler_type::data_ptr data_ptr;
-  typedef typename outgoing_holder::call_id_t call_id_t;
+  typedef typename handler_type::call_id_t call_id_t;
 
 /*  
   typedef ::iow::workflow workflow_type;

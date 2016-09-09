@@ -14,7 +14,7 @@ namespace wjrpc{
 
 struct invoke_stub
 {
-  typedef fas::metalist::advice metatype;
+  typedef ::fas::metalist::advice metatype;
   typedef _invoke_ tag;
   typedef invoke_stub advice_class;
 

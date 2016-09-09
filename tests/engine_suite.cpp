@@ -131,7 +131,7 @@ UNIT(engine1, "")
   using namespace ::fas::testing;
   using namespace ::wjrpc;
   typedef ::wjrpc::engine< handler > engine_type;
-  typedef std::shared_ptr<engine_type> engine_ptr;
+  //typedef std::shared_ptr<engine_type> engine_ptr;
   engine_type::options_type opt;
   auto pcalc = std::make_shared<calc>();
   opt.target = pcalc;

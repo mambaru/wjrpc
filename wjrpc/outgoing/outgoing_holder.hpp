@@ -13,7 +13,6 @@ namespace wjrpc{
 class outgoing_holder
 {
 public:
-  typedef ::wjrpc::call_id_t call_id_t;
   typedef std::function< void(incoming_holder) > result_handler_t;
   typedef std::function< data_ptr() > basic_serializer_t;
   typedef std::function< data_ptr(const char* name, call_id_t id) > request_serializer_t;
@@ -27,7 +26,7 @@ public:
   // полностью сериализованный notify
   outgoing_holder(const char* name, data_ptr d);
 
-  // частично сериализованный request
+  // полностью сериализованный request
   outgoing_holder(const char* name, data_ptr d, result_handler_t result_handler, call_id_t call_id);
 
   // отложенная сериализация result или error
