@@ -6,114 +6,104 @@
 #include <algorithm>
 #include <memory>
 
-
-
-namespace request{
-
-/// -------------------
-template<typename T>
-struct base 
+// *********************************
+//              Interface
+// *********************************
+namespace request
 {
-  int first=0; 
-  int second=0;
-  typedef std::unique_ptr<T> ptr;
-};
+  struct plus
+  {
+    int first=0; 
+    int second=0;
+    typedef std::unique_ptr<plus> ptr;
+  };
+} // request
 
-struct plus: base<plus> {};
-struct munus: base<munus> {};
-
-/// -------------------
-template<typename T>
-struct T_json
+namespace response
 {
-  FAS_NAME(first)
-  FAS_NAME(second)
+  struct plus 
+  {
+    int value=0;
+    typedef std::unique_ptr<plus> ptr;
+    typedef std::function<void(ptr)> callback;
+  };
+} // response 
 
-  typedef ::wjson::object<
-    T,
-    ::wjson::member_list<
-      ::wjson::member<n_first, base<T>,  int,  &base<T>::first>,
-      ::wjson::member<n_second, base<T>, int,  &base<T>::second>
-    >
-  > type;
-  typedef typename type::serializer serializer;
-  typedef typename type::target target;
-};
-
-struct plus_json: T_json<plus> {};
-struct munus_json: T_json<munus> {};
-
-}
-
-namespace response{
-
-template<typename T>
-struct base 
-{
-  int value=0;
-  typedef std::unique_ptr<T> ptr;
-  typedef std::function<void(ptr)> callback;
-};
-
-struct plus: base<plus> {};
-struct munus: base<munus> {};
-
-/// -------------------
-
-template<typename T>
-struct T_json
-{
-  FAS_NAME(value)
-
-  typedef ::wjson::object<
-    T,
-    ::wjson::member_list<
-      ::wjson::member<n_value, base<T>, int, &base<T>::value>
-    >
-  > type;
-  typedef typename type::serializer serializer;
-  typedef typename type::target target;
-};
-
-struct plus_json: T_json<plus> {};
-struct munus_json: T_json<munus> {};
-
-}
 
 struct icalc
 {
   virtual ~icalc() {}
   virtual void plus( request::plus::ptr req, response::plus::callback cb) = 0;
-  virtual void minus( request::plus::ptr req, response::plus::callback cb) = 0;
 };
+
+// *********************************
+//              Domain
+// *********************************
 
 class calc
   : public icalc
 {
 public:
-  virtual void plus( request::plus::ptr req, response::plus::callback cb)
-  {
-    if ( cb == nullptr )
-      return;
-
-    if ( req == nullptr )
-      return cb(nullptr);
-
-    auto res = std::make_unique<response::plus>();
-    res->value = req->first + req->second;
-    cb( std::make_unique<response::plus>() );
-  }
-
-  virtual void minus( request::plus::ptr , response::plus::callback cb)
-  {
-    if ( cb == nullptr )
-      return;
-    return cb(nullptr);
-  }
+  virtual void plus( request::plus::ptr req, response::plus::callback cb) override;
 };
 
+void calc::plus( request::plus::ptr req, response::plus::callback cb)
+{
+  if ( cb == nullptr )
+    return;
+
+  if ( req == nullptr )
+    return cb(nullptr);
+
+  auto res = std::make_unique<response::plus>();
+  res->value = req->first + req->second;
+  cb( std::move(res) );
+}
+
+// *********************************
+//              JSON
+// *********************************
+
+namespace request 
+{
+  struct plus_json
+  {
+    FAS_NAME(first)
+    FAS_NAME(second)
+
+    typedef wjson::object<
+      plus,
+      wjson::member_list<
+        wjson::member<n_first, plus,  int,  &plus::first>,
+        wjson::member<n_second, plus, int,  &plus::second>
+      >
+    > type;
+    typedef typename type::serializer serializer;
+    typedef typename type::target target;
+  };
+}
+
+namespace response
+{
+  struct plus_json
+  {
+    FAS_NAME(value)
+    typedef wjson::object<
+      plus,
+      wjson::member_list<
+        wjson::member<n_value, plus, int, &plus::value>
+      >
+    > type;
+    typedef typename type::serializer serializer;
+    typedef typename type::target target;
+  };
+}
+
+// *********************************
+//              JSON-RPC
+// *********************************
+
 JSONRPC_TAG(plus)
-JSONRPC_TAG(minus)
 
 struct method_list: wjrpc::method_list
 <
@@ -121,7 +111,12 @@ struct method_list: wjrpc::method_list
   wjrpc::invoke_method<_plus_, request::plus_json, response::plus_json, icalc, &icalc::plus>
 >{};
 
-struct handler: ::wjrpc::handler<method_list> {};
+
+// *********************************
+//              Engine
+// *********************************
+
+class handler: public ::wjrpc::handler<method_list> {};
 
 int main()
 {
@@ -129,13 +124,9 @@ int main()
     engine_type::options_type opt;
   auto pcalc = std::make_shared<calc>();
   opt.target = pcalc;
-  /*opt.sender_handler = [](const char*, notify_serializer_t, request_serializer_t, result_handler_t )
-  {
-    
-  };*/
   auto e = std::make_shared<engine_type>();
   e->start(opt, 1);
-  std::string sreq = "{\"method\":\"plus\",\"params\":{\"first\":2, \"first\":3},\"id\":1}";
+  std::string sreq = "{\"method\":\"plus\",\"params\":{\"first\":2, \"second\":3},\"id\":1}";
   e->perform_io( std::make_unique< wjrpc::data_type >(sreq.begin(), sreq.end()), 1, []( wjrpc::data_ptr d) 
   {
     using namespace ::fas::testing;
