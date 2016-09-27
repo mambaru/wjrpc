@@ -522,7 +522,7 @@ private:
   handler_map_t _handler_map;
   call_map _call_map;
   std::atomic<int> _call_counter;
-  std::atomic<io_id_t> _io_id;
+  /*std::atomic<*/io_id_t/*>*/ _io_id;
   //timer_id_t _timer_id;
   //owner_type _owner;
   
