@@ -28,7 +28,6 @@ int main()
     if ( inholder.method() == "plus" )
     {
       auto params = inholder.get_params<request::plus_json>(nullptr);
-      
       wjrpc::outgoing_result<response::plus> res;
       res.result = std::make_unique<response::plus>();
       res.result->value = params->first + params->second;

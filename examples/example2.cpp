@@ -10,42 +10,37 @@
 #include <wjrpc/outgoing/outgoing_error_json.hpp>
 #include <iostream>
 
-template<typename E>
-std::string make_error()
-{
-  typedef wjrpc::outgoing_error<wjrpc::error> parse_error;
-  parse_error err;
-  err.error = std::make_unique<E>();
-
-  typedef wjrpc::outgoing_error_json<wjrpc::error_json> error_json;
-  
-  std::string str;
-  error_json::serializer()(err, std::back_inserter(str));
-  return str;
-}
-
 int main()
 {
-  std::list<std::string> req_list = 
+  std::vector<std::string> req_list = 
   {
-    "uyi {\"method\":\"plus\",\"params\":{\"first\":2, \"second\":3},\"id\":1}"
+    "{\"method\":\"plus\",\"params\":{\"first\":2, \"second\":3},\"id\":1}"
   };
+  
+  std::vector<std::string> res_list;
   
   for ( auto& sreq : req_list )
   {
-    std::cout << "-----------------------" << std::endl;
-    std::cout << sreq << std::endl;
-    wjrpc::incoming_holder inholder( std::move(sreq) );
+    wjrpc::incoming_holder inholder( sreq );
     
     wjson::json_error e;
     inholder.parse(&e);
     if ( e )
     {
-      std::cerr << "CERR: Ошибка JSON-RPC: " << inholder.error_message(e) << std::endl;
-      std::cout << make_error<wjrpc::parse_error>() << std::endl;
+      typedef wjrpc::outgoing_error<wjrpc::error> error_type;
+      error_type err;
+      err.error = std::make_unique<wjrpc::parse_error>();
+
+      typedef wjrpc::outgoing_error_json<wjrpc::error_json> error_json;
+      
+      std::string str;
+      error_json::serializer()(err, std::back_inserter(str));
+      res_list.push_back(str);
     }
     else if ( inholder.is_request() )
     {
+      auto raw_id  = inholder.raw_id();
+      auto call_id = std::make_unique<wjrpc::data_type>( raw_id.first, raw_id.second );
       // Есть имя метода и идентификатор вызова
       if ( inholder.method() == "plus" )
       {
@@ -55,28 +50,59 @@ int main()
           wjrpc::outgoing_result<response::plus> res;
           res.result = std::make_unique<response::plus>();
           res.result->value = params->first + params->second;
-          res.id = std::make_unique<wjrpc::data_type>( inholder.raw_id().first, inholder.raw_id().second );
+          res.id = std::move(call_id);
           typedef wjrpc::outgoing_result_json<response::plus_json> result_json;
-          result_json::serializer()( res, std::ostreambuf_iterator<char>(std::cout) );
-          std::cout << std::endl;
+          std::string str;
+          result_json::serializer()( res, std::back_inserter(str) );
+          res_list.push_back(str);
         }
         else
         {
-          std::cerr << "CERR: Неверный параметр для '" << inholder.method() << "': " << inholder.params_error_message(e) << std::endl;
-          std::cout << make_error<wjrpc::invalid_params>() << std::endl;
+          typedef wjrpc::outgoing_error<wjrpc::error> error_type;
+          error_type err;
+          err.error = std::make_unique<wjrpc::invalid_params>();
+          err.id  = std::move(call_id);
+
+          typedef wjrpc::outgoing_error_json<wjrpc::error_json> error_json;
+          
+          std::string str;
+          error_json::serializer()(err, std::back_inserter(str));
+          res_list.push_back(str);
         }
       }
       else
       {
-        std::cerr << "CERR: Ошибка: метод '" << inholder.method() <<"' не поддерживается " << std::endl;
-        std::cout << make_error<wjrpc::procedure_not_found>() << std::endl;
+        typedef wjrpc::outgoing_error<wjrpc::error> error_type;
+        error_type err;
+        err.error = std::make_unique<wjrpc::procedure_not_found>();
+        err.id  = std::move(call_id);
+
+        typedef wjrpc::outgoing_error_json<wjrpc::error_json> error_json;
+          
+        std::string str;
+        error_json::serializer()(err, std::back_inserter(str));
+        res_list.push_back(str);
       }
     }
     else
     {
-      std::cerr << "CERR: Ошибка: это не JSON-RPC запрос" << std::endl;
-      std::cout << make_error<wjrpc::invalid_request>() << std::endl;
+      typedef wjrpc::outgoing_error<wjrpc::error> error_type;
+      error_type err;
+      err.error = std::make_unique<wjrpc::invalid_request>();
+
+      typedef wjrpc::outgoing_error_json<wjrpc::error_json> error_json;
+          
+      std::string str;
+      error_json::serializer()(err, std::back_inserter(str));
+      res_list.push_back(str);
     }
+  }
+  
+  for ( size_t i =0; i != req_list.size(); ++i)
+  {
+    std::cout << req_list[i] << std::endl;
+    std::cout << res_list[i] << std::endl;
+    std::cout << std::endl;
   }
 }
 
