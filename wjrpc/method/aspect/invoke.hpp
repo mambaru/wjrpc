@@ -54,7 +54,7 @@ struct invoke: Handler
     if ( e )
     {
       WJRPC_LOG_ERROR( &t, "jsonrpc::invoke Invalid Params: " << holder.params_error_message(e) );
-      
+
       if ( holder.has_id() )
       {
         TT::template send_error<T, error_json>( 
@@ -66,88 +66,43 @@ struct invoke: Handler
       return;
     }
 
-    /*
-    try // server_error
+    if ( holder.is_notify() )
     {
-    */
-      if ( holder.is_notify() )
-      {
-        Handler::operator()( t, std::move(req), nullptr);
-      }
-      else
-      {
-        using namespace std::placeholders;
-        auto ph = std::make_shared<incoming_holder>( std::move(holder) );
-        Handler::operator()( t, std::move(req), 
-          [ph, outgoing_handler]( result_ptr result, error_ptr err )
-          {
-            self::callback_<T, TT>(ph, outgoing_handler, std::move(result), std::move(err) );
-          }
-        );
-      }
-    /*
+      Handler::operator()( t, std::move(req), nullptr);
     }
-    catch(const std::exception& e)
+    else
     {
-      WJRPC_LOG_ERROR(&t, "iow::jsonrpc::invoke::operator() : " << e.what() )
-      // Ахтунг! holder перемещен
-      holder = decltype(holder)( data_ptr() );
-      TT::template send_error<T, error_json>( 
-        std::move(holder), 
-        std::make_unique<server_error>(),
-        std::move(outgoing_handler) 
+      using namespace std::placeholders;
+      auto ph = std::make_shared<incoming_holder>( std::move(holder) );
+      Handler::operator()( t, std::move(req), 
+        [ph, outgoing_handler]( result_ptr result, error_ptr err )
+        {
+          self::callback_<T, TT>(ph, outgoing_handler, std::move(result), std::move(err) );
+        }
       );
-      throw;
     }
-    catch(...)
-    {
-      WJRPC_LOG_ERROR(&t, "iow::jsonrpc::invoke::operator() : unhandled exception (Server Error)")
-      // Ахтунг! holder перемещен
-      holder = decltype(holder)( data_ptr() );
-      TT::template send_error<T, error_json>( 
-        std::move(holder), 
-        std::make_unique<server_error>(),
-        std::move(outgoing_handler) 
-      );
-      throw;
-    }
-    */
   }
 private:
-  
-  
+
   template<typename T, typename TT, typename HolderPtr, typename OutgoingHandler, typename Result, typename Error>
   static void callback_( HolderPtr ph, OutgoingHandler outgoing_handler, Result result, Error err )
   {
-    /*try
-    {*/
-      if (err == nullptr )
-      {
-        TT::template send_result<T, result_json>( 
-          std::move(*ph),
-          std::move(result),
-          std::move(outgoing_handler) 
-        );
-      }
-      else
-      {
-        TT::template send_error<T, error_json>( 
-          std::move(*ph), 
-          std::move(err), 
-          std::move(outgoing_handler)
-        );
-      }
-    /*}
-    catch(const std::exception& e)
+    if (err == nullptr )
     {
-      ///!! WJRPC_LOG_FATAL(&tt, "jsonrpc service exception: " << e.what() )
-      abort();
+      TT::template send_result<T, result_json>( 
+        std::move(*ph),
+        std::move(result),
+        std::move(outgoing_handler) 
+      );
     }
-    catch(...)
+    else
     {
-      ///!! WJRPC_LOG_FATAL(&tt, "jsonrpc service unhandled exception")
-      abort();
-    }*/
+      TT::template send_error<T, error_json>( 
+        std::move(*ph), 
+        std::move(err), 
+        std::move(outgoing_handler)
+      );
+    }
   }
   
 };
