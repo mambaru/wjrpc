@@ -33,7 +33,7 @@ void send_error( incoming_holder holder, std::unique_ptr<error> err, outgoing_ha
   outgoing_handler( std::move(out) );
 }
 
-void send_error_raw( incoming_holder holder, std::unique_ptr<error> err, raw_outgoing_handler_t outgoing_handler)
+void send_error_raw( incoming_holder holder, std::unique_ptr<error> err, output_handler_t output_handler)
 {
   typedef outgoing_error_json< error_json > message_json;
   outgoing_error<error> error_message;
@@ -53,7 +53,7 @@ void send_error_raw( incoming_holder holder, std::unique_ptr<error> err, raw_out
   typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
 
   //WJRPC_LOG_ERROR( "jsonrpc-broker: " << d )
-  outgoing_handler( std::move(d) );
+  output_handler( std::move(d) );
 }
 
 

@@ -14,11 +14,13 @@ int main()
 {
   std::vector<std::string> req_list = 
   {
-    "{\"method\":\"plus\",\"params\":{\"first\":2, \"second\":3},\"id\":1}"
+    "{\"method\":\"plus\", \"params\":{ \"first\":2, \"second\":3 }, \"id\" :1 }",
+    "{\"method\":\"minus\", \"params\":{ \"first\":5, \"second\":10 }, \"id\" :1 }",
+    "{\"method\":\"multiplies\", \"params\":{ \"first\":2, \"second\":2 }, \"id\" :1 }",
+    "{\"method\":\"divides\", \"params\":{ \"first\":9, \"second\":3 }, \"id\" :1 }"
   };
-  
   std::vector<std::string> res_list;
-  
+
   for ( auto& sreq : req_list )
   {
     wjrpc::incoming_holder inholder( sreq );
@@ -97,8 +99,8 @@ int main()
       res_list.push_back(str);
     }
   }
-  
-  for ( size_t i =0; i != req_list.size(); ++i)
+
+  for ( size_t i =0; i != res_list.size(); ++i)
   {
     std::cout << req_list[i] << std::endl;
     std::cout << res_list[i] << std::endl;

@@ -40,6 +40,21 @@ struct mem_fun_handler2
   typedef std::unique_ptr< error> json_error_ptr;
   typedef std::function< void(responce_ptr, json_error_ptr) > jsonrpc_callback;
 
+    template<typename T>
+  void operator()(T& t, request_ptr req) const
+  {
+    if ( auto i = t.target() )
+    {
+      std::shared_ptr<Itf> pthis = t.shared_from_this();
+      (i.get()->*mem_ptr)( 
+        std::move(req), 
+        nullptr,
+        t.get_id(),
+        nullptr
+      );
+    }
+  }
+
   template<typename T>
   void operator()(T& t, request_ptr req, jsonrpc_callback cb) const
   {

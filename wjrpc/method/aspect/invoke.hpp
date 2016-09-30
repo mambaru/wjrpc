@@ -68,7 +68,7 @@ struct invoke: Handler
 
     if ( holder.is_notify() )
     {
-      Handler::operator()( t, std::move(req), nullptr);
+      Handler::operator()( t, std::move(req) );
     }
     else
     {

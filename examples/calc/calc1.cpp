@@ -20,7 +20,6 @@ void calc1::plus( request::plus::ptr req, response::plus::callback cb)
   this->impl_<response::plus>( std::move(req), cb, [](int f, int s) { return f+s; } );
 }
 
-
 void calc1::minus( request::minus::ptr req, response::minus::callback cb)
 {
   this->impl_<response::minus>( std::move(req), cb, [](int f, int s) { return f-s; });

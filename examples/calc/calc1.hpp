@@ -1,6 +1,6 @@
 #pragma once
 
-#include "iclac.hpp"
+#include "icalc.hpp"
 
 class calc1
   : public icalc

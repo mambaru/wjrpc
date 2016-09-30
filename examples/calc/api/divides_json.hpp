@@ -24,7 +24,7 @@ namespace request
 
 namespace response
 {
-  struct plus_json
+  struct divides_json
   {
     JSON_NAME(value)
     typedef wjson::object<

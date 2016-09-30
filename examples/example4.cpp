@@ -97,21 +97,20 @@ int main()
       // Есть имя метода и идентификатор вызова
       if ( inholder.method() == "plus" )
       {
-        // Ручная обработка
-        auto params = inholder.get_params<request::plus_json>(&e);
-        if ( !e )
-        {
-          std::shared_ptr<wjrpc::incoming_holder> ph = std::make_shared<wjrpc::incoming_holder>( std::move(inholder) );
-          calc->plus( std::move(params), std::bind( send_responce<response::plus_json>, ph, std::placeholders::_1, std::ref(out)) );
-        }
-        else
-        {
-          out = make_error<wjrpc::invalid_params>();
-        }
+        invoke<request::plus_json, response::plus_json, &icalc::plus>( std::move(inholder), calc, out );
       }
-      // else if ( inholder.method() == "minus" ) { ... }
-      // else if ( inholder.method() == "multiplies" ) { .... }
-      // else if ( inholder.method() == "divides" ) { .... }
+      else if ( inholder.method() == "minus" )
+      {
+        invoke<request::minus_json, response::minus_json, &icalc::minus>( std::move(inholder), calc, out );
+      }
+      else if ( inholder.method() == "multiplies" )
+      {
+        invoke<request::multiplies_json, response::multiplies_json, &icalc::multiplies>( std::move(inholder), calc, out );
+      }
+      else if ( inholder.method() == "divides" )
+      {
+        invoke<request::divides_json, response::divides_json, &icalc::divides>( std::move(inholder), calc, out );
+      }
       else
       {
         out = make_error<wjrpc::procedure_not_found>();

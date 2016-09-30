@@ -24,7 +24,6 @@ struct ad_perform_send
     ResultHandler rh
   ) const
   {
-
     std::shared_ptr<Params> p = nullptr;
 
     if (params!=nullptr)

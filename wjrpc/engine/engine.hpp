@@ -7,6 +7,7 @@
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/outgoing/outgoing_error.hpp>
 #include <wjrpc/outgoing/outgoing_error_json.hpp>
+#include <wjrpc/errors/error_json.hpp>
 #include <wjrpc/types.hpp>
 #include <wjrpc/incoming/send_error.hpp>
 #include <wjson/strerror.hpp>
@@ -117,12 +118,12 @@ public:
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
 
-    _incoming_io_factory = [opt, this](io_id_t io_id, raw_incoming_handler_t handler, bool reg_io) -> handler_ptr
+    _incoming_io_factory = [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io) -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
  
-    _outgoing_io_factory = [opt, this](io_id_t io_id, raw_outgoing_handler_t handler, bool reg_io) -> handler_ptr
+    _outgoing_io_factory = [opt, this](io_id_t io_id, output_handler_t handler, bool reg_io) -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
@@ -188,7 +189,7 @@ public:
   /***************************************************************/
   
   
-  jsonrpc_outgoing_handler_t io2rpc( raw_outgoing_handler_t handler )
+  jsonrpc_outgoing_handler_t io2rpc( output_handler_t handler )
   {
     if ( handler == nullptr )
       return nullptr;
@@ -200,7 +201,7 @@ public:
     };
   }
 
-  void reg_io( io_id_t io_id, raw_incoming_handler_t handler )
+  void reg_io( io_id_t io_id, input_handler_t handler )
   {
     this->_incoming_io_factory(io_id, handler, true);
   }
@@ -211,7 +212,7 @@ public:
   }
 
   
-  void perform_io(data_ptr d, io_id_t io_id, raw_outgoing_handler_t handler) 
+  void perform_io(data_ptr d, io_id_t io_id, output_handler_t handler) 
   {
     using namespace std::placeholders;
 /*    if ( _allow_non_jsonrpc )
@@ -272,7 +273,7 @@ public:
   
 private:
   
-  void perform_io_once_(incoming_holder holder, io_id_t io_id, raw_outgoing_handler_t handler)
+  void perform_io_once_(incoming_holder holder, io_id_t io_id, output_handler_t handler)
   {
     this->perform_incoming_( std::move(holder), io_id, [handler](outgoing_holder holder)
     {
@@ -340,7 +341,7 @@ private:
 
   
   template<typename O>
-  void upgrate_options_(O& opt, raw_outgoing_handler_t handler)
+  void upgrate_options_(O& opt, output_handler_t handler)
   {
     std::weak_ptr<self> wthis = this->shared_from_this();
     opt.sender_handler = [handler, wthis](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)
@@ -369,7 +370,7 @@ private:
   }
   
   template<typename O>
-  void upgrate_options_(O& opt, raw_incoming_handler_t handler)
+  void upgrate_options_(O& opt, input_handler_t handler)
   {
     io_id_t io_id = this->_io_id;
     std::weak_ptr<self> wthis = this->shared_from_this();
@@ -515,8 +516,8 @@ private:
 private:
 
   std::function<handler_ptr(io_id_t, jsonrpc_outgoing_handler_t, bool)> _outgoing_rpc_factory;
-  std::function<handler_ptr(io_id_t, raw_outgoing_handler_t, bool)> _outgoing_io_factory;
-  std::function<handler_ptr(io_id_t, raw_incoming_handler_t, bool)> _incoming_io_factory;
+  std::function<handler_ptr(io_id_t, output_handler_t, bool)> _outgoing_io_factory;
+  std::function<handler_ptr(io_id_t, input_handler_t, bool)> _incoming_io_factory;
 
   typedef handler_map<handler_type> handler_map_t;
   handler_map_t _handler_map;

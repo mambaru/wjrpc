@@ -13,8 +13,8 @@ typedef data_ptr incoming_call_id_t;
 typedef int      call_id_t;
 typedef int      error_code_t;
 
-typedef std::function< void(data_ptr) > raw_outgoing_handler_t;
-typedef std::function< void(data_ptr, io_id_t, raw_outgoing_handler_t )> raw_incoming_handler_t;
+typedef std::function< void(data_ptr) > output_handler_t;
+typedef std::function< void(data_ptr, io_id_t, output_handler_t )> input_handler_t;
 
 
 }

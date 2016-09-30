@@ -83,6 +83,11 @@ struct munus_json: T_json<munus> {};
 struct plus_handler
 {
   template<typename T>
+  void operator() ( T&, request::plus::ptr)
+  {
+  }
+  
+  template<typename T>
   void operator() ( T&, request::plus::ptr req, response::plus::callback2 cb)
   {
     auto res = std::make_unique<response::plus>();

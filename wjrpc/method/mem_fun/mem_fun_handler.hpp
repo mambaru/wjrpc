@@ -27,17 +27,23 @@ struct mem_fun_handler
   typedef std::function< void(responce_ptr, json_error_ptr) > jsonrpc_callback;
 
   template<typename T>
+  void operator()(T& t, request_ptr req) const
+  {
+    if ( auto i = t.target() )
+    {
+      (i.get()->*mem_ptr)(std::move(req), nullptr );
+    }
+  }
+
+  template<typename T>
   void operator()(T& t, request_ptr req, jsonrpc_callback cb) const
   {
     if ( auto i = t.target() )
     {
-
-
       (i.get()->*mem_ptr)( 
         std::move(req), 
         mem_fun_make_callback( std::move(cb)) 
       );
-      
     }
     else 
     {
