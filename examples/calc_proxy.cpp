@@ -1,49 +1,230 @@
+#include "calc/calc1.hpp"
+#include "calc/calc_p.hpp"
 #include "gateway.hpp"
 #include "service.hpp"
 #include <iostream>
+#include <unistd.h>
+#include <atomic>
+#include <chrono>
 
-std::shared_ptr<icalc> create_next(int mode1)
+/*#ifndef NDEBUG
+#define LOG_READ(BEG, END) std::clog << getpid() << " READ: " << std::string(BEG, END) << std::endl;
+#define LOG_WRITE(BEG, END) std::clog << getpid() << " WRITE: " << std::string(BEG, END) << std::endl;
+#else*/
+#define LOG_READ(BEG, END)
+#define LOG_WRITE(BEG, END)
+/*#endif*/
+
+wjrpc::io_id_t create_id()
 {
+  static std::atomic<wjrpc::io_id_t> counter( (wjrpc::io_id_t(1)) );
+  return counter.fetch_add(1);
+}
+
+void run_service(int rd, int wd, std::shared_ptr<service::engine_type> srv)
+{
+  auto io_id = create_id();
+  char buff[1024];
+  for (;;)
+  {
+    int s = ::read( rd, buff, 1024 );
+    LOG_READ(buff, buff + s)
+
+    auto d = std::make_unique<wjrpc::data_type>( buff, buff + s );
+
+    srv->perform_io( std::move(d), io_id, [wd]( wjrpc::data_ptr d )
+    {
+      LOG_WRITE(d->begin(), d->end() )
+      ::write( wd, d->data(), d->size());
+    });
+  }
+}
+
+void gateway_writer(int rd, int wd, wjrpc::data_ptr d, wjrpc::output_handler_t handler)
+{
+  LOG_WRITE(d->begin(), d->end() )
+  ::write( wd, d->data(), d->size() );
+  char buff[1024];
+  int s = ::read(rd, buff, 1024);
+  LOG_READ(buff, buff + s)
+  handler( std::make_unique<wjrpc::data_type>(buff, buff + s) );
+}
+
+void run_calc(int rd, int wd, std::shared_ptr<icalc> calc)
+{
+  auto srv = std::make_shared<service::engine_type>();
+  service::engine_type::options_type srv_opt;
+  srv_opt.target = calc;
+  srv->start(srv_opt, 11);
+  run_service(rd, wd, srv);
+}
+
+struct holder
+{
+  int rd = 0, wd = 0;
+  std::shared_ptr<gateway::engine_type> engine;
+  std::shared_ptr<icalc> calc;
+};
+
+void run_proxy(int rd, int wd, std::shared_ptr<icalc> calc, int count, std::shared_ptr<calc_p> proxy);
+
+holder create_gateway(std::shared_ptr<icalc> calc, int count, std::shared_ptr<calc_p> proxy)
+{
+  if ( count == 0 )
+    return holder();
+  holder hld;
+  int up[2], down[2];
+  ::pipe(up);
+  ::pipe(down);
+  auto pid = fork();
+  if ( pid == 0 )
+  {
+    run_proxy(up[0], down[1], calc, count-1 , proxy);
+    return holder();
+  }
+
+  hld.rd = down[0];
+  hld.wd = up[1];
+  hld.engine = std::make_shared<gateway::engine_type>();
+  gateway::engine_type::options_type gtw_opt;
+  hld.engine->start(gtw_opt, 33);
+  using namespace std::placeholders;
+  hld.engine->reg_io( 44,  std::bind(gateway_writer, down[0], up[1], _1, _3) );
+  hld.calc = hld.engine->find(44);
+  return hld;
+}
+
+void run_proxy(int rd, int wd, std::shared_ptr<icalc> calc, int count, std::shared_ptr<calc_p> proxy)
+{
+  if ( count == 0 )
+    return run_calc(rd, wd, calc);
   
+  auto hld = create_gateway(calc, count, proxy);
+  auto srv = std::make_shared<service::engine_type>();
+
+  service::engine_type::options_type srv_opt;
+  if ( proxy!=nullptr )
+  {
+    proxy->initialize( hld.calc );
+    srv_opt.target = proxy;
+  }
+  else
+  {
+    srv_opt.target = hld.calc;
+  }
+  srv->start(srv_opt, 22);
+
+  run_service(rd, wd, srv);
 }
 
-std::shared_ptr<icalc> create_client(int mode1, std::shared_ptr<icalc> next)
+template<typename T>
+T get(std::istream& is)
 {
-  return nullptr;
+  T res = 0;
+  is >> res;
+  return res;
 }
 
-void run(int mode1, int mode2)
+void run_iter(std::shared_ptr<icalc> cli)
 {
-  auto cli = create_client(mode1, create_next(mode2) );
   while ( !std::cin.eof() )
   {
-    int first = 0;
-    char op = '';
-    int second = 0;
-    std::cin >> first;
-    std::cin >> op;
-    std::cin >> second;
-    
+    int first = get<int>(std::cin);
+    char op = get<char>(std::cin);
+    int second = get<int>(std::cin);
+    if ( op == '+') 
+    {
+      auto req = std::make_unique<request::plus>();
+      req->first = first;
+      req->second = second;
+      cli->plus(std::move(req), [](response::plus::ptr res)
+      {
+        std::cout << "= ";
+        if (res) std::cout << res->value << std::endl;
+        else std::cout << "null" << std::endl;
+      });
+    }
   }
+}
+
+void run_bench(std::shared_ptr<icalc> cli)
+{
+  std::vector<time_t> times;
+  times.reserve(1000);
+  request::plus pls; 
+  pls.first = 12345;
+  pls.second = 54321;
+  for (;;)
+  {
+    auto start = std::chrono::high_resolution_clock::now();
+    cli->plus( std::make_unique<request::plus>(pls), [](response::plus::ptr){} );
+    auto finish = std::chrono::high_resolution_clock::now();
+    auto span = std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start).count();
+    times.push_back(span);
+    if ( times.size() == 1000 )
+    {
+      std::sort(times.begin(), times.end());
+      std::cout << "100%: " << times.back() << " ns ( " << size_t(( 1000000000.0/times.back() ) * 1) << " persec), "
+                << "99%: " << times[990] << " ns ( " << size_t(( 1000000000.0/times[990] ) * 1) << " persec), "
+                << "90%: " << times[900] << " ns ( " << size_t(( 1000000000.0/times[900] ) * 1) << " persec), "
+                << "80%: " << times[800] << " ns ( " << size_t(( 1000000000.0/times[800] ) * 1) << " persec), "
+                << "50%: " << times[500] << " ns ( " << size_t(( 1000000000.0/times[500] ) * 1) << " persec), " 
+                << "0% " << times.front() << " ns ( " << size_t(( 1000000000.0/times.front() ) * 1) << " persec)" << std::endl;
+      times.clear();
+    }
+  }
+}
+
+
+void run_client(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy)
+{
+  std::shared_ptr<icalc> clc = calc;
+  auto hld = create_gateway(calc, count, proxy);
+  if ( count != 0 )
+    clc = hld.calc;
+  if ( mode == 0)
+    run_iter( clc );
+  if ( mode == 1)
+    run_bench( clc );
 }
 
 int main(int argc, char* argv[])
 {
-  if ( argc < 3)
+  std::shared_ptr<calc_p> proxy;
+  std::shared_ptr<calc1>  calc = std::make_shared<calc1>();
+
+  if ( argc < 4)
   {
-    std::cout << "Usage: calc <<mode1>> <<mode2>>" << std::endl;
-    std::cout << "\tmode1" << std::endl;
-    std::cout << "\t\t0 - interactive" << std::endl;
-    std::cout << "\t\t1 - benchmark" << std::endl;
-    std::cout << "\t\t2 - stress" << std::endl;
-    std::cout << "\tmode2" << std::endl;
-    std::cout << "\t\t0 - local" << std::endl;
-    std::cout << "\t\t1 - local->server" << std::endl;
-    std::cout << "\t\t2 - local->proxy->server" << std::endl;
+    std::cout << "Usage: calc [i|b|s] [<<proxy count>>] [w]" << std::endl;
   }
+
+
+  int mode = 0;
+  int proxy_count = 0;
+
+  if ( argc > 1 )
+  {
+    if ( argv[1][0] == 'i' ) mode = 0;
+    else if ( argv[1][0] == 'b' ) mode = 1;
+    else if ( argv[1][0] == 's' ) mode = 2;
+  }
+
+  if ( argc > 2 )
+    proxy_count = atoi(argv[2]);
+
+  if ( argc > 3 )
+    proxy = std::make_shared<calc_p>();
+  
+  std::cout << "mode: " << mode << std::endl; 
+  std::cout << "proxy_count: " << proxy_count << std::endl;
+  std::cout << "proxy: " << std::boolalpha <<  ( proxy!=nullptr ) << std::endl;
+  run_client(mode, calc, proxy_count, proxy);
+  
+  /*
   int mode1 = atoi(argv[1]);
   int mode2 = atoi(argv[2]);
   run(mode1, mode2);
+  */
 }
 
 
