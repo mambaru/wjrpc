@@ -21,6 +21,137 @@ wjrpc::io_id_t create_id()
   return counter.fetch_add(1);
 }
 
+class calc_server
+{
+public:
+  void initialize(std::shared_ptr<icalc> target);
+  void run(int rd, int wd);
+private:
+  class engine;
+  std::shared_ptr<engine> _impl;  
+  std::shared_ptr<icalc>  _target;
+};
+
+class calc_server::engine: public service::engine_type {};
+
+void calc_server::initialize(std::shared_ptr<icalc> target)
+{
+  _impl = std::make_shared<engine>();
+  _target = target;
+}
+
+void calc_server::run(int rd, int wd)
+{
+  engine::options_type opt;
+  opt.target = _target;
+  _impl->start(opt, create_id() );
+
+  auto io_id = create_id();  
+  char buff[1024];
+  for (;;)
+  {
+    int s = ::read( rd, buff, 1024 );
+    LOG_READ(buff, buff + s)
+
+    auto d = std::make_unique<wjrpc::data_type>( buff, buff + s );
+
+    _impl->perform_io( std::move(d), io_id, [wd]( wjrpc::data_ptr d )
+    {
+      LOG_WRITE(d->begin(), d->end() )
+      ::write( wd, d->data(), d->size());
+    });
+  }
+}
+
+class calc_client
+{
+public:
+  void initialize(int rd, int wd);
+  std::shared_ptr<icalc> get();
+private:
+  class engine;
+  std::shared_ptr<engine> _impl;
+  std::shared_ptr<icalc> _calc;
+};
+
+class calc_client::engine: public gateway::engine_type {};
+
+void calc_client::initialize(int rd, int wd)
+{
+  _impl = std::make_shared<engine>();
+  engine::options_type opt;
+  _impl->start(opt, create_id() );  
+
+  auto io_id = create_id();
+  using namespace std::placeholders;
+  _impl->reg_io( io_id,  [rd, wd]( wjrpc::data_ptr d, wjrpc::io_id_t, wjrpc::output_handler_t handler)
+  {
+    LOG_WRITE(d->begin(), d->end() )
+    ::write( wd, d->data(), d->size() );
+    char buff[1024];
+    int s = ::read(rd, buff, 1024);
+    LOG_READ(buff, buff + s)
+    handler( std::make_unique<wjrpc::data_type>(buff, buff + s) );
+  } );
+  _calc = _impl->find(io_id);
+}
+
+std::shared_ptr<icalc> calc_client::get()
+{
+  return _calc;
+}
+
+void create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy);
+std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy)
+{
+  if ( count == 0)
+    return calc;
+
+  // mode - 0, прямой вызов
+  // mode - 1, сериализация без пайпов
+  // mode - 2, через пайпы
+  if ( mode==0 )
+  {
+    if ( count == 0)
+      return calc;
+  }
+  else if ( mode==1 )
+  {
+    
+  }
+  else if ( mode==2 )
+  {
+    int up[2], down[2];
+    ::pipe(up);
+    ::pipe(down);
+    auto target = create_chain(mode, calc, count - 1, proxy);
+    auto pid = fork();
+    if ( pid == 0 )
+    {
+      // дочериний процесс
+      auto srv = std::make_shared<calc_server>();
+      srv->initialize(target);
+      // бесконечный цикл
+      srv->run(up[0], down[1]);
+    }
+    else
+    {
+      // текущий процесс
+      // создаем шлюз 
+      auto cli = std::make_shared<calc_client>();
+      cli->initialize(down[0], up[1]);
+       
+    }
+  }
+  abort();
+}
+
+
+
+//*****//
+//*****//
+//*****//
+//*****//
 void run_service(int rd, int wd, std::shared_ptr<service::engine_type> srv)
 {
   auto io_id = create_id();
