@@ -62,7 +62,7 @@ struct call
     // response handler
     std::function<void(incoming_holder holder)> rh 
       = std::bind( TT::template process_response<T, result_json, error_json>, _1, callback);
-    
+
     t.perform_send( 
       tt.name(), 
       std::move(req),

@@ -15,6 +15,8 @@
 #include <type_traits>
 #include <atomic>
 
+
+#include <iostream>
 namespace wjrpc{
 
 //#error
@@ -379,7 +381,6 @@ private:
       auto pthis = wthis.lock();
       if ( pthis == nullptr )
         return;
-      
       if ( rs1!=nullptr && rh1!=nullptr )
       {
         auto call_id = pthis->_call_counter.fetch_add(1);
@@ -446,10 +447,10 @@ private:
       auto pthis = wthis.lock();
       if ( pthis==nullptr )
         return;
-      
+
       call_id_t call_id = 0;
       outgoing_holder::result_handler_t rhw = nullptr;
-      
+
       if ( rs1!=nullptr && rh1!=nullptr )
       {
         io_id_t io_id = pthis->_io_id;
