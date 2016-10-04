@@ -34,9 +34,7 @@ namespace gateway
   public:
     virtual void plus( request::plus::ptr req, response::plus::callback cb)  override
     {
-      std::cout << "gateway::handle::plus{" << std::endl;
       this->call<_plus_>( std::move(req), cb, nullptr );
-      std::cout << "}gateway::handle::plus" << std::endl;
     }
 
     virtual void minus( request::minus::ptr req, response::minus::callback cb) override

@@ -10,15 +10,10 @@
 
 void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy)
 {
-  std::shared_ptr<icalc> target = calc;
-  if (proxy!=nullptr && count != 0)
-    target = proxy;
-
   auto srv = std::make_shared<pserver>();
-  srv->initialize(rd, wd, target);
-
   if ( count == 0 )
   {
+    srv->initialize(rd, wd, calc);
     srv->run();
     return;
   }
@@ -26,20 +21,31 @@ void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shar
   int up[2], down[2];
   ::pipe(up);
   ::pipe(down);
-  
+
   auto cli = std::make_shared<pclient>();
   cli->initialize(down[0], up[1] );
   auto gtw = cli->get();
-  if (proxy!=nullptr)
+
+  if ( proxy == nullptr )
+  {
+    srv->initialize(rd, wd, gtw);
+  }
+  else
+  {
     proxy->initialize(gtw);
+    srv->initialize(rd, wd, proxy);
+  }
 
   if ( 0!=fork() )
+  {
     srv->run();
+  }
   else
+  {
     fork_next(up[0], down[1], calc, count - 1, proxy);
+  }
 }
 
-std::shared_ptr<pclient> main_client;
 std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy);
 std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy)
 {
@@ -51,8 +57,14 @@ std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int c
   // mode - 2, через пайпы
   if ( mode==0 )
   {
-    if ( count == 0)
-      return calc;
+    static std::list< std::shared_ptr<calc_p> > proxy_list;
+    proxy_list.push_back(std::make_shared<calc_p>());
+    proxy_list.front()->initialize(calc);
+    for (int i=1; i < count; i++)
+    {
+      auto cur_proxy = std::make_shared<calc_p>();
+      
+    }
   }
   else if ( mode==1 )
   {
@@ -64,15 +76,13 @@ std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int c
     ::pipe(up);
     ::pipe(down);
     auto cli = std::make_shared<pclient>();
-    main_client = cli;
+    // Так делать не надо
+    static std::shared_ptr<pclient> main_client = cli;
     cli->initialize(down[0], up[1] );
     auto clc = cli->get();
     auto pid = fork();
     if ( pid != 0 )
-    {
-      std::cout << "TATA" << std::endl;
       return clc;
-    }
 
     fork_next(up[0], down[1], calc, count - 1, proxy);
   }
@@ -121,21 +131,24 @@ void run_bench(std::shared_ptr<icalc> cli)
   for (;;)
   {
     auto start = std::chrono::high_resolution_clock::now();
-    cli->plus( std::make_unique<request::plus>(pls), [](response::plus::ptr){} );
-    auto finish = std::chrono::high_resolution_clock::now();
-    auto span = std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start).count();
-    times.push_back(span);
-    if ( times.size() == 1000 )
+    cli->plus( std::make_unique<request::plus>(pls), [&](response::plus::ptr)
     {
-      std::sort(times.begin(), times.end());
-      std::cout << "100%: " << times.back() << " ns ( " << size_t(( 1000000000.0/times.back() ) * 1) << " persec), "
-                << "99%: " << times[990] << " ns ( " << size_t(( 1000000000.0/times[990] ) * 1) << " persec), "
-                << "90%: " << times[900] << " ns ( " << size_t(( 1000000000.0/times[900] ) * 1) << " persec), "
-                << "80%: " << times[800] << " ns ( " << size_t(( 1000000000.0/times[800] ) * 1) << " persec), "
-                << "50%: " << times[500] << " ns ( " << size_t(( 1000000000.0/times[500] ) * 1) << " persec), " 
-                << "0% " << times.front() << " ns ( " << size_t(( 1000000000.0/times.front() ) * 1) << " persec)" << std::endl;
-      times.clear();
-    }
+      auto finish = std::chrono::high_resolution_clock::now();
+      auto span = std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start).count();
+      times.push_back(span);
+      if ( times.size() == 1000 )
+      {
+        std::sort(times.begin(), times.end());
+        std::cout << "100%: " << times.back() << " ns ( " << size_t(( 1000000000.0/times.back() ) * 1) << " persec), "
+                  << "99%: " << times[990] << " ns ( " << size_t(( 1000000000.0/times[990] ) * 1) << " persec), "
+                  << "90%: " << times[900] << " ns ( " << size_t(( 1000000000.0/times[900] ) * 1) << " persec), "
+                  << "80%: " << times[800] << " ns ( " << size_t(( 1000000000.0/times[800] ) * 1) << " persec), "
+                  << "50%: " << times[500] << " ns ( " << size_t(( 1000000000.0/times[500] ) * 1) << " persec), " 
+                  << "0% " << times.front() << " ns ( " << size_t(( 1000000000.0/times.front() ) * 1) << " persec)" << std::endl;
+        times.clear();
+      }
+      
+    } );
   }
 }
 
