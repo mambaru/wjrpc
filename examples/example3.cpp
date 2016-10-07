@@ -42,39 +42,14 @@ void send_responce(std::shared_ptr<wjrpc::incoming_holder> ph, typename ResJ::ta
   typename response_json::serializer()( resp, std::back_inserter( out ) );
 }
 
-template<
-  typename JParams, 
-  typename JResult, 
-  void (icalc::*mem_ptr)( 
-    std::unique_ptr<typename JParams::target>, 
-    std::function< void(std::unique_ptr<typename JResult::target>) > 
-  )
->
-void invoke(wjrpc::incoming_holder inholder, std::shared_ptr<icalc> calc, std::string& out)
-{
-  typedef JParams params_json;
-  typedef JResult result_json;
-  wjson::json_error e;
-  auto params = inholder.get_params<params_json>(&e);
-  if ( !e )
-  {
-    std::shared_ptr<wjrpc::incoming_holder> ph = std::make_shared<wjrpc::incoming_holder>( std::move(inholder) );
-    (calc.get()->*mem_ptr)( std::move(params), std::bind( send_responce<result_json>, ph, std::placeholders::_1, std::ref(out) ) );
-  }
-  else
-  {
-    out  = make_error<wjrpc::invalid_params>();
-  }
-}
-
 int main()
 {
   std::vector<std::string> req_list = 
   {
-    "{\"method\":\"plus\", \"params\":{ \"first\":2, \"second\":3 }, \"id\" :1 }",
-    "{\"method\":\"minus\", \"params\":{ \"first\":5, \"second\":10 }, \"id\" :1 }",
-    "{\"method\":\"multiplies\", \"params\":{ \"first\":2, \"second\":2 }, \"id\" :1 }",
-    "{\"method\":\"divides\", \"params\":{ \"first\":9, \"second\":3 }, \"id\" :1 }"
+    "{\"method\":\"plus\",       \"params\":{ \"first\":2, \"second\":3  }, \"id\":1 }",
+    "{\"method\":\"minus\",      \"params\":{ \"first\":5, \"second\":10 }, \"id\":1 }",
+    "{\"method\":\"multiplies\", \"params\":{ \"first\":2, \"second\":2  }, \"id\":1 }",
+    "{\"method\":\"divides\",    \"params\":{ \"first\":9, \"second\":3  }, \"id\":1 }"
   };
   std::vector<std::string> res_list;
  

@@ -72,6 +72,9 @@ int main()
           res_list.push_back(str);
         }
       }
+   /* else if ( inholder.method() == "minus" ) { ... } */
+   /* else if ( inholder.method() == "multiplies" ) { ... } */
+  /* else if ( inholder.method() == "divides" ) { ... } */
       else
       {
         typedef wjrpc::outgoing_error<wjrpc::error> error_type;
