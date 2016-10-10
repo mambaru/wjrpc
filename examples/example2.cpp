@@ -74,7 +74,7 @@ int main()
       }
    /* else if ( inholder.method() == "minus" ) { ... } */
    /* else if ( inholder.method() == "multiplies" ) { ... } */
-  /* else if ( inholder.method() == "divides" ) { ... } */
+   /* else if ( inholder.method() == "divides" ) { ... } */
       else
       {
         typedef wjrpc::outgoing_error<wjrpc::error> error_type;

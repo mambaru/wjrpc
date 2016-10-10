@@ -8,6 +8,7 @@
 #include <wjrpc/outgoing/outgoing_result_json.hpp>
 #include <wjrpc/outgoing/outgoing_error.hpp>
 #include <wjrpc/outgoing/outgoing_error_json.hpp>
+
 #include <iostream>
 
 int main()
@@ -24,17 +25,25 @@ int main()
   for ( auto& sreq : req_list )
   {
     wjrpc::incoming_holder inholder( sreq );
+    // Парсим без проверок на ошибки
     inholder.parse(nullptr);
 
     // Есть имя метода и идентификатор вызова
     if ( inholder.method() == "plus" )
     {
+      // Десериализация параметров без проверок
       auto params = inholder.get_params<request::plus_json>(nullptr);
+      
+      // Объект для ответа
       wjrpc::outgoing_result<response::plus> res;
       res.result = std::make_unique<response::plus>();
       res.result->value = params->first + params->second;
+      
+      // Забираем id в сыром виде как есть
       auto raw_id = inholder.raw_id();
       res.id = std::make_unique<wjrpc::data_type>( raw_id.first, raw_id.second );
+      
+      // Сериализатор ответа
       typedef wjrpc::outgoing_result_json<response::plus_json> result_json;
       res_list.push_back(std::string());
       result_json::serializer()( res, std::back_inserter(res_list.back()) );
