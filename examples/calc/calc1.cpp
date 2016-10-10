@@ -4,9 +4,11 @@
 template<typename Res, typename ReqPtr, typename Callback, typename F>
 void calc1::impl_( ReqPtr req, Callback cb, F f)
 {
+  // это уведомление
   if ( cb == nullptr )
     return;
 
+  // нет параметров
   if ( req == nullptr )
     return cb(nullptr);
 
