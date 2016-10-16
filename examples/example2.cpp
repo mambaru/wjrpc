@@ -27,39 +27,46 @@ int main()
     
     wjson::json_error e;
     inholder.parse(&e);
+    
     if ( e )
-    {
+    { // Если json не валидный то Parse Error
+
       typedef wjrpc::outgoing_error<wjrpc::error> error_type;
       error_type err;
       err.error = std::make_unique<wjrpc::parse_error>();
 
       typedef wjrpc::outgoing_error_json<wjrpc::error_json> error_json;
-      
       std::string str;
       error_json::serializer()(err, std::back_inserter(str));
       res_list.push_back(str);
     }
     else if ( inholder.is_request() )
-    {
+    { // Если входное сообщение JSON-RPC запрос
+      
+      // Извлекаем индификатор вызова 
       auto raw_id  = inholder.raw_id();
       auto call_id = std::make_unique<wjrpc::data_type>( raw_id.first, raw_id.second );
-      // Есть имя метода и идентификатор вызова
+      
       if ( inholder.method() == "plus" )
       {
         auto params = inholder.get_params<request::plus_json>(&e);
         if ( !e )
-        {
+        { 
+          // Создаем объект результата
           wjrpc::outgoing_result<response::plus> res;
           res.result = std::make_unique<response::plus>();
+          // выполняем
           res.result->value = params->first + params->second;
+          // инициализируем идентификатор вызова
           res.id = std::move(call_id);
+          // Сериализуем результат
           typedef wjrpc::outgoing_result_json<response::plus_json> result_json;
           std::string str;
           result_json::serializer()( res, std::back_inserter(str) );
           res_list.push_back(str);
         }
         else
-        {
+        { // Ошибка в параметрах запроса
           typedef wjrpc::outgoing_error<wjrpc::error> error_type;
           error_type err;
           err.error = std::make_unique<wjrpc::invalid_params>();
@@ -76,7 +83,7 @@ int main()
    /* else if ( inholder.method() == "multiplies" ) { ... } */
    /* else if ( inholder.method() == "divides" ) { ... } */
       else
-      {
+      { // Это запрос, но метод не найден
         typedef wjrpc::outgoing_error<wjrpc::error> error_type;
         error_type err;
         err.error = std::make_unique<wjrpc::procedure_not_found>();
@@ -90,7 +97,7 @@ int main()
       }
     }
     else
-    {
+    { // Это не запрос 
       typedef wjrpc::outgoing_error<wjrpc::error> error_type;
       error_type err;
       err.error = std::make_unique<wjrpc::invalid_request>();

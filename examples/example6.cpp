@@ -20,13 +20,14 @@ struct plus_handler
 {
   template<typename T>
   void operator()( T& t, request::plus::ptr req)
-  {
+  { // обработка уведомления 
     t.target()->plus( std::move(req), nullptr );
   }
 
   template<typename T, typename Handler>
   void operator()( T& t, request::plus::ptr req, Handler handler)
   {
+    // обработка запроса
     t.target()->plus( std::move(req), [handler](response::plus::ptr res)
     {
       if ( res != nullptr )
@@ -34,9 +35,18 @@ struct plus_handler
       else
         handler( nullptr, std::make_unique<wjrpc::service_unavailable>() );
     });
+    
+    if (req==nullptr)
+    {
+      handler( nullptr, std::make_unique<wjrpc::invalid_params>() );
+      return;
+    }
+    
+    auto res = std::make_unique<response::plus>();
+    res->value = req->first + req->second;
+    handler( std::move(res), nullptr );
   }
 };
-
 
 struct method_list: wjrpc::method_list
 <
@@ -47,9 +57,7 @@ struct method_list: wjrpc::method_list
   wjrpc::invoke_method<_divides_, request::divides_json, response::divides_json, icalc, &icalc::divides>
 >{};
 
-
 class handler: public ::wjrpc::handler<method_list> {};
-
 
 int main()
 {

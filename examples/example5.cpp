@@ -25,9 +25,7 @@ struct method_list: wjrpc::method_list
   wjrpc::invoke_method<_divides_, request::divides_json, response::divides_json, icalc, &icalc::divides>
 >{};
 
-
 class handler: public ::wjrpc::handler<method_list> {};
-
 
 int main()
 {
@@ -39,14 +37,13 @@ int main()
     "{\"method\":\"divides\", \"params\":{ \"first\":9, \"second\":3 }, \"id\" :1 }"
   };
   std::vector<std::string> res_list;
- 
+
   auto calc = std::make_shared<calc1>();
   handler h;
-
   handler::options_type opt;
   opt.target = calc;
   h.start(opt, 1);
-  
+
   for ( auto& sreq : req_list )
   {
     h.perform( sreq, [&res_list](std::string out) { res_list.push_back(out);} );
@@ -59,5 +56,3 @@ int main()
     std::cout << std::endl;
   }
 }
-
-

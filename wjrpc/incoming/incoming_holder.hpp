@@ -64,10 +64,10 @@ public:
   V get_id( ::wjson::json_error* e) const;
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_result( ::wjson::json_error* e) const;
+  std::unique_ptr<typename J::target> get_params( ::wjson::json_error* e) const;
 
   template<typename J>
-  std::unique_ptr<typename J::target> get_params( ::wjson::json_error* e) const;
+  std::unique_ptr<typename J::target> get_result( ::wjson::json_error* e) const;
 
   template<typename J>
   std::unique_ptr<typename J::target> get_error( ::wjson::json_error* e) const;

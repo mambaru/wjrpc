@@ -29,7 +29,7 @@ std::string make_error()
 }
 
 template<typename ResJ>
-void send_responce(std::shared_ptr<wjrpc::incoming_holder> ph, typename ResJ::target::ptr result, std::string& out)
+void send_response(std::shared_ptr<wjrpc::incoming_holder> ph, typename ResJ::target::ptr result, std::string& out)
 {
   
   typedef ResJ result_json;
@@ -59,7 +59,7 @@ void invoke(wjrpc::incoming_holder inholder, std::shared_ptr<icalc> calc, std::s
   if ( !e )
   {
     std::shared_ptr<wjrpc::incoming_holder> ph = std::make_shared<wjrpc::incoming_holder>( std::move(inholder) );
-    (calc.get()->*mem_ptr)( std::move(params), std::bind( send_responce<result_json>, ph, std::placeholders::_1, std::ref(out) ) );
+    (calc.get()->*mem_ptr)( std::move(params), std::bind( send_response<result_json>, ph, std::placeholders::_1, std::ref(out) ) );
   }
   else
   {

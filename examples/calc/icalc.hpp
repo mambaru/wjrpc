@@ -5,7 +5,6 @@
 #include "api/multiplies.hpp"
 #include "api/divides.hpp"
 
-
 struct icalc
 {
   virtual ~icalc() {}
