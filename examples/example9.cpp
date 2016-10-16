@@ -22,7 +22,7 @@ struct method_list: wjrpc::method_list
   wjrpc::call_method<_plus_, request::plus_json, response::plus_json>,
   wjrpc::call_method<_minus_, request::minus_json, response::minus_json>,
   wjrpc::call_method<_multiplies_, request::multiplies_json, response::multiplies_json>,
-  wjrpc::call_method<_divides_, request::divides_json, response::divides_json, icalc>
+  wjrpc::call_method<_divides_, request::divides_json, response::divides_json>
 >
 {};
 

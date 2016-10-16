@@ -30,7 +30,7 @@ target_link_libraries(example9 wjrpc)
 add_executable(example10 example10.cpp calc/calc1.cpp)
 target_link_libraries(example10 wjrpc)
 
-add_executable(example11 example11.cpp calc/calc1.cpp)
+add_executable(example11 example11.cpp calc/calc1.cpp calc/calc_p.cpp)
 target_link_libraries(example11 wjrpc)
 
 

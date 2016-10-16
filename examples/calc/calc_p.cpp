@@ -1,5 +1,5 @@
 #include "calc_p.hpp"
-#include <wjrpc/memory.hpp>
+#include <memory>
 
 void calc_p::initialize(std::shared_ptr<icalc> next)
 {

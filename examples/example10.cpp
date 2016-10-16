@@ -11,7 +11,7 @@
 #include <iostream>
 #include <functional>
 
-namespace server
+namespace service
 {
 
 JSONRPC_TAG(plus)
@@ -34,7 +34,7 @@ class handler: public ::wjrpc::handler<method_list> {};
 typedef wjrpc::engine<handler> engine_type;
 }
 
-namespace client
+namespace gateway
 {
   JSONRPC_TAG(plus)
   JSONRPC_TAG(minus)
@@ -46,7 +46,7 @@ namespace client
     wjrpc::call_method<_plus_, request::plus_json, response::plus_json>,
     wjrpc::call_method<_minus_, request::minus_json, response::minus_json>,
     wjrpc::call_method<_multiplies_, request::multiplies_json, response::multiplies_json>,
-    wjrpc::call_method<_divides_, request::divides_json, response::divides_json, icalc>
+    wjrpc::call_method<_divides_, request::divides_json, response::divides_json>
   >
   {};
 
@@ -82,14 +82,14 @@ namespace client
 int main()
 {
   auto dom = std::make_shared<calc1>();
-  auto srv = std::make_shared<server::engine_type>();
-  auto cli = std::make_shared<client::engine_type>();
+  auto srv = std::make_shared<service::engine_type>();
+  auto cli = std::make_shared<gateway::engine_type>();
   
-  server::engine_type::options_type srv_opt;
+  service::engine_type::options_type srv_opt;
   srv_opt.target = dom;
   srv->start(srv_opt, 1);
 
-  client::engine_type::options_type cli_opt;
+  gateway::engine_type::options_type cli_opt;
   cli->start(cli_opt, 2);
 
   cli->reg_io(22, [srv]( wjrpc::data_ptr d, wjrpc::io_id_t io_id, wjrpc::output_handler_t handler)

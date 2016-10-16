@@ -45,8 +45,6 @@ struct aspect_handler: fas::aspect<
   fas::type<_handler_types_, handler_types>,
   fas::type<_mutex_type_, std::recursive_mutex>,
   fas::advice<_perform_send_, ad_perform_send>,
-  //fas::advice<_send_request_, ad_send_request>,
-  //fas::advice<_send_notify_, ad_send_notify>,
   fas::advice<_invoke_, ad_invoke>,
   fas::advice<_invoke_error_, ad_invoke_error>,
   fas::advice< _initialize_, ad_initialize>,
