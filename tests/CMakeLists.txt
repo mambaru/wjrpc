@@ -1,7 +1,3 @@
-
-message(STATUS "---++++++++++++++++++---")
-message(STATUS "---${FAS_TESTING_CPP}---")
-
 include_directories(../../wjson/)
 
 add_executable(benchmark1 benchmark.cpp)
