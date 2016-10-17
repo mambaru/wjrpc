@@ -15,44 +15,8 @@
 #include <type_traits>
 #include <atomic>
 
-
-#include <iostream>
 namespace wjrpc{
 
-//#error
-  // TODO: Сделать чеклист по всем вариантам 
-  // Отработать
-  // для handler_map (сервис)
-  //    все handler опции игнорируються (оборачиваются)
-  //    reg_io - новый коннект io (для авто-ответа нового коннекта)
-  //    reg_jsonrpc - новый коннект jsonrpc (для авто-ответа нового коннекта)
-  //    perform_io - обновить хандеры для io
-  //    perform_incoming - обновить хандеры для jsonrpc
-  // для _common_handler (шлюз)
-  //    инициализация в зависимти от опций
-
-/*
- * Входы:
- *      perform_io
- *      perform_jsonrpc
- *      reg_io
- *      reg_jsonrpc
- *      user_interface
- *        ссылку на user_interface можно получить при запросе или при новом "коннекте"(reg_*)
-*/
-
-/**
- * Все режимы взаимодействия.
- * Участики:
- *      iinterface - сервре и клиент
- *      ijsonrpc - промежуточные обработчики
- *      iinterface1 и iinterface2 пользовательские объекты
- * iinterface -> iinterface1
- * ijsonrpc   -> iinterface1
- * iinterface1 -> iinterface
- * iinterface1 -> ijsonrpc
- * 
- */
 template<typename JsonrpcHandler>
 class engine
   : public std::enable_shared_from_this< engine<JsonrpcHandler> >
@@ -75,13 +39,6 @@ public:
   typedef typename handler_type::data_ptr data_ptr;
   typedef typename handler_type::call_id_t call_id_t;
 
-/*  
-  typedef ::iow::workflow workflow_type;
-  typedef workflow_type::timer_id_t timer_id_t;
-  
-  typedef ::iow::owner owner_type;
-  */
-
   ~engine()
   {
     this->stop();
@@ -89,7 +46,6 @@ public:
   
   engine()
     : _call_counter(1)
-    //, _timer_id(0)
   {
   }
 
@@ -101,7 +57,6 @@ public:
   void start(O&& opt, io_id_t io_id)
   {
     _io_id = io_id;
-    //_io_id = ::iow::io::create_id<size_t>();
     this->reconfigure( std::forward<O>(opt) );
   }
 
@@ -111,10 +66,7 @@ public:
     typename std::decay<O>::type opt = opt1;
     logger::initialize(opt);
 
-    //_workflow = opt.engine_args.workflow;
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
-    //_allow_non_jsonrpc = opt.allow_non_jsonrpc;
-    
     _outgoing_rpc_factory = [opt, this](io_id_t io_id, jsonrpc_outgoing_handler_t handler, bool reg_io) -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
@@ -129,39 +81,13 @@ public:
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
-
-    /*
-    if ( auto wf = _workflow.lock() )
-    {
-      wf->release_timer( _timer_id );
-      if ( opt.remove_outdated_ms != 0 )
-      {
-        _timer_id = wf->create_timer(
-          std::chrono::milliseconds(opt.remove_outdated_ms),
-          [this]() -> bool 
-          {
-            if ( size_t count = this->remove_outdated() )
-            {
-              WJRPC_LOG_WARNING( count << " calls is outdated.");
-            }
-            return true;
-          }
-        );
-      }
-    }*/
-
   }
 
   void stop()
   {
-    /*if ( auto wf = _workflow.lock() )
-      wf->release_timer(_timer_id);
-      */
     _handler_map.stop();
     _call_map.clear();
   }
-
-// iterface implementation
 
   template<typename Tg, typename Req, typename ...Args>
   void call(Req req, io_id_t io_id, Args... args)
@@ -217,20 +143,6 @@ public:
   void perform_io(data_ptr d, io_id_t io_id, output_handler_t handler) 
   {
     using namespace std::placeholders;
-/*    if ( _allow_non_jsonrpc )
-    {
-      auto beg = ::wjson::parser::parse_space( d->begin(), d->end(), nullptr );
-      if ( beg!=d->end() && *beg!='{' )
-      {
-        if ( auto h = _handler_map.find(io_id) )
-        {
-          h->target()->perform_io(std::move(d), io_id, std::move(handler));
-          return;
-        }
-      }
-    }
-    */
-
     while ( d != nullptr )
     {
       incoming_holder holder(std::move(d));
@@ -244,17 +156,6 @@ public:
       {
         aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), handler );
       }
-      /*
-      d = holder.parse( [handler, this](outgoing_holder holder) 
-      {
-        auto d = holder.detach();
-        WJRPC_LOG_ERROR(this, "JSON-RPC error:" << d)
-        handler( std::move(d) );
-      });
-      */
-
-      /*if ( d!=nullptr )
-        this->perform_io_once_( std::move(holder), io_id, handler );*/
     }
   }
 
@@ -337,11 +238,6 @@ private:
     }
   }
 
-  /**
-   * upgrate_options_ - инициализация send_request и send_notify 
-   */
-
-  
   template<typename O>
   void upgrate_options_(O& opt, output_handler_t handler)
   {
@@ -524,12 +420,7 @@ private:
   handler_map_t _handler_map;
   call_map _call_map;
   std::atomic<int> _call_counter;
-  /*std::atomic<*/io_id_t/*>*/ _io_id;
-  //timer_id_t _timer_id;
-  //owner_type _owner;
-  
-  //bool _allow_non_jsonrpc = false;
-  //std::weak_ptr< ::iow::workflow > _workflow;
+  io_id_t _io_id;
 };
 
 }

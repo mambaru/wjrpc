@@ -31,8 +31,6 @@ public:
     return itr->second.first;
   }
 
-  /// @param[in] reg_io Значение reinit при следующем вызове 
-  /// @param[out] reinit Требуеться инициализация. Всегда true при первом вызове, при последующих принимает reg_io от передыдущего вызова
   handler_ptr findocre(io_id_t io_id, bool reg_io, bool& reinit)
   {
     std::lock_guard<mutex_type> lk(_mutex);
@@ -45,7 +43,7 @@ public:
     }
     reinit = true;
     auto handler = std::make_shared<handler_type>();
-    _handlers[io_id] = data{handler, reg_io/*, std::make_shared< owner_type >()*/};
+    _handlers[io_id] = data{handler, reg_io};
     return handler;
   }
 

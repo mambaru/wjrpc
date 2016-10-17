@@ -1,3 +1,9 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2013-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #include <wjrpc/incoming/incoming_holder.hpp>
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/method/aspect/send_error.hpp>
@@ -53,11 +59,6 @@ data_ptr incoming_holder::parse(::wjson::json_error* e)
   _end = incoming_json::serializer()( _incoming, _begin, _data->end(), e);
   _parsed = !e || !*e;
 
-  /* не нужно, следующий может быть валидный 
-  if ( !_parsed )
-    return nullptr;
-  */
-
   auto next = ::wjson::parser::parse_space( _end, _data->end(), nullptr);
   while ( next!=_data->end() && *next=='\0' ) ++next;
   if ( next != _data->end() )
@@ -67,85 +68,31 @@ data_ptr incoming_holder::parse(::wjson::json_error* e)
     return std::move(res);
   }
   return nullptr;
-  
-  /*
-  if ( !e )
-  {
-    _end = incoming_json::serializer()( _incoming, _begin, _data->end(), &e);
-    _parsed = true;
-  }
-  else 
-  {
-    if ( error_handler!=nullptr )
-    {
-      incoming_holder eh( this->detach() );
-      aux::send_error( std::move(eh), std::make_unique<parse_error>(), error_handler );
-    }
-    return nullptr;
-  }
-
-  iterator next = ::wjson::parser::parse_space( _end, _data->end(), nullptr);
-  if ( next == _data->end() || *next=='\0')
-    return nullptr;
-
-  return std::make_unique<data_type>(next, _data->end());
-  */
 }
 
-/*
-data_ptr incoming_holder::parse(outgoing_handler_t error_handler)
+incoming_holder::operator bool () const{ return this->ready_();}
+bool incoming_holder::ready() const { return this->ready_();}
+
+bool incoming_holder::has_method() const { return ready_() && _incoming.method.first!=_incoming.method.second; }
+bool incoming_holder::has_result() const { return ready_() && _incoming.result.first!=_incoming.result.second; }
+bool incoming_holder::has_error() const  { return ready_() && _incoming.error.first!=_incoming.error.second;   }
+bool incoming_holder::has_id() const     { return ready_() && _incoming.id.first!=_incoming.id.second;         }
+bool incoming_holder::has_params() const { return ready_() && _incoming.params.first!=_incoming.params.second; }
+
+bool incoming_holder::is_request() const       { return this->has_method() && this->has_id();   }
+bool incoming_holder::is_response() const      { return this->has_result() && this->has_id();   }
+bool incoming_holder::is_notify() const        { return this->has_method() && !this->has_id();  }
+bool incoming_holder::is_error() const         { return this->has_error();                      }
+bool incoming_holder::is_request_error() const { return this->has_error() && this->has_id() && 'n'!=*_incoming.params.first;}
+bool incoming_holder::is_other_error() const   { return this->has_error() && !this->has_id();   }
+
+bool incoming_holder::is_valid() const 
 {
-  if ( _data == nullptr )
-    return nullptr;
-
-  ::wjson::json_error e;
-  _begin = ::wjson::parser::parse_space(_data->begin(), _data->end(), &e);
-  if ( !e )
-  {
-    _end = incoming_json::serializer()( _incoming, _begin, _data->end(), &e);
-    _parsed = true;
-  }
-  else 
-  {
-    if ( error_handler!=nullptr )
-    {
-      incoming_holder eh( this->detach() );
-      aux::send_error( std::move(eh), std::make_unique<parse_error>(), error_handler );
-    }
-    return nullptr;
-  }
-
-  iterator next = ::wjson::parser::parse_space( _end, _data->end(), nullptr);
-  if ( next == _data->end() || *next=='\0')
-    return nullptr;
-
-  return std::make_unique<data_type>(next, _data->end());
+  return this->is_request()
+      || this->is_response()
+      || this->is_notify()
+      || this->is_error();
 }
-*/
-
-  incoming_holder::operator bool () const{ return this->ready_();}
-  bool incoming_holder::ready() const { return this->ready_();}
-
-  bool incoming_holder::has_method() const { return ready_() && _incoming.method.first!=_incoming.method.second; }
-  bool incoming_holder::has_result() const { return ready_() && _incoming.result.first!=_incoming.result.second; }
-  bool incoming_holder::has_error() const  { return ready_() && _incoming.error.first!=_incoming.error.second;   }
-  bool incoming_holder::has_id() const     { return ready_() && _incoming.id.first!=_incoming.id.second;         }
-  bool incoming_holder::has_params() const { return ready_() && _incoming.params.first!=_incoming.params.second; }
-
-  bool incoming_holder::is_request() const       { return this->has_method() && this->has_id();   }
-  bool incoming_holder::is_response() const      { return this->has_result() && this->has_id();   }
-  bool incoming_holder::is_notify() const        { return this->has_method() && !this->has_id();  }
-  bool incoming_holder::is_error() const         { return this->has_error();                      }
-  bool incoming_holder::is_request_error() const { return this->has_error() && this->has_id() && 'n'!=*_incoming.params.first;}
-  bool incoming_holder::is_other_error() const   { return this->has_error() && !this->has_id();   }
-
-  bool incoming_holder::is_valid() const 
-  {
-    return this->is_request()
-        || this->is_response()
-        || this->is_notify()
-        || this->is_error();
-  }
 
 bool incoming_holder::method_equal_to(const char* name)  const
 {
@@ -233,12 +180,6 @@ data_ptr incoming_holder::detach()
 incoming_holder incoming_holder::clone() const
 {
   return incoming_holder(*_data, _time_point);
-  /*
-  incoming_holder h;
-  h.attach( std::make_unique<data_type>(*_data) );
-  h._time_point = this->_time_point;
-  return std::move(h);
-  */
 }
 
 data_ptr incoming_holder::acquire_params()
@@ -251,90 +192,5 @@ data_ptr incoming_holder::acquire_params()
   _incoming = incoming();
   return std::move(_data);
 }
-
-/*
-void incoming_holder::send_error( incoming_holder holder, std::unique_ptr<error> err, outgoing_handler_t outgoing_handler)
-{
-  typedef outgoing_error_json< error_json > message_json;
-  outgoing_error<error> error_message;
-    
-  error_message.error = std::move(err);
-  auto id_range = holder.raw_id();
-  if ( id_range.first != id_range.second )
-  {
-    error_message.id = std::make_unique<data_type>( id_range.first, id_range.second );
-  }
-
-  auto d = holder.detach();
-  if ( d == nullptr )
-    d = std::make_unique<data_type>();
-  d->clear();
-  d->reserve(80);
-  typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
-  
-  outgoing_holder out(std::move(d));
-  outgoing_handler( std::move(out) );
-}
-*/
-
-/*
-namespace{
-
-  data_ptr incoming_holder_perform_once(
-    data_ptr d, io_id_t io_id, outgoing_handler_t outgoing_handler, 
-    std::function<void(incoming_holder, io_id_t, outgoing_handler_t)> incoming_handler 
-  )
-  {
-    incoming_holder holder(std::move(d));
-    try
-    {
-      d = holder.parse();
-    }
-    catch(const json::json_error& er)
-    {
-      WJRPC_LOG_WARNING( "jsonrpc::incoming_holder: parse error: " << holder.error_message(er) )
-      incoming_holder::send_error( std::move(holder), std::make_unique<parse_error>(), std::move(outgoing_handler));
-      return nullptr;
-    }
-
-    if ( holder.is_valid() )
-    {
-      incoming_handler( std::move(holder), io_id, std::move(outgoing_handler));
-    }
-    else
-    {
-      incoming_holder::send_error( std::move(holder), std::make_unique<invalid_request>(), std::move(outgoing_handler));
-    }
-    return std::move(d);
-  }
-}
-*/
-
-/*
-void incoming_holder::perform(
-    data_ptr d, io_id_t io_id, outgoing_handler_t outgoing_handler, 
-    std::function<void(incoming_holder, io_id_t, outgoing_handler_t)> incoming_handler )
-{
-  try
-  {
-    while (d != nullptr)
-    {
-      d = incoming_holder_perform_once(std::move(d), io_id, outgoing_handler, incoming_handler);
-    }
-  }
-  catch(const std::exception& ex)
-  {
-    WJRPC_LOG_ERROR( "jsonrpc::engine: server error: " << ex.what() )
-    incoming_holder::send_error( std::move(incoming_holder(nullptr)), std::make_unique<server_error>(), std::move(outgoing_handler));
-    return;
-  }
-  catch(...)
-  {
-    WJRPC_LOG_ERROR( "jsonrpc::engine: server error: " << "unhandler exception" )
-    incoming_holder::send_error( std::move(incoming_holder(nullptr)), std::make_unique<server_error>(), std::move(outgoing_handler));
-    return;
-  }
-}
-*/
 
 }

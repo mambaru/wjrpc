@@ -1,3 +1,9 @@
+//
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2013-2016
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+
 #include <wjrpc/incoming/send_error.hpp>
 #include <wjrpc/incoming/incoming_holder.hpp>
 #include <wjrpc/outgoing/outgoing_error_json.hpp>
@@ -27,7 +33,7 @@ void send_error( incoming_holder holder, std::unique_ptr<error> err, outgoing_ha
   d->clear();
   d->reserve(80);
   typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
-  
+
   //WJRPC_LOG_ERROR( "jsonrpc-broker: " << d )
   outgoing_holder out(std::move(d));
   outgoing_handler( std::move(out) );
