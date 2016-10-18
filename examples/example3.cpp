@@ -17,8 +17,8 @@
 template<typename E>
 void make_error(wjrpc::incoming_holder inholder, std::string& out)
 {
-  typedef wjrpc::outgoing_error<wjrpc::error> parse_error;
-  parse_error err;
+  typedef wjrpc::outgoing_error<wjrpc::error> common_error;
+  common_error err;
   err.error = std::make_unique<E>();
   if ( inholder.has_id() )
   {

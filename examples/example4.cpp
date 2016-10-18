@@ -15,17 +15,19 @@
 #include <iostream>
 
 template<typename E>
-std::string make_error()
+void make_error(wjrpc::incoming_holder inholder, std::string& out)
 {
-  typedef wjrpc::outgoing_error<wjrpc::error> parse_error;
-  parse_error err;
+  typedef wjrpc::outgoing_error<wjrpc::error> common_error;
+  common_error err;
   err.error = std::make_unique<E>();
+  if ( inholder.has_id() )
+  {
+    auto id = inholder.raw_id();
+    err.id = std::make_unique<wjrpc::data_type>(id.first, id.second);
+  }
 
   typedef wjrpc::outgoing_error_json<wjrpc::error_json> error_json;
-  
-  std::string str;
-  error_json::serializer()(err, std::back_inserter(str));
-  return str;
+  error_json::serializer()(err, std::back_inserter(out));
 }
 
 template<typename ResJ>
@@ -63,7 +65,8 @@ void invoke(wjrpc::incoming_holder inholder, std::shared_ptr<icalc> calc, std::s
   }
   else
   {
-    out  = make_error<wjrpc::invalid_params>();
+    make_error<wjrpc::invalid_params>(std::move(inholder), out);
+    //out  = make_error<wjrpc::invalid_params>();
   }
 }
 
@@ -90,7 +93,7 @@ int main()
     inholder.parse(&e);
     if ( e )
     {
-      out = make_error<wjrpc::parse_error>();
+      make_error<wjrpc::parse_error>(std::move(inholder), out);
     }
     else if ( inholder.is_request() )
     {
@@ -113,12 +116,12 @@ int main()
       }
       else
       {
-        out = make_error<wjrpc::procedure_not_found>();
+        make_error<wjrpc::procedure_not_found>(std::move(inholder), out);
       }
     }
     else
     {
-      out = make_error<wjrpc::invalid_request>();
+      make_error<wjrpc::invalid_request>(std::move(inholder), out);
     }
   }
 
