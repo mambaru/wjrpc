@@ -43,6 +43,7 @@ public:
   data_ptr parse(::wjson::json_error* e);
   operator bool () const;
   bool ready() const;
+  size_t size() const;
 
   bool has_method() const;
   bool has_result() const;

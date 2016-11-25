@@ -70,6 +70,13 @@ data_ptr incoming_holder::parse(::wjson::json_error* e)
   return nullptr;
 }
 
+size_t incoming_holder::size() const
+{
+  if ( _data!=nullptr )
+    return _data->size();
+  return 0;
+}
+
 incoming_holder::operator bool () const{ return this->ready_();}
 bool incoming_holder::ready() const { return this->ready_();}
 
