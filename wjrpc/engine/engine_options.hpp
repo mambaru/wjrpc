@@ -10,7 +10,6 @@ struct engine_options
   : HandlerOptions
 {
   typedef HandlerOptions handler_options;
-  bool allow_non_jsonrpc = false;
   // максимальное время ожидания ответа на вызов (0 - неограничено)
   time_t call_lifetime_ms   = 60000;
   bool   remove_everytime = true;
