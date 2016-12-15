@@ -45,7 +45,7 @@ struct ad_init_log
     t.get_aspect().template get<_log_error_>() = opt.log_error;
     t.get_aspect().template get<_log_fatal_>() = opt.log_fatal;
     t.get_aspect().template get<_log_debug_>() = opt.log_debug;
-    t.get_aspect().template get<_log_debug_>() = opt.log_debug;
+    t.get_aspect().template get<_log_trace_>() = opt.log_trace;
   }
 };
 
