@@ -124,7 +124,9 @@ void outgoing_holder::result_handler(result_handler_t handler)
 
 outgoing_holder outgoing_holder::clone() const
 {
-  outgoing_holder holder;
+  outgoing_holder holder = this->clone(0);
+  holder._result_handler = nullptr;
+  /*
   holder._name = this->_name;
   if ( this->_data != nullptr )
     holder._data = std::make_unique<data_type>(*(this->_data));
@@ -133,6 +135,7 @@ outgoing_holder outgoing_holder::clone() const
   holder._notify_serializer = this->_notify_serializer;
   holder._result_handler = nullptr;
   holder._call_id = 0;
+  */
   return std::move(holder);
 }
 
