@@ -154,7 +154,13 @@ public:
       }
       else
       {
-        aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), handler );
+        WJRPC_LOG_ERROR( this, "jsonrpc::engine: Parse error: " << holder.str() )
+        aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), [this, handler](data_ptr d)
+        {
+          if ( d != nullptr)
+            WJRPC_LOG_ERROR( this, std::string(d->begin(), d->end()) )
+          handler( std::move(d) );
+        });
       }
     }
   }
@@ -196,16 +202,16 @@ private:
     }
     else
     {
-      auto errreq = holder.str();
-      if ( errreq.empty() )
+      WJRPC_LOG_ERROR( this, "jsonrpc::engine: Invalid Request: " << holder.str() )
+      aux::send_error( std::move(holder), std::make_unique<invalid_request>(), [this, handler](outgoing_holder holder)
       {
-        WJRPC_LOG_ERROR( this, "jsonrpc::engine: Bad Gateway" )
-      }
-      else
-      {
-        WJRPC_LOG_ERROR( this, "jsonrpc::engine: Invalid Request: " << errreq << " : " << holder.is_error() )
-      }
-      aux::send_error( std::move(holder), std::make_unique<invalid_request>(), std::move(handler) );
+        auto h2 = holder.clone( holder.call_id() );
+        if ( auto d = h2.detach() )
+        {
+          WJRPC_LOG_ERROR( this, std::string(d->begin(), d->end()) )
+        }
+        handler( std::move(holder) );
+      });
     }
   }
 
@@ -228,11 +234,11 @@ private:
     {
       if ( !e )
       {  
-        WJRPC_LOG_DEBUG( this, "jsonrpc::engind incoming response with call_id=" << call_id << " not found")
+        WJRPC_LOG_ERROR( this, "jsonrpc::engind incoming response with call_id=" << call_id << " not found")
       }
       else
       {
-        WJRPC_LOG_DEBUG(this, "jsonrpc::engind incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
+        WJRPC_LOG_ERROR(this, "jsonrpc::engind incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
       }
       handler( outgoing_holder() );
     }

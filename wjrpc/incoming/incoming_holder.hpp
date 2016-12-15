@@ -80,6 +80,7 @@ public:
   std::unique_ptr<typename J::target> get_error( ::wjson::json_error* e) const;
 
   const incoming& get() const ;
+  
 
   time_point get_time_point() const ;
 
