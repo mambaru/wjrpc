@@ -126,7 +126,8 @@ outgoing_holder outgoing_holder::clone() const
 {
   outgoing_holder holder;
   holder._name = this->_name;
-  holder._data = std::make_unique<data_type>(*(this->_data));
+  if ( this->_data != nullptr )
+    holder._data = std::make_unique<data_type>(*(this->_data));
   holder._basic_serializer = this->_basic_serializer;
   holder._request_serializer = this->_request_serializer;
   holder._notify_serializer = this->_notify_serializer;
@@ -139,7 +140,8 @@ outgoing_holder outgoing_holder::clone(call_id_t call_id) const
 {
   outgoing_holder holder;
   holder._name = this->_name;
-  holder._data = std::make_unique<data_type>(*(this->_data));
+  if ( this->_data != nullptr )
+    holder._data = std::make_unique<data_type>(*(this->_data));
   holder._basic_serializer = this->_basic_serializer;
   holder._request_serializer = this->_request_serializer;
   holder._notify_serializer = this->_notify_serializer;
