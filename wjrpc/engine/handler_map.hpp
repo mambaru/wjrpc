@@ -19,7 +19,7 @@ public:
   struct data
   {
     handler_ptr first;
-    bool second;
+    bool reinit;
   };
 
   handler_ptr find(io_id_t io_id) const
@@ -37,10 +37,18 @@ public:
     auto itr = _handlers.find(io_id);
     if ( itr != _handlers.end() )
     {
-      reinit = itr->second.second;
-      itr->second.second = reg_io;
+      reinit = itr->second.reinit;
+      itr->second.reinit = reg_io;
       return itr->second.first;
     }
+    else if ( !reg_io )
+    {
+      reinit = (_default==nullptr);
+      if ( reinit )
+        _default = std::make_shared<handler_type>();
+      return _default;
+    }
+
     reinit = true;
     auto handler = std::make_shared<handler_type>();
     _handlers[io_id] = data{handler, reg_io};
@@ -79,6 +87,7 @@ private:
   typedef std::mutex mutex_type;
   handler_map_t _handlers;
   mutable mutex_type _mutex;
+  handler_ptr _default;
 };
 
 } // wfc
