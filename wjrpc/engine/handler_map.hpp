@@ -47,8 +47,8 @@ public:
   {
     if ( _disable )
     {
-      ::abort();
       reinit = _reinit.exchange(false);
+#warning инит может пройти позже первого вызова (думай млин)
       return _default;
     }
     std::lock_guard<mutex_type> lk(_mutex);
