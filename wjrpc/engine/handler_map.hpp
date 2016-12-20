@@ -47,6 +47,7 @@ public:
   {
     if ( _disable )
     {
+      ::abort();
       reinit = _reinit.exchange(false);
       return _default;
     }
