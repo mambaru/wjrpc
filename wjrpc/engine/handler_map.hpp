@@ -21,6 +21,18 @@ public:
     handler_ptr first;
     bool reinit;
   };
+  
+  handler_map()
+  {
+    _default = std::make_shared<handler_type>();
+    _disable = false;
+    _reinit = true;
+  }
+  
+  void disable(bool value)
+  {
+    _disable = value;
+  }
 
   handler_ptr find(io_id_t io_id) const
   {
@@ -33,6 +45,11 @@ public:
 
   handler_ptr findocre(io_id_t io_id, bool reg_io, bool& reinit)
   {
+    if ( _disable )
+    {
+      reinit = _reinit.exchange(false);
+      return _default;
+    }
     std::lock_guard<mutex_type> lk(_mutex);
     auto itr = _handlers.find(io_id);
     if ( itr != _handlers.end() )
@@ -40,13 +57,6 @@ public:
       reinit = itr->second.reinit;
       itr->second.reinit = reg_io;
       return itr->second.first;
-    }
-    else if ( !reg_io )
-    {
-      reinit = (_default==nullptr);
-      if ( reinit )
-        _default = std::make_shared<handler_type>();
-      return _default;
     }
 
     reinit = true;
@@ -88,6 +98,8 @@ private:
   handler_map_t _handlers;
   mutable mutex_type _mutex;
   handler_ptr _default;
+  std::atomic<bool> _disable;
+  std::atomic<bool> _reinit;
 };
 
 } // wfc

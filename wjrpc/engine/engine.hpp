@@ -66,13 +66,18 @@ public:
     typename std::decay<O>::type opt = opt1;
     logger::initialize(opt);
 
+    _handler_map.disable( opt.disable_handler_map );
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
-    _outgoing_rpc_factory = [opt, this](io_id_t io_id, jsonrpc_outgoing_handler_t handler, bool reg_io) -> handler_ptr
+    _outgoing_rpc_factory = 
+      [opt, this](io_id_t io_id, jsonrpc_outgoing_handler_t handler, bool reg_io) 
+        -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
 
-    _incoming_io_factory = [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io) -> handler_ptr
+    _incoming_io_factory = 
+      [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io) 
+        -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
