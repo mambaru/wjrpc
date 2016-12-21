@@ -24,19 +24,27 @@ public:
   
   handler_map()
   {
+    /*
     _default = std::make_shared<handler_type>();
     _disable = false;
     _reinit = true;
+    */
   }
   
-  void disable(bool value)
+  
+  void disable(handler_ptr value)
   {
-    _disable = value;
+    std::lock_guard< mutex_type > lk(_mutex);
+    _default = value;
   }
+  
 
   handler_ptr find(io_id_t io_id) const
   {
     std::lock_guard< mutex_type > lk(_mutex);
+    if ( _default!=nullptr )
+      return _default;
+      
     auto itr = _handlers.find(io_id);
     if ( itr == _handlers.end() )
       return nullptr;
@@ -45,14 +53,22 @@ public:
 
   handler_ptr findocre(io_id_t io_id, bool reg_io, bool& reinit)
   {
+    /*
     if ( _disable )
     {
       reinit = _reinit.exchange(false);
 #warning инит может пройти позже первого вызова (думай млин)
 #warning надо делать на уровне engine
       return _default;
-    }
+    }*/
     std::lock_guard<mutex_type> lk(_mutex);
+    
+    if ( _default!=nullptr )
+    {
+      reinit = false;
+      return _default;
+    }
+
     auto itr = _handlers.find(io_id);
     if ( itr != _handlers.end() )
     {
@@ -79,12 +95,16 @@ public:
 
   void stop()
   {
+    handler_ptr def;
     handler_map_t tmp_map;
     {
       std::lock_guard<mutex_type> lk(_mutex);
       tmp_map.swap(_handlers);
+      handler_ptr def = _default;
+      _default = nullptr;
     }
 
+    if ( def ) def->stop();
     for (auto& tmp : tmp_map)
     {
       if (tmp.second.first != nullptr ) 
@@ -94,14 +114,18 @@ public:
     }
   }
 
+  /*mutex_type& mutex() const
+  {
+    return _mutex;
+  }*/
 private:
   typedef std::map<io_id_t, data > handler_map_t;
   typedef std::mutex mutex_type;
   handler_map_t _handlers;
   mutable mutex_type _mutex;
   handler_ptr _default;
-  std::atomic<bool> _disable;
-  std::atomic<bool> _reinit;
+  //std::atomic<bool> _disable;
+  //std::atomic<bool> _reinit;
 };
 
 } // wfc

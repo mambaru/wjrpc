@@ -38,6 +38,7 @@ public:
   typedef typename handler_type::outgoing_handler_t jsonrpc_outgoing_handler_t;
   typedef typename handler_type::data_ptr data_ptr;
   typedef typename handler_type::call_id_t call_id_t;
+  
 
   ~engine()
   {
@@ -66,7 +67,25 @@ public:
     typename std::decay<O>::type opt = opt1;
     logger::initialize(opt);
 
-    _handler_map.disable( opt.disable_handler_map );
+    if ( opt.disable_handler_map )
+    {
+      auto handler = std::make_shared<handler_type>();
+      handler->initialize(opt1);
+      _handler_map.disable(handler);
+    }
+    //_handler_map.disable( opt.disable_handler_map );
+    /*
+    {
+      std::lock_guard< std::mutex > lk( _handler_map.mutex() );
+      _default_handler = nullptr;
+      if ( opt.disable_handler_map )
+      {
+        _default_handler = std::make_shared<handler_type>();
+        _default_handler->initialize(opt1);
+      }
+    }*/
+    
+    
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
     _outgoing_rpc_factory = 
       [opt, this](io_id_t io_id, jsonrpc_outgoing_handler_t handler, bool reg_io) 
@@ -432,6 +451,7 @@ private:
   call_map _call_map;
   std::atomic<int> _call_counter;
   io_id_t _io_id;
+  handler_ptr _default_handler;
 };
 
 }
