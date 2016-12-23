@@ -22,7 +22,8 @@ enum class error_codes
   ServerError = -32000,
   MethodNotImplementation = -32001,
   BadGateway = -32002,
-  ServiceUnavailable = -32003
+  ServiceUnavailable = -32003,
+  QueueOverflow = -32004,
 };
 
 

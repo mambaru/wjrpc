@@ -23,6 +23,7 @@ struct error_codes_json
   JSON_NAME2(MethodNotImplementation, "Method not implementation")
   JSON_NAME2(BadGateway, "Bad gateway")
   JSON_NAME2(ServiceUnavailable, "Service unavailable")
+  JSON_NAME2(QueueOverflow, "Queue overflow")
 
   typedef ::wjson::enumerator<
     error_code_t,
@@ -36,7 +37,8 @@ struct error_codes_json
       ::wjson::enum_value<ServerError, error_code_t, static_cast<error_code_t>(error_codes::ServerError) >,
       ::wjson::enum_value<MethodNotImplementation, error_code_t, static_cast<error_code_t>(error_codes::MethodNotImplementation) >,
       ::wjson::enum_value<BadGateway, error_code_t, static_cast<error_code_t>(error_codes::BadGateway) >,
-      ::wjson::enum_value<ServiceUnavailable, error_code_t, static_cast<error_code_t>(error_codes::ServiceUnavailable) >
+      ::wjson::enum_value<ServiceUnavailable, error_code_t, static_cast<error_code_t>(error_codes::ServiceUnavailable) >,
+      ::wjson::enum_value<QueueOverflow, error_code_t, static_cast<error_code_t>(error_codes::QueueOverflow) >
     >
   > type;
   typedef type::target target; 
