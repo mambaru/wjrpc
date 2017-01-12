@@ -203,7 +203,24 @@ public:
   {
     return _handler_map.find(io_id);
   }
+
+  struct sizes_info
+  {
+    size_t handler_map = 0;
+    size_t result_map = 0;
+    size_t result_queue = 0;
+  };
   
+  sizes_info sizes() const
+  {
+    sizes_info si;
+    auto cmi = _call_map.sizes();
+    si.result_map = cmi.first;
+    si.result_queue = cmi.second;
+    si.handler_map = _handler_map.size();
+    return si;
+  }
+
 private:
   
   void perform_io_once_(incoming_holder holder, io_id_t io_id, output_handler_t handler)

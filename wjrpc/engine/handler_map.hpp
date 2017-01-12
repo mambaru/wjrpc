@@ -113,6 +113,12 @@ public:
       }
     }
   }
+  
+  size_t size() const
+  {
+    std::lock_guard<mutex_type> lk(_mutex);
+    return _handlers.size();
+  }
 
   /*mutex_type& mutex() const
   {

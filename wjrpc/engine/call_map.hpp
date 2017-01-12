@@ -94,9 +94,15 @@ public:
     }
     return count;
   }
-  
+
+   std::pair<size_t, size_t> sizes() const
+   {
+     std::lock_guard<mutex_type> lk(_mutex);
+     return std::make_pair( _result_map.size(), _time_queue.size() );
+   }
+
 private:
-  
+
   call_list get_call_list()
   {
     std::lock_guard<mutex_type> lk(_mutex);
@@ -109,13 +115,12 @@ private:
     }
     return std::move( calls );
   }
-  
+
   time_t now_ms()
   {
     return std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-
   }
-  
+
 private:
   bool _everytime = true;
   time_t _lifetime_ms = 1000;
