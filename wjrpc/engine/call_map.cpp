@@ -104,7 +104,12 @@ namespace wjrpc{
     */
     std::cout << std::endl <<  "DEBUG _time_queue.size() = " << _time_queue.size()  << std::endl;
     if ( !_time_queue.empty() ) 
+    {
         std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(_time_queue.top().first - now).count() << std::endl;
+        std::cout << std::chrono::duration_cast<std::chrono::milliseconds>( now - _time_queue.top().first ).count() << std::endl;
+        std::cout << std::boolalpha << bool(_time_queue.top().first < now) << std::endl;
+        abort();
+    }
     while ( !_time_queue.empty() && ( _time_queue.top().first < now) /*< now*/ )
     {
       std::cout << _time_queue.size() << " " << calls.size() << " " 
