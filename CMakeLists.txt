@@ -29,6 +29,7 @@ endif(UNIX)
 
 add_library(
   wjrpc
+  wjrpc/engine/call_map.cpp
   wjrpc/incoming/incoming_holder.cpp
   wjrpc/outgoing/outgoing_holder.cpp
   wjrpc/incoming/send_error.cpp
