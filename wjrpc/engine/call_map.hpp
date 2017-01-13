@@ -114,11 +114,14 @@ private:
     else
       std::cout << "_time_queue.size() == " <<  _time_queue.size() << " " << now << std::endl;
     */
-    
+    std::cout << _time_queue.size() << std::endl;
     while ( !_time_queue.empty() && ( _time_queue.top().first < now) /*< now*/ )
     {
+      std::cout << _time_queue.size() << " " << calls.size() << " " 
+                << std::chrono::duration_cast<std::chrono::milliseconds>(_time_queue.top().first - now).count() << std::endl;
       calls.push_back( std::move(_time_queue.top().second) );
       _time_queue.pop();
+      
     }
     return std::move( calls );
   }
