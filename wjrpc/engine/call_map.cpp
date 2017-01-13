@@ -102,7 +102,7 @@ namespace wjrpc{
     else
       std::cout << "_time_queue.size() == " <<  _time_queue.size() << " " << now << std::endl;
     */
-    WJRPC_LOG_MESSAGE( "_time_queue.size() = " << _time_queue.size()) 
+    std::cout << std::endl <<  "DEBUG _time_queue.size() = " << _time_queue.size()  << std::endl;
     while ( !_time_queue.empty() && ( _time_queue.top().first < now) /*< now*/ )
     {
       std::cout << _time_queue.size() << " " << calls.size() << " " 
