@@ -107,8 +107,8 @@ namespace wjrpc{
     {
         std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(_time_queue.top().first - now).count() << std::endl;
         std::cout << std::chrono::duration_cast<std::chrono::milliseconds>( now - _time_queue.top().first ).count() << std::endl;
-        std::cout << std::boolalpha << bool(_time_queue.top().first < now) << std::endl;
-        abort();
+        std::cout << std::boolalpha << bool(_time_queue.top().first < now) << " ";
+        std::cout << std::boolalpha << bool( now < _time_queue.top().first ) << std::endl;
     }
     while ( !_time_queue.empty() && ( _time_queue.top().first < now) /*< now*/ )
     {
