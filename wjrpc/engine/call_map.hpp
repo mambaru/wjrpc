@@ -84,6 +84,7 @@ public:
   {
     size_t count = 0;
     auto calls = this->get_call_list();
+    auto tmp = calls.size();
     for ( auto call_id : calls ) 
     {
       if ( auto handler = this->detach(call_id) )
@@ -92,7 +93,8 @@ public:
         ++count;
       }
     }
-    return count;
+    return tmp;
+    //return count;
   }
 
    std::pair<size_t, size_t> sizes() const

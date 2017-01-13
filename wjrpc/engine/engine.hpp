@@ -182,7 +182,7 @@ public:
         aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), [this, handler](data_ptr d)
         {
           if ( d != nullptr)
-            WJRPC_LOG_ERROR( this, std::string(d->begin(), d->end()) )
+            { WJRPC_LOG_ERROR( this, std::string(d->begin(), d->end()) ) }
           handler( std::move(d) );
         });
       }
