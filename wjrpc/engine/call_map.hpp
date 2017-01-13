@@ -84,7 +84,6 @@ public:
   {
     size_t count = 0;
     auto calls = this->get_call_list();
-    auto tmp = calls.size();
     for ( auto call_id : calls ) 
     {
       if ( auto handler = this->detach(call_id) )
@@ -93,8 +92,7 @@ public:
         ++count;
       }
     }
-    return tmp;
-    //return count;
+    return count;
   }
 
    std::pair<size_t, size_t> sizes() const
@@ -111,7 +109,13 @@ private:
     call_list calls;
     //auto now = this->now_ms();
     auto now = std::chrono::system_clock::now();
-    while ( !_time_queue.empty() && _time_queue.top().first < now )
+    /*if ( !_time_queue.empty() && _time_queue.top().first < now )
+      std::cout << _time_queue.size() << " " <<  _time_queue.top().first << " " << now << std::endl;
+    else
+      std::cout << "_time_queue.size() == " <<  _time_queue.size() << " " << now << std::endl;
+    */
+    
+    while ( !_time_queue.empty() && ( now < _time_queue.top().first ) /*< now*/ )
     {
       calls.push_back( std::move(_time_queue.top().second) );
       _time_queue.pop();
