@@ -115,7 +115,7 @@ private:
       std::cout << "_time_queue.size() == " <<  _time_queue.size() << " " << now << std::endl;
     */
     
-    while ( !_time_queue.empty() && ( now < _time_queue.top().first ) /*< now*/ )
+    while ( !_time_queue.empty() && ( _time_queue.top().first < now) /*< now*/ )
     {
       calls.push_back( std::move(_time_queue.top().second) );
       _time_queue.pop();
