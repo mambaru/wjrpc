@@ -22,7 +22,8 @@ public:
   typedef std::map<call_id_t, result_handler_t> result_map;
   typedef std::mutex mutex_type;
 
-  typedef std::pair<time_t, call_id_t> time_pair;
+  typedef std::chrono::time_point<std::chrono::system_clock> time_point_t;
+  typedef std::pair<time_point_t, call_id_t> time_pair;
   typedef std::priority_queue< time_pair > time_queue;
   typedef std::deque<call_id_t> call_list;
   
@@ -32,9 +33,7 @@ public:
     _everytime = everytime;
     _lifetime_ms = lifetime_ms;
     if ( _lifetime_ms == 0 )
-    {
       time_queue().swap(_time_queue);
-    }
   }
   
 
@@ -45,7 +44,8 @@ public:
     _result_map[call_id] = result;
     if ( _lifetime_ms != 0 )
     {
-      _time_queue.emplace( this->now_ms() + _lifetime_ms, call_id);
+      _time_queue.emplace( std::chrono::system_clock::now() + std::chrono::milliseconds(_lifetime_ms), call_id);
+      //_time_queue.emplace( this->now_ms() + _lifetime_ms, call_id);
     }
   }
   
@@ -107,20 +107,23 @@ private:
   {
     std::lock_guard<mutex_type> lk(_mutex);
     call_list calls;
-    auto now = this->now_ms();
+    //auto now = this->now_ms();
+    auto now = std::chrono::system_clock::now();
     while ( !_time_queue.empty() && _time_queue.top().first < now )
     {
-      calls.push_back(_time_queue.top().second);
+      calls.push_back( std::move(_time_queue.top().second) );
       _time_queue.pop();
     }
     return std::move( calls );
   }
 
+  /*
   time_t now_ms()
   {
     return std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now().time_since_epoch() ).count();
     //return std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
   }
+  */
 
 private:
   bool _everytime = true;
