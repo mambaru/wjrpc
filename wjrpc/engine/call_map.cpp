@@ -34,7 +34,7 @@ namespace wjrpc{
     _result_map[call_id] = result;
     if ( _lifetime_ms != 0 )
     {
-      _time_queue.emplace( std::chrono::system_clock::now() + std::chrono::milliseconds(_lifetime_ms), call_id);
+      _time_queue.push( std::make_pair( std::chrono::system_clock::now() + std::chrono::milliseconds(_lifetime_ms), call_id) );
       //_time_queue.emplace( this->now_ms() + _lifetime_ms, call_id);
     }
   }
@@ -105,16 +105,16 @@ namespace wjrpc{
     std::cout << std::endl <<  "DEBUG _time_queue.size() = " << _time_queue.size()  << std::endl;
     if ( !_time_queue.empty() ) 
     {
-        std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(_time_queue.top().first - now).count() << std::endl;
-        std::cout << std::chrono::duration_cast<std::chrono::milliseconds>( now - _time_queue.top().first ).count() << std::endl;
-        std::cout << std::boolalpha << bool(_time_queue.top().first < now) << " ";
-        std::cout << std::boolalpha << bool( now < _time_queue.top().first ) << std::endl;
+        std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(_time_queue.front().first - now).count() << std::endl;
+        std::cout << std::chrono::duration_cast<std::chrono::milliseconds>( now - _time_queue.front().first ).count() << std::endl;
+        std::cout << std::boolalpha << bool(_time_queue.front().first < now) << " ";
+        std::cout << std::boolalpha << bool( now < _time_queue.front().first ) << std::endl;
     }
-    while ( !_time_queue.empty() && ( _time_queue.top().first < now) /*< now*/ )
+    while ( !_time_queue.empty() && ( _time_queue.front().first < now) /*< now*/ )
     {
       std::cout << _time_queue.size() << " " << calls.size() << " " 
-                << std::chrono::duration_cast<std::chrono::milliseconds>(_time_queue.top().first - now).count() << std::endl;
-      calls.push_back( std::move(_time_queue.top().second) );
+                << std::chrono::duration_cast<std::chrono::milliseconds>(_time_queue.front().first - now).count() << std::endl;
+      calls.push_back( std::move(_time_queue.front().second) );
       _time_queue.pop();
       
     }

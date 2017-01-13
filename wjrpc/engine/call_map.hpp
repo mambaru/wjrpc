@@ -24,7 +24,7 @@ public:
 
   typedef std::chrono::time_point<std::chrono::system_clock> time_point_t;
   typedef std::pair<time_point_t, call_id_t> time_pair;
-  typedef std::priority_queue< time_pair > time_queue;
+  typedef std::queue< time_pair > time_queue;
   typedef std::deque<call_id_t> call_list;
   
   void set_lifetime(time_t lifetime_ms, bool everytime);
