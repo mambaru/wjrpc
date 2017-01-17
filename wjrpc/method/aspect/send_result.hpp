@@ -39,15 +39,19 @@ struct send_result
           id_range.first, 
           id_range.second 
       );
-    auto d = holder.detach();
-    d->clear();
-    d->reserve(ReserveSize);
-    typedef outgoing_result_json<result_json> message_json;
-    typename message_json::serializer()(
-      result_message, 
-      std::inserter( *d, d->end() )
-    );
-    outgoing_handler( std::move(d) );
+    if ( auto d = holder.detach() )
+    {
+      d->clear();
+      d->reserve(ReserveSize);
+      typedef outgoing_result_json<result_json> message_json;
+      typename message_json::serializer()(
+        result_message, 
+        std::inserter( *d, d->end() )
+      );
+      outgoing_handler( std::move(d) );
+    }
+    else
+      outgoing_handler( nullptr );
   }
 };
 

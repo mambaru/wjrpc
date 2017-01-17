@@ -258,8 +258,14 @@ private:
 
   void perform_request_(incoming_holder holder, io_id_t io_id, jsonrpc_outgoing_handler_t handler) 
   {
-    auto h = _outgoing_rpc_factory(io_id, handler, false);
-    h->invoke( std::move(holder), std::move(handler) );
+    if ( auto h = _outgoing_rpc_factory(io_id, handler, false) )
+    {
+      h->invoke( std::move(holder), std::move(handler) );
+    }
+    else
+    {
+      WJRPC_LOG_FATAL( this, "_outgoing_rpc_factory==nullptr engine.hpp:267" )
+    }
   }
 
   void perform_response_(incoming_holder holder, io_id_t /*io_id*/, jsonrpc_outgoing_handler_t handler) 
