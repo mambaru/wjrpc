@@ -51,7 +51,7 @@ struct send_result
       outgoing_handler( std::move(d) );
     }
     else
-      outgoing_handler( nullptr );
+      outgoing_handler( data_ptr() );
   }
 };
 
