@@ -66,7 +66,7 @@ public:
     if ( _default!=nullptr )
     {
       reinit = false;
-      return _default;
+      return _default->clone();
     }
 
     auto itr = _handlers.find(io_id);

@@ -20,7 +20,6 @@ struct ad_initialize
     t.get_aspect().template get<_target_>() = opt.target;
     t.get_aspect().template get<_peeper_>() = opt.peeper;
     t.get_aspect().template get<_init_log_>()(t, opt);
-    //static_cast< ::wjrpc::logger&  >(t).initialize(opt);
   }
 };
 

@@ -65,7 +65,7 @@ public:
 
   void invoke(incoming_holder holder, outgoing_handler_t outgoing_handler) 
   {
-    std::lock_guard< mutex_type > lk( super::mutex() );
+    std::lock_guard< mutex_type > lk( _mutex );
     super::get_aspect().template get<_invoke_>()(*this, std::move(holder), std::move(outgoing_handler) );
   }
   
@@ -82,7 +82,7 @@ public:
   template<typename O>
   void start(O&& opt, io_id_t io_id)
   {
-    std::lock_guard< mutex_type > lk( super::mutex() );
+    std::lock_guard< mutex_type > lk( _mutex );
     _io_id = io_id;
     this->get_aspect().template get<_initialize_>()(*this, std::move(opt) );
     this->get_aspect().template get<_connect_>()(*this, io_id );
@@ -90,7 +90,7 @@ public:
 
   void stop()
   {
-    std::lock_guard< mutex_type > lk( super::mutex() );
+    std::lock_guard< mutex_type > lk( _mutex );
     this->get_aspect().template get<_disconnect_>()(*this, _io_id );
     //super::stop_(*this);
   }
@@ -98,7 +98,7 @@ public:
   template<typename O>
   void initialize(O&& opt)
   {
-    std::lock_guard< mutex_type > lk( super::mutex() );
+    std::lock_guard< mutex_type > lk( _mutex );
     this->get_aspect().template get<_initialize_>()(*this, std::move(opt) );
   }
 
@@ -132,6 +132,14 @@ public:
       handler( std::string(d->begin(), d->end()) );
     });
   }
+  
+  std::shared_ptr<self> clone()
+  {
+    auto clon = std::make_shared<self>();
+    static_cast<super&>(*clon) = static_cast<const super&>(*this);
+    clon->_io_id = _io_id;
+    return clon;
+  }
 
 private:
   struct f_get_methods
@@ -145,7 +153,7 @@ private:
   };
 
 private:
-  
+  mutable mutex_type _mutex;
   io_id_t _io_id = 0;
 };
 

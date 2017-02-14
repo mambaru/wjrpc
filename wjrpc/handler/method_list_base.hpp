@@ -89,7 +89,6 @@ public:
     else
     {
       WJRPC_LOG_FATAL(this, " (ABORT) iow::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
-      abort();
     }
   }
 
@@ -152,10 +151,10 @@ public:
     );
   }
 
-  mutex_type& mutex() const
+  /*mutex_type& mutex() const
   {
     return _mutex;
-  }
+  }*/
 
 private:
 
@@ -180,7 +179,7 @@ private:
   friend struct super::aspect::template advice_cast< _initialize_ >::type;
   typedef typename handler_types::sender_handler_t   sender_handler_t;
   sender_handler_t _sender_handler = sender_handler_t(nullptr);
-  mutable mutex_type _mutex;
+  /*mutable mutex_type _mutex;*/
 };
 
 } // iow

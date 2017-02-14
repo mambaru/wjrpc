@@ -35,7 +35,7 @@ public:
   typedef engine_options<handler_options_type> options_type;
   
   typedef typename handler_type::io_id_t io_id_t;
-  typedef typename handler_type::outgoing_handler_t jsonrpc_outgoing_handler_t;
+  typedef typename handler_type::outgoing_handler_t outgoing_handler_t;
   typedef typename handler_type::data_ptr data_ptr;
   typedef typename handler_type::call_id_t call_id_t;
   
@@ -73,35 +73,25 @@ public:
       handler->initialize(opt1);
       _handler_map.disable(handler);
     }
-    //_handler_map.disable( opt.disable_handler_map );
-    /*
-    {
-      std::lock_guard< std::mutex > lk( _handler_map.mutex() );
-      _default_handler = nullptr;
-      if ( opt.disable_handler_map )
-      {
-        _default_handler = std::make_shared<handler_type>();
-        _default_handler->initialize(opt1);
-      }
-    }*/
-    
-    
+    else
+      _handler_map.disable(nullptr);
+
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
-    _outgoing_rpc_factory = 
-      [opt, this](io_id_t io_id, jsonrpc_outgoing_handler_t handler, bool reg_io) 
+    _outgoing_factory = 
+      [opt, this](io_id_t io_id, outgoing_handler_t handler, bool reg_io) 
         -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
 
-    _incoming_io_factory = 
+    _input_factory = 
       [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io) 
         -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
  
-    _outgoing_io_factory = [opt, this](io_id_t io_id, output_handler_t handler, bool reg_io) -> handler_ptr
+    _output_factory = [opt, this](io_id_t io_id, output_handler_thandler, bool reg_io) -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
@@ -114,7 +104,7 @@ public:
   }
 
   template<typename Tg, typename Req, typename ...Args>
-  void call(Req req, io_id_t io_id, Args... args)
+  void call(Req req, io_id_t io_id, Args&&... args)
   {
     if ( auto h = _handler_map.find(io_id) )
     {
@@ -126,12 +116,12 @@ public:
   /* jsonrpc                                                     */
   /***************************************************************/
 
-  void reg_jsonrpc( io_id_t io_id, jsonrpc_outgoing_handler_t handler )
+  void reg_jsonrpc( io_id_t io_id, outgoing_handler_t handler )
   {
-    _outgoing_rpc_factory(io_id, handler, true);
+    _outgoing_factory(io_id, std::move(handler), true);
   }
 
-  void perform_jsonrpc(incoming_holder holder, io_id_t io_id, jsonrpc_outgoing_handler_t handler) 
+  void perform_jsonrpc(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) 
   {
     this->perform_incoming_( std::move(holder), io_id, std::move(handler) );
   }
@@ -141,7 +131,7 @@ public:
   /***************************************************************/
   
   
-  jsonrpc_outgoing_handler_t io2rpc( output_handler_t handler )
+  outgoing_handler_t io2rpc( output_handler_t handler )
   {
     if ( handler == nullptr )
       return nullptr;
@@ -155,7 +145,7 @@ public:
 
   void reg_io( io_id_t io_id, input_handler_t handler )
   {
-    this->_incoming_io_factory(io_id, handler, true);
+    this->_input_factory(io_id, std::move(handler), true);
   }
 
   void unreg_io( io_id_t io_id )
@@ -174,7 +164,7 @@ public:
       d = holder.parse(&e);
       if ( !e && holder )
       {
-        this->perform_io_once_( std::move(holder), io_id, handler );
+        this->perform_io_once_( std::move(holder), io_id, std::forward<output_handler_t>(handler) );
       }
       else
       {
@@ -231,7 +221,7 @@ private:
     });
   }
 
-  void perform_incoming_(incoming_holder holder, io_id_t io_id, jsonrpc_outgoing_handler_t handler) 
+  void perform_incoming_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) 
   {
     if ( holder.is_notify() || holder.is_request() )
     {
@@ -256,19 +246,19 @@ private:
     }
   }
 
-  void perform_request_(incoming_holder holder, io_id_t io_id, jsonrpc_outgoing_handler_t handler) 
+  void perform_request_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) 
   {
-    if ( auto h = _outgoing_rpc_factory(io_id, handler, false) )
+    if ( auto h = _outgoing_factory(io_id, std::forward<outgoing_handler_t>(handler), false) )
     {
       h->invoke( std::move(holder), std::move(handler) );
     }
     else
     {
-      WJRPC_LOG_FATAL( this, "_outgoing_rpc_factory==nullptr engine.hpp:267" )
+      WJRPC_LOG_FATAL( this, "_outgoing_factory==nullptr engine.hpp:267" )
     }
   }
 
-  void perform_response_(incoming_holder holder, io_id_t /*io_id*/, jsonrpc_outgoing_handler_t handler) 
+  void perform_response_(incoming_holder holder, io_id_t /*io_id*/, outgoing_handler_t handler) 
   {
     ::wjson::json_error e;
     call_id_t call_id = holder.template get_id<call_id_t>(&e);
@@ -321,7 +311,7 @@ private:
   }
   
   template<typename O>
-  void upgrate_options_(O& opt, input_handler_t handler)
+  void upgrate_options_(O& opt, input_handler_t&& handler)
   {
     io_id_t io_id = this->_io_id;
     std::weak_ptr<self> wthis = this->shared_from_this();
@@ -381,7 +371,7 @@ private:
   }
 
   template<typename O>
-  void upgrate_options_(O& opt, jsonrpc_outgoing_handler_t handler)
+  void upgrate_options_(O& opt, outgoing_handler_t&& handler)
   {
     
     if ( handler == nullptr )
@@ -442,7 +432,7 @@ private:
 
   // OutgoingHandler io::outgoing_handler_t или jsonrpc::outgoing_handler_t
   template<typename Opt, typename OutgoingHandler>
-  handler_ptr create_handler_(io_id_t io_id, Opt opt, OutgoingHandler handler, bool reg_io)
+  handler_ptr create_handler_(io_id_t io_id, Opt opt, OutgoingHandler&& handler, bool reg_io)
   {
     bool reinit;
     auto ph = _handler_map.findocre(io_id, reg_io, reinit);
@@ -450,7 +440,7 @@ private:
     {
       // ph->initialize(opt);
       // специализация в зависимости от типа OutgoingHandler
-      this->upgrate_options_(opt, std::move(handler));
+      this->upgrate_options_(opt, std::forward<OutgoingHandler>(handler));
       if ( !ph->status() )
       {
         ph->start(opt, io_id);
@@ -465,9 +455,9 @@ private:
 
 private:
 
-  std::function<handler_ptr(io_id_t, jsonrpc_outgoing_handler_t, bool)> _outgoing_rpc_factory;
-  std::function<handler_ptr(io_id_t, output_handler_t, bool)> _outgoing_io_factory;
-  std::function<handler_ptr(io_id_t, input_handler_t, bool)> _incoming_io_factory;
+  std::function<handler_ptr(io_id_t, outgoing_handler_t&&, bool)> _outgoing_factory;
+  std::function<handler_ptr(io_id_t, output_handler_t&&, bool)> _output_factory;
+  std::function<handler_ptr(io_id_t, input_handler_t&&, bool)> _input_factory;
 
   typedef handler_map<handler_type> handler_map_t;
   handler_map_t _handler_map;
