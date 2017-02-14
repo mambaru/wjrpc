@@ -91,7 +91,7 @@ public:
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
  
-    _output_factory = [opt, this](io_id_t io_id, output_handler_thandler, bool reg_io) -> handler_ptr
+    _output_factory = [opt, this](io_id_t io_id, output_handler_t handler, bool reg_io) -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io );
     };
@@ -164,7 +164,7 @@ public:
       d = holder.parse(&e);
       if ( !e && holder )
       {
-        this->perform_io_once_( std::move(holder), io_id, std::forward<output_handler_t>(handler) );
+        this->perform_io_once_( std::move(holder), io_id, handler );
       }
       else
       {
@@ -248,7 +248,7 @@ private:
 
   void perform_request_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) 
   {
-    if ( auto h = _outgoing_factory(io_id, std::forward<outgoing_handler_t>(handler), false) )
+    if ( auto h = _outgoing_factory(io_id, std::cref(handler), false) )
     {
       h->invoke( std::move(holder), std::move(handler) );
     }
@@ -311,7 +311,7 @@ private:
   }
   
   template<typename O>
-  void upgrate_options_(O& opt, input_handler_t&& handler)
+  void upgrate_options_(O& opt, input_handler_t handler)
   {
     io_id_t io_id = this->_io_id;
     std::weak_ptr<self> wthis = this->shared_from_this();
@@ -371,7 +371,7 @@ private:
   }
 
   template<typename O>
-  void upgrate_options_(O& opt, outgoing_handler_t&& handler)
+  void upgrate_options_(O& opt, outgoing_handler_t handler)
   {
     
     if ( handler == nullptr )
@@ -432,7 +432,7 @@ private:
 
   // OutgoingHandler io::outgoing_handler_t или jsonrpc::outgoing_handler_t
   template<typename Opt, typename OutgoingHandler>
-  handler_ptr create_handler_(io_id_t io_id, Opt opt, OutgoingHandler&& handler, bool reg_io)
+  handler_ptr create_handler_(io_id_t io_id, Opt opt, OutgoingHandler handler, bool reg_io)
   {
     bool reinit;
     auto ph = _handler_map.findocre(io_id, reg_io, reinit);
@@ -440,7 +440,7 @@ private:
     {
       // ph->initialize(opt);
       // специализация в зависимости от типа OutgoingHandler
-      this->upgrate_options_(opt, std::forward<OutgoingHandler>(handler));
+      this->upgrate_options_(opt, std::move(handler));
       if ( !ph->status() )
       {
         ph->start(opt, io_id);
@@ -455,9 +455,9 @@ private:
 
 private:
 
-  std::function<handler_ptr(io_id_t, outgoing_handler_t&&, bool)> _outgoing_factory;
-  std::function<handler_ptr(io_id_t, output_handler_t&&, bool)> _output_factory;
-  std::function<handler_ptr(io_id_t, input_handler_t&&, bool)> _input_factory;
+  std::function<handler_ptr(io_id_t, outgoing_handler_t, bool)> _outgoing_factory;
+  std::function<handler_ptr(io_id_t, output_handler_t, bool)> _output_factory;
+  std::function<handler_ptr(io_id_t, input_handler_t, bool)> _input_factory;
 
   typedef handler_map<handler_type> handler_map_t;
   handler_map_t _handler_map;
