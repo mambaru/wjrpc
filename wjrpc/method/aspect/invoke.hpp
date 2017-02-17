@@ -75,7 +75,7 @@ struct invoke: Handler
       using namespace std::placeholders;
       auto ph = std::make_shared<incoming_holder>( std::move(holder) );
       Handler::operator()( t, std::move(req), 
-        [ph, outgoing_handler]( result_ptr result, error_ptr err )
+        [this, ph, outgoing_handler]( result_ptr result, error_ptr err )
         {
           self::callback_<T, TT>(ph, outgoing_handler, std::move(result), std::move(err) );
         }
