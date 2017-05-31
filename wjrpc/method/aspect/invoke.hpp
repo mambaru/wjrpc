@@ -77,12 +77,32 @@ struct invoke: Handler
       Handler::operator()( t, std::move(req), 
         [ph, outgoing_handler]( result_ptr result, error_ptr err )
         {
+          if (err == nullptr )
+          {
+            TT::template send_result<T, result_json>( 
+              std::move(*ph),
+              std::move(result),
+              std::move(outgoing_handler) 
+            );
+          }
+          else
+          {
+            TT::template send_error<T, error_json>( 
+              std::move(*ph), 
+              std::move(err), 
+              std::move(outgoing_handler)
+            );
+          }
+
+          /*
           ::wjrpc::invoke<JParams, JResult, Handler, JError>
                  ::template callback_<T, TT>(ph, outgoing_handler, std::move(result), std::move(err) );
+          */
         }
       );
     }
   }
+  /*
 private:
 
   template<typename T, typename TT, typename HolderPtr, typename OutgoingHandler, typename Result, typename Error>
@@ -105,6 +125,7 @@ private:
       );
     }
   }
+  */
   
 };
 
