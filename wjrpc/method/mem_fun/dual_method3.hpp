@@ -30,7 +30,7 @@ template<
 struct basic_dual_method3: basic_method< 
   name<TgName>,
   invoke_mem_fun3< JParams, JResult, Target, mem_ptr>,
-  call<JParams, JResult>,
+  remote_call<JParams, JResult>,
   Args...
 >
 {};
@@ -51,7 +51,7 @@ template<
 struct dual_method3: method< 
   name<TgName>,
   invoke_mem_fun3< JParams, JResult, Target, mem_ptr>,
-  call<JParams, JResult>,
+  remote_call<JParams, JResult>,
   Args...
 >
 {};

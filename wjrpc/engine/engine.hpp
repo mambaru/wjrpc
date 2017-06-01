@@ -106,7 +106,7 @@ public:
   template<typename Tg, typename Req, typename ...Args>
   void call(Req req, io_id_t io_id, Args&&... args)
   {
-    if ( auto h = _handler_map.find(io_id) )
+    if ( handler_ptr h = _handler_map.find(io_id) )
     {
       h->template call<Tg>(std::move(req), std::forward<Args>(args)...);
     }

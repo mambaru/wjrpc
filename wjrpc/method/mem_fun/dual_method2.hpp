@@ -50,7 +50,7 @@ struct basic_dual_method2: basic_method<
     Itf, 
     mem_ptr2
   >,
-  call<JParams, JResult>,
+  remote_call<JParams, JResult>,
   Args...
 >
 {};
@@ -91,7 +91,7 @@ struct dual_method2: method<
     Itf, 
     mem_ptr2
   >,
-  call<JParams, JResult>,
+  remote_call<JParams, JResult>,
   Args...
 >
 {};

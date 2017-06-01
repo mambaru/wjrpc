@@ -22,7 +22,7 @@ template<
 >
 struct basic_call_method: basic_method< 
   name<TgName>,
-  call<JParams, JResult>,
+  remote_call<JParams, JResult>,
   Args...
 >
 {};
@@ -36,7 +36,7 @@ template<
 >
 struct call_method: method< 
   name<TgName>,
-  call<JParams, JResult>,
+  remote_call<JParams, JResult>,
   Args...
 >
 {};

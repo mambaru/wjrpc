@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 namespace wjrpc{
 
