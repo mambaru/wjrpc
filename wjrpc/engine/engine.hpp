@@ -48,6 +48,8 @@ public:
   engine()
     : _call_counter(1)
   {
+    _log_time1 = time(0);
+    _lost_results = 0;
   }
 
   /***************************************************************/
@@ -271,11 +273,17 @@ private:
     {
       if ( !e )
       {  
-        WJRPC_LOG_ERROR( this, "jsonrpc::engind incoming response with call_id=" << call_id << " not found")
+        ++_lost_results;
+        time_t now = time(0);
+        if ( now > _log_time1 )
+        {
+          WJRPC_LOG_ERROR( this, "jsonrpc::engin incoming response with call_id=" << call_id << " not found. Lost results " << _lost_results)
+          _log_time1 = now;
+        }
       }
       else
       {
-        WJRPC_LOG_ERROR(this, "jsonrpc::engind incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
+        WJRPC_LOG_ERROR(this, "jsonrpc::engin incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
       }
       handler( outgoing_holder() );
     }
@@ -463,8 +471,10 @@ private:
   handler_map_t _handler_map;
   call_map _call_map;
   std::atomic<int> _call_counter;
-  io_id_t _io_id;
+  io_id_t _io_id = 0;
   handler_ptr _default_handler;
+  std::atomic<time_t> _log_time1;
+  std::atomic<time_t> _lost_results;
 };
 
 }
