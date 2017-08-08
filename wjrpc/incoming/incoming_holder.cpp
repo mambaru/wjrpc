@@ -22,9 +22,7 @@ incoming_holder::~incoming_holder()
   if ( _data == nullptr)
     return;
   
-  //std::cout << "incoming_holder::~incoming_holder() " << _data->capacity() << std::endl;
-  if ( auto f = ::iow::io::global_pool::get_free() )
-    f( std::move(_data) );
+  ::iow::io::global_pool::free( std::move(_data) );
 }
 
 /*
