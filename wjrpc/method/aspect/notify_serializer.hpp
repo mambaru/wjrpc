@@ -53,6 +53,6 @@ struct notify_serializer_proxy
 };
 
 
-} // iow
+} // wjrpc
 
 

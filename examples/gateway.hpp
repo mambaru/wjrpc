@@ -20,6 +20,7 @@ namespace gateway
 
   struct method_list: wjrpc::method_list
   <
+    wjrpc::interface_<icalc>,
     wjrpc::call_method<_plus_, request::plus_json, response::plus_json>,
     wjrpc::call_method<_minus_, request::minus_json, response::minus_json>,
     wjrpc::call_method<_multiplies_, request::multiplies_json, response::multiplies_json>,
@@ -27,32 +28,33 @@ namespace gateway
   >
   {};
 
-  class handler
-    : public ::wjrpc::handler<method_list>
-    , public icalc
+  template<typename Base>
+  class calc_interface
+    : public Base 
+    , public Base::interface_type
   {
   public:
     virtual void plus( request::plus::ptr req, response::plus::callback cb)  override
     {
-      this->call<_plus_>( std::move(req), cb, nullptr );
+      this->template call<_plus_>( std::move(req), cb, nullptr );
     }
 
     virtual void minus( request::minus::ptr req, response::minus::callback cb) override
     {
-      this->call<_minus_>( std::move(req), cb, nullptr );
+      this->template call<_minus_>( std::move(req), cb, nullptr );
     }
 
     virtual void multiplies( request::multiplies::ptr req, response::multiplies::callback cb) override
     {
-      this->call<_multiplies_>( std::move(req), cb, nullptr );
+      this->template call<_multiplies_>( std::move(req), cb, nullptr );
     }
 
     virtual void divides( request::divides::ptr req, response::divides::callback cb) override
     {
-      this->call<_divides_>( std::move(req), cb, nullptr );
+      this->template call<_divides_>( std::move(req), cb, nullptr );
     }
   };
 
-  typedef wjrpc::engine<handler> engine_type;
+  typedef wjrpc::engine< ::wjrpc::handler< calc_interface<method_list> > > engine_type;
 }
 

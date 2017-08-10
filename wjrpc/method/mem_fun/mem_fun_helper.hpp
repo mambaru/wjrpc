@@ -41,6 +41,6 @@ inline void mem_fun_service_unavailable( std::function< void(std::unique_ptr<Res
   }
 }
 
-} // iow
+} // wjrpc
 
 

@@ -18,6 +18,6 @@ struct interface_
   typedef I advice_class;
 };
 
-} // iow
+} // wjrpc
 
 

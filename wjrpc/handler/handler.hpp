@@ -25,6 +25,7 @@ class handler
 {
 public:
   typedef handler<MethodList> self;
+  typedef std::shared_ptr<self> ptr;
   typedef MethodList super;
   typedef typename super::interface_type interface_type;
   typedef typename super::target_type target_type;
@@ -102,34 +103,34 @@ public:
     this->get_aspect().template get<_initialize_>()(*this, std::move(opt) );
   }
 
-  void perform_io(data_ptr d, output_handler_t handler) 
+  void perform_io(data_ptr d, output_handler_t h) 
   {
     using namespace std::placeholders;
 
     while ( d != nullptr )
     {
-      incoming_holder holder(std::move(d));
+      incoming_holder iholder(std::move(d));
       ::wjson::json_error e;
-      d = holder.parse(&e);
-      if ( !e && holder )
+      d = iholder.parse(&e);
+      if ( !e && iholder )
       {
-        this->invoke( std::move(holder), [handler](outgoing_holder holder)
+        this->invoke( std::move(iholder), [h](outgoing_holder oholder)
         {
-          handler( std::move(holder.detach()) );
+          h( std::move(oholder.detach()) );
         });
       }
       else
       {
-        aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), handler );
+        aux::send_error_raw( std::move(iholder), std::make_unique<parse_error>(), h );
       }
     }
   }
   
-  void perform(std::string str, std::function<void(std::string)> handler) 
+  void perform(std::string str, std::function<void(std::string)> h) 
   {
-    this->perform_io( std::make_unique<data_type>( str.begin(), str.end() ), [handler](data_ptr d)
+    this->perform_io( std::make_unique<data_type>( str.begin(), str.end() ), [h](data_ptr d)
     {
-      handler( std::string(d->begin(), d->end()) );
+      h( std::string(d->begin(), d->end()) );
     });
   }
   
@@ -157,5 +158,5 @@ private:
   io_id_t _io_id = 0;
 };
 
-} // iow
+} // wjrpc
 

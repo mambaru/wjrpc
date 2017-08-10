@@ -35,6 +35,6 @@ struct aspect_method
 {
 };
 
-} // iow
+} // wjrpc
 
 

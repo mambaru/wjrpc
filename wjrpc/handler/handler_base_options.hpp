@@ -17,6 +17,6 @@ struct handler_base_options:
   sender_handler_t sender_handler;
 };
 
-} // iow
+} // wjrpc
 
 

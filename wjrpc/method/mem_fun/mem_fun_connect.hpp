@@ -36,6 +36,6 @@ struct mem_fun_connect
   }
 };
 
-} // iow
+} // wjrpc
 
 

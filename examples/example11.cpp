@@ -44,6 +44,7 @@ namespace gateway
 
   struct method_list: wjrpc::method_list
   <
+    wjrpc::interface_<icalc>,
     wjrpc::call_method<_plus_, request::plus_json, response::plus_json>,
     wjrpc::call_method<_minus_, request::minus_json, response::minus_json>,
     wjrpc::call_method<_multiplies_, request::multiplies_json, response::multiplies_json>,
@@ -51,11 +52,9 @@ namespace gateway
   >
   {};
 
-  class handler
-    : public ::wjrpc::handler<method_list>
-    , public icalc
+  template<typename Base>
+  struct calc_interface: public Base, public icalc
   {
-  public:
     virtual void plus( request::plus::ptr req, response::plus::callback cb)  override
     {
       this->template call<_plus_>( std::move(req), cb, nullptr );
@@ -75,6 +74,13 @@ namespace gateway
     {
       this->template call<_divides_>( std::move(req), cb, nullptr );
     }
+  };
+  
+  class handler
+    : public ::wjrpc::handler< calc_interface<method_list> >     
+  {
+  public:
+
   };
 
   typedef wjrpc::engine<handler> engine_type;
@@ -109,18 +115,18 @@ int main()
   gtw->reg_io(33, [srv]( wjrpc::data_ptr d, wjrpc::io_id_t /*io_id*/, wjrpc::output_handler_t handler)
   {
     std::cout << " REQUEST: " << std::string( d->begin(), d->end() ) << std::endl;
-    srv->perform_io(std::move(d), 44, [handler](wjrpc::data_ptr d)
+    srv->perform_io(std::move(d), 44, [handler](wjrpc::data_ptr d2)
     {
       // Переопределение обработчика для вывода JSON-RPC ответа
-      std::cout << " RESPONSE: " << std::string( d->begin(), d->end() ) << std::endl;
-      handler(std::move(d) );
+      std::cout << " RESPONSE: " << std::string( d2->begin(), d2->end() ) << std::endl;
+      handler(std::move(d2) );
     });
   });
   
   // Находим зарегистрированный обработчик шлюза по его ID 
   auto gtwh = gtw->find(33);
   // Связываем обработчик шлюза с первм прокси
-  prx1->initialize(gtwh);
+  prx1->initialize( std::static_pointer_cast<icalc>(gtwh) );
   
   // Вызываем plus через прокси (prx1->gtw->srv->prx2->clc)
   auto plus = std::make_unique<request::plus>();

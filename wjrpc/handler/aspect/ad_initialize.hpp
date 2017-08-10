@@ -23,6 +23,6 @@ struct ad_initialize
   }
 };
 
-} // iow
+} // wjrpc
 
 

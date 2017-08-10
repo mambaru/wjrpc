@@ -37,6 +37,6 @@ struct invoke_stub
   }
 };
 
-} // iow
+} // wjrpc
 
 

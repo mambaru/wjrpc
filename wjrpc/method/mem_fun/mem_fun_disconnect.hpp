@@ -30,6 +30,6 @@ struct mem_fun_disconnect
   }
 };
 
-} // iow
+} // wjrpc
 
 

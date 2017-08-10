@@ -21,7 +21,7 @@ struct error_codes_json
   JSON_NAME2(InternalError, "Internal error")
   JSON_NAME2(ServerError, "Server error")
   JSON_NAME2(MethodNotImplementation, "Method not implementation")
-  JSON_NAME2(BadGateway, "Bad gateway")
+  JSON_NAME2(BadGateway, "Bad Gateway")
   JSON_NAME2(ServiceUnavailable, "Service unavailable")
   JSON_NAME2(QueueOverflow, "Queue overflow")
 

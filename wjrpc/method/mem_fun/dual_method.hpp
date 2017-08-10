@@ -55,6 +55,6 @@ struct dual_method: method<
 {};
 
 
-} // iow
+} // wjrpc
 
 

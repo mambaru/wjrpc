@@ -15,8 +15,6 @@
 #include <chrono>
 #include <cstring>
 
-//#define IOW_JSON_EMPTY_OBJECT_STRING "\"~~iow-empty-object~~\""
-
 namespace wjrpc{
 
 class outgoing_holder;

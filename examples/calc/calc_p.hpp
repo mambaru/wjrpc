@@ -14,6 +14,6 @@ public:
   virtual void divides( request::divides::ptr req, response::divides::callback cb) override;
 private:
   template<typename ReqPtr, typename Callback>
-  bool check_( ReqPtr& req, Callback& cb);
+  static bool check_( ReqPtr& req, Callback& cb);
   std::shared_ptr<icalc> _next;
 };

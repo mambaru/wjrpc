@@ -19,5 +19,5 @@ template<
 >
 struct disconnect_method: disconnect< mem_fun_disconnect<Target, mem_ptr> > {};
 
-} // iow
+} // wjrpc
 

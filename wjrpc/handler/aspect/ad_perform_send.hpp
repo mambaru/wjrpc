@@ -33,14 +33,14 @@ struct ad_perform_send
 
     t.sender_handler(
       name,
-      [p, ns1](const char* name) -> typename T::data_ptr
+      [p, ns1](const char* nname) -> typename T::data_ptr
       {
-        return ns1(name, std::move(*p));
+        return ns1(nname, std::move(*p));
       },
-      [p, rs1, this](const char* name, typename T::call_id_t id) 
+      [p, rs1, this](const char* rname, typename T::call_id_t id) 
         -> typename T::data_ptr
       {
-        return rs1(name, std::move(*p), id);
+        return rs1(rname, std::move(*p), id);
       },
       std::move(rh)
     );
@@ -82,6 +82,6 @@ struct ad_send_request
 };
 */
 
-} // iow
+} // wjrpc
 
 

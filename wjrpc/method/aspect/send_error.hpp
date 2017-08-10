@@ -27,12 +27,11 @@ struct send_error
     OutgoingHandler outgoing_handler
   )
   {
-
-    typedef typename T::data_type data_type;
-    typedef JError error_json;
+    //typedef typename T::data_type data_type;
+    typedef JError jerror_json;
     typedef typename JError::target error_type;
 
-    typedef outgoing_error_json< error_json > message_json;
+    typedef outgoing_error_json< jerror_json > message_json;
     outgoing_error<error_type> error_message;
     
     error_message.error = std::move(err);
@@ -49,7 +48,7 @@ struct send_error
     d->reserve(ReserveSize);
     typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
 
-    outgoing_handler( std::move(d) );
+    outgoing_handler( outgoing_holder(std::move(d)) );
   }
 };
 
@@ -69,6 +68,6 @@ struct send_error_proxy
 };
 
 
-} // iow
+} // wjrpc
 
 

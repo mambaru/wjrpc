@@ -39,6 +39,6 @@ struct invoke_mem_fun1
   
 };
 
-} // iow
+} // wjrpc
 
 

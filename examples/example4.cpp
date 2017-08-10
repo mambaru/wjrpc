@@ -15,7 +15,7 @@
 #include <iostream>
 
 template<typename E>
-void make_error(wjrpc::incoming_holder inholder, std::string& out)
+void make_error(const wjrpc::incoming_holder& inholder, std::string& out)
 {
   typedef wjrpc::outgoing_error<wjrpc::error> common_error;
   common_error err;

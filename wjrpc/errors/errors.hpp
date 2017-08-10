@@ -31,8 +31,8 @@ struct error
 {
   error_code_t code = 0;
   error():code() {}
-  error(error_codes code)
-    : code( static_cast<error_code_t>(code) )
+  explicit error(error_codes c)
+    : code( static_cast<error_code_t>(c) )
   {}
 
   typedef std::unique_ptr<error> ptr;

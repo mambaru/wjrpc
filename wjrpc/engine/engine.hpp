@@ -26,7 +26,7 @@ public:
   typedef engine<JsonrpcHandler> self;
   typedef JsonrpcHandler handler_type;
   typedef typename handler_type::target_type target_type;
-  typedef std::shared_ptr<handler_type> handler_ptr;
+  typedef typename handler_type::ptr handler_ptr;
   typedef typename handler_type::options_type handler_options_type;
   typedef typename handler_type::result_handler_t result_handler_t;
   typedef typename handler_type::request_serializer_t request_serializer_t;
@@ -47,9 +47,9 @@ public:
   
   engine()
     : _call_counter(1)
+    , _log_time1(time(0))
+    , _lost_results(0)
   {
-    _log_time1 = time(0);
-    _lost_results = 0;
   }
 
   /***************************************************************/
@@ -171,11 +171,11 @@ public:
       else
       {
         WJRPC_LOG_ERROR( this, "jsonrpc::engine: Parse error: " << holder.str() )
-        aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), [this, handler](data_ptr d)
+        aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), [this, handler](data_ptr err)
         {
-          if ( d != nullptr)
-            { WJRPC_LOG_ERROR( this, std::string(d->begin(), d->end()) ) }
-          handler( std::move(d) );
+          if ( err != nullptr)
+            { WJRPC_LOG_ERROR( this, std::string(err->begin(), err->end()) ) }
+          handler( std::move(err) );
         });
       }
     }
@@ -191,7 +191,7 @@ public:
     return _call_map.remove_outdated();
   }
 
-  std::shared_ptr<handler_type> find(io_id_t io_id) const
+  handler_ptr find(io_id_t io_id) const
   {
     return _handler_map.find(io_id);
   }
@@ -217,9 +217,9 @@ private:
   
   void perform_io_once_(incoming_holder holder, io_id_t io_id, output_handler_t handler)
   {
-    this->perform_incoming_( std::move(holder), io_id, [handler](outgoing_holder holder)
+    this->perform_incoming_( std::move(holder), io_id, [handler](outgoing_holder oholder)
     {
-      handler( std::move(holder.detach()) );
+      handler( std::move(oholder.detach()) );
     });
   }
 
@@ -236,14 +236,14 @@ private:
     else
     {
       WJRPC_LOG_ERROR( this, "jsonrpc::engine: Invalid Request: " << holder.str() )
-      aux::send_error( std::move(holder), std::make_unique<invalid_request>(), [this, handler](outgoing_holder holder)
+      aux::send_error( std::move(holder), std::make_unique<invalid_request>(), [this, handler](outgoing_holder oholder)
       {
-        auto h2 = holder.clone( holder.call_id() );
+        auto h2 = oholder.clone( oholder.call_id() );
         if ( auto d = h2.detach() )
         {
           WJRPC_LOG_ERROR( this, std::string(d->begin(), d->end()) )
         }
-        handler( std::move(holder) );
+        handler( std::move(oholder) );
       });
     }
   }
@@ -336,16 +336,16 @@ private:
         auto d = std::move( rs1(name, call_id) );
         
         int cil = call_id;
-        handler( std::move(d), io_id, [wthis, handler, io_id, call_id, cil](data_ptr d)
+        handler( std::move(d), io_id, [wthis, handler, io_id, call_id, cil](data_ptr d2)
         {
-          auto pthis = wthis.lock();
-          if ( pthis == nullptr )
+          auto pthis2 = wthis.lock();
+          if ( pthis2 == nullptr )
             return;
 
           // если данные не могут быть отправленны
-          if ( d==nullptr )
+          if ( d2==nullptr )
           {
-            auto rh = pthis->_call_map.detach(call_id);
+            auto rh = pthis2->_call_map.detach(call_id);
             if ( rh == nullptr )
               return;
             
@@ -364,9 +364,9 @@ private:
             return;
           }
 
-          pthis->perform_io( std::move(d), io_id, [wthis, io_id, call_id, handler](data_ptr d)
+          pthis2->perform_io( std::move(d2), io_id, [wthis, io_id, call_id, handler](data_ptr d3)
           {
-            handler( std::move(d), io_id, nullptr);
+            handler( std::move(d3), io_id, nullptr);
           });
         });
       }
@@ -403,22 +403,22 @@ private:
         io_id_t io_id = pthis->_io_id;
         rhw = [wthis,  handler, io_id](incoming_holder holder)
         {
-          auto pthis = wthis.lock();
-          if ( pthis==nullptr )
+          auto pthis2 = wthis.lock();
+          if ( pthis2==nullptr )
             return;
 
           if ( holder.is_response() || holder.is_error() )
           {
-            if ( auto h = pthis->_call_map.detach( holder.get_id<call_id_t>(nullptr) ) )
+            if ( auto h = pthis2->_call_map.detach( holder.get_id<call_id_t>(nullptr) ) )
             {
               h(std::move(holder) );
             }
           }
           else
           {
-            pthis->perform_jsonrpc( std::move(holder), io_id, [handler](outgoing_holder holder)
+            pthis2->perform_jsonrpc( std::move(holder), io_id, [handler](outgoing_holder oholder)
             {
-              handler( std::move(holder) ) ;
+              handler( std::move(oholder) ) ;
             });
           }
         }; // rh=[](){}

@@ -6,7 +6,7 @@ class pclient
 {
 public:
   void initialize(int rd, int wd);
-  std::shared_ptr<icalc> get();
+  std::shared_ptr<icalc> get() const;
 private:
   class engine;
   std::shared_ptr<engine> _impl;

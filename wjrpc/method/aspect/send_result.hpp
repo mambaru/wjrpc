@@ -48,10 +48,10 @@ struct send_result
         result_message, 
         std::inserter( *d, d->end() )
       );
-      outgoing_handler( std::move(d) );
+      outgoing_handler( outgoing_holder(std::move(d)) );
     }
     else
-      outgoing_handler( data_ptr() );
+      outgoing_handler( outgoing_holder() );
   }
 };
 
@@ -75,6 +75,6 @@ struct send_result_proxy
 };
 
 
-} // iow
+} // wjrpc
 
 

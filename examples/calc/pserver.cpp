@@ -29,10 +29,10 @@ void pserver::run()
 
     auto d = std::make_unique<wjrpc::data_type>( buff, buff + s );
 
-    _impl->perform_io( std::move(d), io_id, [this]( wjrpc::data_ptr d )
+    _impl->perform_io( std::move(d), io_id, [this]( wjrpc::data_ptr d2 )
     {
-      LOG_WRITE(d->begin(), d->end() )
-      ::write( this->_wd, d->data(), d->size());
+      LOG_WRITE(d2->begin(), d2->end() )
+      ::write( this->_wd, d2->data(), d2->size());
     });
   }
 }

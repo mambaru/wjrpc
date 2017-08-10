@@ -50,8 +50,9 @@ namespace gateway
   >
   {};
 
-  class handler
-    : public ::wjrpc::handler<method_list>
+  template<typename Base>
+  class calc_interface
+    : public Base 
     , public icalc
   {
   public:
@@ -75,8 +76,9 @@ namespace gateway
       this->template call<_divides_>( std::move(req), cb, nullptr );
     }
   };
-
-  typedef wjrpc::engine<handler> engine_type;
+  
+  typedef ::wjrpc::handler< calc_interface<method_list> > handler_type;
+  typedef wjrpc::engine<handler_type> engine_type;
 }
 
 int main()

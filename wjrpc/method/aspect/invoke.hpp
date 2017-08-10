@@ -46,10 +46,8 @@ struct invoke: Handler
     OutgoingHandler outgoing_handler
   ) 
   {
-    params_ptr req = nullptr;
-
     ::wjson::json_error e;
-    req = holder.template get_params<params_json>(&e);
+    params_ptr req = holder.template get_params<params_json>(&e);
 
     if ( e )
     {
@@ -130,6 +128,6 @@ private:
 };
 
 
-} // iow
+} // wjrpc
 
 

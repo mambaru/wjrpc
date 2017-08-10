@@ -28,7 +28,7 @@ void pclient::initialize(int rd, int wd)
   _calc = _impl->find(io_id);
 }
 
-std::shared_ptr<icalc> pclient::get()
+std::shared_ptr<icalc> pclient::get() const
 {
   return _calc;
 }

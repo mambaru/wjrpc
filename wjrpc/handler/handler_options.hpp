@@ -20,6 +20,6 @@ struct handler_options: handler_base_options
   P peeper;
 };
 
-} // iow
+} // wjrpc
 
 

@@ -22,9 +22,9 @@ struct f_invoke
   outgoing_handler_t& outgoing_handler;
   bool founded;
   
-  f_invoke(holder_type& holder, outgoing_handler_t& outgoing_handler)
-    : holder( holder )
-    , outgoing_handler(outgoing_handler)
+  f_invoke(holder_type& h, outgoing_handler_t& ohandler)
+    : holder( h )
+    , outgoing_handler(ohandler)
     , founded(false)
   {
   }
@@ -57,9 +57,9 @@ struct ad_invoke
     OutgoingHandler outgoing_handler
   )
   {
-    typedef HolderType holder_type;
-    typedef OutgoingHandler outgoing_handler_t;
-    typedef f_invoke<holder_type, outgoing_handler_t> f;
+    //typedef HolderType holder_type;
+    // typedef OutgoingHandler outgoing_handler_t;
+    // typedef f_invoke<holder_type, outgoing_handler_t> f;
 
     if ( !holder.has_method() )
     {
@@ -69,7 +69,7 @@ struct ad_invoke
       return;
     }
 
-    if ( !fas::for_each_group<_method_>(t, f( holder, outgoing_handler ) ) )
+    if ( !fas::for_each_group<_method_>(t, f_invoke<HolderType,OutgoingHandler>( holder, outgoing_handler ) ) )
     {
       WJRPC_LOG_ERROR( &t, "jsonrpc::invoke: Procedure Not Found: " << holder.method() );
 
@@ -80,6 +80,6 @@ struct ad_invoke
 
 };
 
-} // iow
+} // wjrpc
 
 

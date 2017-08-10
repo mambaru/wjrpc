@@ -88,7 +88,7 @@ public:
     }
     else
     {
-      WJRPC_LOG_FATAL(this, " (ABORT) iow::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
+      WJRPC_LOG_FATAL(this, " (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
     }
   }
 
@@ -182,6 +182,6 @@ private:
   /*mutable mutex_type _mutex;*/
 };
 
-} // iow
+} // wjrpc
 
 

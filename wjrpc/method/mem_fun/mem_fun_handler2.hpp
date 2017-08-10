@@ -65,16 +65,15 @@ struct mem_fun_handler2
         std::move(req), 
         mem_fun_make_callback( std::move(cb)),
         t.get_id(),
-        [pthis, this](request2_ptr req, std::function< void(responce2_ptr) > callback)
+        [pthis, this](request2_ptr req2, std::function< void(responce2_ptr) > callback)
         {
           if (callback == nullptr)
           {
             abort();
-
           }
           if ( auto ptr = pthis.get() )
           {
-            (ptr->*mem_ptr2)( std::move(req), callback);
+            (ptr->*mem_ptr2)( std::move(req2), callback);
           }
           else
           {
@@ -91,6 +90,6 @@ struct mem_fun_handler2
   }
 };
 
-} // iow
+} // wjrpc
 
 

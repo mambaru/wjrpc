@@ -26,7 +26,7 @@ public:
   outgoing_holder();
   
   // полностью сериализованный result, error
-  outgoing_holder(data_ptr d);
+  explicit outgoing_holder(data_ptr d);
 
   // полностью сериализованный notify
   outgoing_holder(const char* name, data_ptr d);
@@ -35,7 +35,7 @@ public:
   outgoing_holder(const char* name, data_ptr d, result_handler_t result_handler, call_id_t call_id);
 
   // отложенная сериализация result или error
-  outgoing_holder(basic_serializer_t serializer);
+  explicit outgoing_holder(basic_serializer_t serializer);
 
   // отложенная сериализация исходящих запросов
   outgoing_holder(const char* name, notify_serializer_t ns, request_serializer_t rs, result_handler_t rh, call_id_t call_id);

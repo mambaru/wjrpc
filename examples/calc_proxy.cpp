@@ -8,6 +8,12 @@
 #include <atomic>
 #include <chrono>
 
+std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p>& proxy);
+void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy);
+void run_iter(std::shared_ptr<icalc> cli);
+void run_bench(std::shared_ptr<icalc> cli);
+void run_client(int mode, std::shared_ptr<calc1>& calc, int count, std::shared_ptr<calc_p> proxy);
+
 void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy)
 {
   auto srv = std::make_shared<pserver>();
@@ -46,8 +52,8 @@ void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shar
   }
 }
 
-std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy);
-std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy)
+
+std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p>& proxy)
 {
   if ( count == 0)
     return calc;
@@ -153,8 +159,7 @@ void run_bench(std::shared_ptr<icalc> cli)
 }
 
 
-
-void run_client(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy)
+void run_client(int mode, std::shared_ptr<calc1>& calc, int count, std::shared_ptr<calc_p> proxy)
 {
   std::shared_ptr<icalc> clc = create_chain(2, calc, count, proxy);
   if ( mode == 0)

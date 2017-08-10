@@ -12,7 +12,10 @@ typedef std::vector<char> data_type;
 typedef std::unique_ptr<data_type> data_ptr;
 
 typedef wjson::array< std::vector< wjson::value<int> > > param_json;
-
+void test1();
+void test2();
+void test3();
+void ttt(std::function<void()> f);
 param_type params1 = {1,2,3,4,5};
 
 void test1()
@@ -96,15 +99,6 @@ void test3()
     result.result = std::make_unique<data_type>( std::move(outpar) );
     //result.result = nullptr;
     serializer(result, std::back_inserter(output));
-    
-    /*
-    output.clear();
-    iow::jsonrpc::outgoing_result_json<param_json>::serializer serializer;
-    iow::jsonrpc::outgoing_result<param_type> result;
-    result.result = std::make_unique<param_type>(params1);
-    serializer(result, std::back_inserter(output));
-    serializer(result, std::back_inserter(output));
-    */
   }
   auto finish = ::std::chrono::high_resolution_clock::now();
   auto span = std::chrono::duration_cast< std::chrono::microseconds >(finish - start).count();
@@ -117,6 +111,8 @@ int main()
 {
   for (int i=0; i < 10000; ++i)
   {
+    test1();
+    test2();
     test3();
   }
   return 0;

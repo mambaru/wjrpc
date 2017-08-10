@@ -41,5 +41,5 @@ struct call_method: method<
 >
 {};
 
-} // iow
+} // wjrpc
 

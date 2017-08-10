@@ -52,6 +52,6 @@ struct mem_fun_handler
   }
 };
 
-} // iow
+} // wjrpc
 
 

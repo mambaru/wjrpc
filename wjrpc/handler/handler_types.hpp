@@ -36,6 +36,6 @@ struct handler_types
   
 };
 
-} // iow
+} // wjrpc
 
 

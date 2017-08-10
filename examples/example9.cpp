@@ -26,8 +26,9 @@ struct method_list: wjrpc::method_list
 >
 {};
 
-class handler
-  : public ::wjrpc::handler<method_list>
+template<typename Base>
+class calc_interface 
+  : public Base
   , public icalc
 {
 public:
@@ -61,7 +62,7 @@ int main()
     "{\"result\":{ \"value\":27 }, \"id\" :2 }"
   };
 
-  typedef wjrpc::engine<handler> engine_type;
+  typedef wjrpc::engine< ::wjrpc::handler<calc_interface<method_list> > > engine_type;
   auto e = std::make_shared<engine_type>();
   engine_type::options_type opt;
   e->start(opt, 11);

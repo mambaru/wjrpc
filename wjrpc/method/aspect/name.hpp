@@ -28,6 +28,6 @@ struct name
   }
 };
 
-} // iow
+} // wjrpc
 
 

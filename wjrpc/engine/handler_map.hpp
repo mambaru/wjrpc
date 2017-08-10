@@ -13,7 +13,7 @@ class handler_map
 {
 public:
   typedef Handler handler_type;
-  typedef std::shared_ptr<handler_type> handler_ptr;
+  typedef typename handler_type::ptr handler_ptr;
   typedef typename handler_type::io_id_t io_id_t;
 
   struct data
@@ -24,20 +24,14 @@ public:
   
   handler_map()
   {
-    /*
-    _default = std::make_shared<handler_type>();
-    _disable = false;
-    _reinit = true;
-    */
   }
   
   
   void disable(handler_ptr value)
   {
     std::lock_guard< mutex_type > lk(_mutex);
-    _default = value;
+    this->_default = value;
   }
-  
 
   handler_ptr find(io_id_t io_id) const
   {
@@ -100,7 +94,7 @@ public:
     {
       std::lock_guard<mutex_type> lk(_mutex);
       tmp_map.swap(_handlers);
-      handler_ptr def = _default;
+      def = _default;
       _default = nullptr;
     }
 

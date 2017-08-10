@@ -19,5 +19,5 @@ template<
 >
 struct connect_method: connect< mem_fun_connect<Interface, Target, mem_ptr> > {};
 
-} // iow
+} // wjrpc
 

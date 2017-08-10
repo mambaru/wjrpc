@@ -83,12 +83,12 @@ struct munus_json: T_json<munus> {};
 struct plus_handler
 {
   template<typename T>
-  void operator() ( T&, request::plus::ptr)
+  void operator() ( T&, request::plus::ptr) const
   {
   }
   
   template<typename T>
-  void operator() ( T&, request::plus::ptr req, response::plus::callback2 cb)
+  void operator() ( T&, request::plus::ptr req, response::plus::callback2 cb) const
   {
     auto res = std::make_unique<response::plus>();
     res->value = req->first + req->second;
@@ -111,7 +111,7 @@ struct invoke_method_plus:
 struct call_method_plus:
   ::wjrpc::basic_method<
     ::wjrpc::name<_plus_>,
-    ::wjrpc::call< request::plus_json, response::plus_json>
+    ::wjrpc::remote_call< request::plus_json, response::plus_json>
   >
   {};
 

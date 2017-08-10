@@ -94,6 +94,6 @@ struct invoke_method2: method<
 {};
 
 
-} // iow
+} // wjrpc
 
 

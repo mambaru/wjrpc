@@ -19,13 +19,13 @@ JSONRPC_TAG(divides)
 struct plus_handler
 {
   template<typename T>
-  void operator()( T& t, request::plus::ptr req)
+  void operator()( T& t, request::plus::ptr req) const
   { // обработка уведомления 
     t.target()->plus( std::move(req), nullptr );
   }
 
   template<typename T, typename Handler>
-  void operator()( T& t, request::plus::ptr req, Handler handler)
+  void operator()( T& t, request::plus::ptr req, Handler handler) const
   {
     // обработка запроса
     t.target()->plus( std::move(req), [handler](response::plus::ptr res)
