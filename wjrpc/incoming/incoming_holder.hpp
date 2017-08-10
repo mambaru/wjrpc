@@ -34,7 +34,9 @@ public:
   typedef clock_t::time_point time_point;
 
 public:
-
+  ~incoming_holder();
+  incoming_holder(const incoming_holder& ) = delete;
+  incoming_holder(incoming_holder&& ) = default;
   incoming_holder();
   explicit incoming_holder(data_ptr    d,  time_point tp=time_point() );
   explicit incoming_holder(data_type   d,  time_point tp=time_point() );
@@ -106,12 +108,12 @@ private:
 
 private:
 
+  /*std::function<void(data_ptr)> _free;*/
   bool     _parsed;
   data_ptr _data;
   incoming _incoming;
   iterator _begin;
   iterator _end;
-
   time_point _time_point;
 };
 

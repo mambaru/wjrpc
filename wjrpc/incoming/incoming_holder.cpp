@@ -12,30 +12,55 @@
 #include <wjrpc/types.hpp>
 #include <wjrpc/logger.hpp>
 #include <wjson/strerror.hpp>
+#include <iow/io/aux/global_pool.hpp>
 
 namespace wjrpc{
 
+
+incoming_holder::~incoming_holder()
+{
+  if ( _data == nullptr)
+    return;
+  
+  ::iow::io::global_pool::free( std::move(_data) );
+}
+
+/*
+incoming_holder::incoming_holder(incoming_holder&& other)
+  : _parsed( other._parsed ),
+  _data( std::move(other._data) ),
+  _incoming( std::move(other._incoming) ),
+  _begin( std::move(other._begin) ),
+  _end( std::move(other._end) ),
+  _time_point( std::move(other._time_point) ),
+{
+}
+*/
+
 incoming_holder::incoming_holder()
   : _parsed(false)
-{}
+{
+//  _free = ::iow::io::global_pool::get_free();
+}
 
 incoming_holder::incoming_holder(data_ptr d, time_point tp)
   : _parsed(false)
   , _data(std::move(d))
   , _time_point(tp)
 {
+//  _free = ::iow::io::global_pool::get_free();
 }
 
 incoming_holder::incoming_holder(data_type   d,  time_point tp )
   : incoming_holder( std::make_unique<data_type>( std::move(d) ), tp )
 {
-  
+//  _free = ::iow::io::global_pool::get_free();
 }
 
 incoming_holder::incoming_holder(std::string d,  time_point tp )
   : incoming_holder( std::make_unique<data_type>( d.begin(), d.end() ), tp )
 {
-  
+//  _free = ::iow::io::global_pool::get_free();
 }
 
 void incoming_holder::attach(data_ptr d,  time_point tp)
