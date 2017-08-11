@@ -1,23 +1,10 @@
-wjrpc:
+wjson:
   only:
 #    - master
 #    - devel
   script:
-    - pushd `pwd`
-    - cd ..
-    - rm -rf faslib | true
-    - rm -rf wjson  | true
-    - git clone http://github.lan/cpp/faslib.git
-    - git clone http://github.lan/cpp/wjson.git
-    - cd faslib
-    - mkdir build
-    - cd build
-    - cmake ..
-    - cd ../../wjson
-    - mkdir build
-    - cd build
-    - cmake ..
-    - popd
+    - ./.ci/getlib faslib master
+    - ./.ci/getlib wjson master
     - mkdir build
     - cd build
     - cmake -I ./faslib -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..
