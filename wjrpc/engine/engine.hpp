@@ -277,7 +277,7 @@ private:
         time_t now = time(0);
         if ( now > _log_time1 )
         {
-          WJRPC_LOG_ERROR( this, "jsonrpc::engin incoming response with call_id=" << call_id << " not found. Lost results " << _lost_results)
+          WJRPC_LOG_ERROR( this, "jsonrpc::engin incoming response with call_id=" << call_id << " not found. Total lost results " << _lost_results)
           _log_time1 = now;
         }
       }
