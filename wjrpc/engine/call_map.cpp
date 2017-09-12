@@ -130,8 +130,6 @@ namespace wjrpc{
     auto now = std::chrono::system_clock::now();
     while ( !_time_queue.empty() && ( _time_queue.front().first < now)  )
     {
-      std::cout << _time_queue.size() << " " << calls.size() << " " 
-                << std::chrono::duration_cast<std::chrono::milliseconds>(_time_queue.front().first - now).count() << std::endl;
       calls.push_back( std::move(_time_queue.front().second) );
       _time_queue.pop();
       
