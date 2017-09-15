@@ -18,7 +18,7 @@ namespace wjrpc{
 class call_map
 {
 public:
-  typedef std::mutex mutex_type;
+  typedef std::recursive_mutex mutex_type;
 
   typedef std::chrono::time_point<std::chrono::system_clock> time_point_t;
   typedef std::function<void(incoming_holder holder)> result_handler_t;
@@ -48,7 +48,6 @@ private:
 private:
   bool _everytime = true;
   time_t _lifetime_ms = 1000;
-  //time_queue _time_queue;
   result_map _result_map;
   time_set   _time_set;
   mutable mutex_type _mutex;
