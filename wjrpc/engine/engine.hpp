@@ -225,7 +225,6 @@ private:
 
   void perform_incoming_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) 
   {
-    std::cout << "engine::perform_incoming_ -1-" << std::endl;
     if ( holder.is_notify() || holder.is_request() )
     {
       this->perform_request_( std::move(holder), io_id, std::move(handler) );
@@ -236,7 +235,6 @@ private:
     }
     else
     {
-      std::cout << "engine::perform_incoming_ -2-" << std::endl;
       WJRPC_LOG_ERROR( this, "jsonrpc::engine: Invalid Request: " << holder.str() )
       aux::send_error( std::move(holder), std::make_unique<invalid_request>(), [this, handler](outgoing_holder oholder)
       {
@@ -297,7 +295,6 @@ private:
     std::weak_ptr<self> wthis = this->shared_from_this();
     opt.sender_handler = [handler, wthis](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)
     {
-      std::cout << "opt.sender_handler -1-" << std::endl;
       auto pthis = wthis.lock();
       if ( pthis==nullptr )
         return;
@@ -328,8 +325,6 @@ private:
     std::weak_ptr<self> wthis = this->shared_from_this();
     opt.sender_handler = [handler, wthis, io_id](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)
     {
-      std::cout << "opt.sender_handler -2-" << std::endl;
-
       auto pthis = wthis.lock();
       if ( pthis == nullptr )
         return;
@@ -396,8 +391,6 @@ private:
     std::weak_ptr<self> wthis = this->shared_from_this();
     opt.sender_handler = [handler, wthis](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)
     {
-      std::cout << "opt.sender_handler -3-" << std::endl;
-
       auto pthis = wthis.lock();
       if ( pthis==nullptr )
         return;
@@ -410,28 +403,21 @@ private:
         io_id_t io_id = pthis->_io_id;
         rhw = [wthis,  handler, io_id](incoming_holder holder)
         {
-          std::cout << "opt.sender_handler -3.1-" << std::endl;
-
           auto pthis2 = wthis.lock();
           if ( pthis2==nullptr )
             return;
 
-          std::cout << "opt.sender_handler -3.2-" << std::endl;
           if ( holder.is_response() || holder.is_error() )
           {
-            std::cout << "opt.sender_handler -3.2.1-" << std::endl;
             if ( auto h = pthis2->_call_map.detach( holder.get_id<call_id_t>(nullptr) ) )
             {
-              std::cout << "opt.sender_handler -3.2.1.1-" << std::endl;
               h(std::move(holder) );
             }
           }
           else
           {
-            std::cout << "opt.sender_handler -3.2.2-" << std::endl;
             pthis2->perform_jsonrpc( std::move(holder), io_id, [handler](outgoing_holder oholder)
             {
-              std::cout << "opt.sender_handler -3.2.3-" << std::endl;
               handler( std::move(oholder) ) ;
             });
           }
