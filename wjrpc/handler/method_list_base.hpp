@@ -142,7 +142,9 @@ public:
     )> callback_type;
 
     using namespace std::placeholders;
-    callback_type callback = std::bind( self::response_handler<Tg>, _1, _2, result_callback, error_callback );
+    callback_type callback = nullptr;
+    if ( result_callback!=nullptr )
+      callback = std::bind( self::response_handler<Tg>, _1, _2, result_callback, error_callback );
 
     this->get_aspect().template get<Tg>().call( 
       *this, 
@@ -150,11 +152,6 @@ public:
       std::move(callback)
     );
   }
-
-  /*mutex_type& mutex() const
-  {
-    return _mutex;
-  }*/
 
 private:
 
@@ -179,7 +176,6 @@ private:
   friend struct super::aspect::template advice_cast< _initialize_ >::type;
   typedef typename handler_types::sender_handler_t   sender_handler_t;
   sender_handler_t _sender_handler = sender_handler_t(nullptr);
-  /*mutable mutex_type _mutex;*/
 };
 
 } // wjrpc
