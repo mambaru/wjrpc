@@ -35,8 +35,8 @@ add_library(
   wjrpc/incoming/send_error.cpp
 )
 
-if ( BUILD_TESTING OR WJRPC_BUILD_ALL )
-  if(UNIX)
+if ( BUILD_TESTING )
+  if(UNIX AND PARANOID_WARNING)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wcast-align \
                          -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization\
                          -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations \
@@ -46,7 +46,5 @@ if ( BUILD_TESTING OR WJRPC_BUILD_ALL )
   endif()
   enable_testing()
   add_subdirectory(tests)
-  if( WJRPC_BUILD_ALL )
-    add_subdirectory(examples)
-  endif() # WJRPC_BUILD_TEST
+  add_subdirectory(examples)
 endif()

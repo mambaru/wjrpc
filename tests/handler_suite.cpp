@@ -216,7 +216,7 @@ UNIT(handler4_unit, "")
   
   std::string str_notify;
   
-  opt.sender_handler = [&t, &str_notify]( const char* name, handler2::notify_serializer_t ser ) -> void
+  opt.sender_handler = [&t, &str_notify]( const char* name, handler2::notify_serializer_t ser, handler2::request_serializer_t, handler2::result_handler_t ) -> void
   {
     auto d = ser(name);
     str_notify = std::string(d->begin(), d->end() );
@@ -229,13 +229,15 @@ UNIT(handler4_unit, "")
   //auto h2 = std::make_shared<handler2>(nullptr, t1);
   auto p1 = std::make_unique<test1_params>(test1_params{1,2,3,4,5});
   
+
+  h2->method1( std::make_unique<test1_params>(*p1), nullptr);
+  h2->method2( std::move(p1), nullptr);
   
-  h2->method1( std::move(p1), nullptr);
   t << nothing;
 }
 
 BEGIN_SUITE(handler_suite, "")
   ADD_UNIT(nohandler_unit)
-  ADD_UNIT(handler2_unit)/*
-  ADD_UNIT(handler4_unit)*/
+  ADD_UNIT(handler2_unit)
+  ADD_UNIT(handler4_unit)
 END_SUITE(handler_suite)

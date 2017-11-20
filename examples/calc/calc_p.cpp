@@ -1,7 +1,7 @@
 #include "calc_p.hpp"
 #include <memory>
 
-void calc_p::initialize(std::shared_ptr<icalc> next)
+void calc_p::initialize(const std::shared_ptr<icalc>& next)
 {
   _next = next;
 }

@@ -6,8 +6,7 @@
 #include <algorithm>
 #include <memory>
 
-namespace 
-{
+namespace {
 
 
 namespace request{

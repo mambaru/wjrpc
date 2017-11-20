@@ -7,7 +7,7 @@ class calc_p
   : public icalc
 {
 public:
-  void initialize(std::shared_ptr<icalc>);
+  void initialize(const std::shared_ptr<icalc>&);
   virtual void plus( request::plus::ptr req, response::plus::callback cb) override;
   virtual void minus( request::minus::ptr req, response::minus::callback cb) override;
   virtual void multiplies( request::multiplies::ptr req, response::multiplies::callback cb) override;

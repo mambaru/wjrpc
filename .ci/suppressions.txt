@@ -1,5 +1,2 @@
-duplicateExpression:./examples/example6.cpp:25
-duplicateExpression:./examples/example6.cpp:27
-duplicateExpression:./examples/example6.cpp:52
-duplicateExpression:./examples/example6.cpp:54
-constStatement:./tests/json/array_suite.cpp:105
+syntaxError:/home/migashko/prj/wjrpc/tests/engine_suite.cpp:128
+syntaxError:/home/migashko/prj/wjrpc/tests/method_suite.cpp:118

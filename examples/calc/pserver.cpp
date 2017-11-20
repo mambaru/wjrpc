@@ -6,7 +6,7 @@
 
 class pserver::engine: public service::engine_type {};
 
-void pserver::initialize(int rd, int wd, std::shared_ptr<icalc> target)
+void pserver::initialize(int rd, int wd, const std::shared_ptr<icalc>& target)
 {
   _rd = rd;
   _wd = wd;
