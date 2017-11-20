@@ -56,12 +56,15 @@ struct remote_call
       = std::bind( TT::template serialize_notify<T, params_json>, _1, _2);
 
     // request serializer
-    std::function<data_ptr(const char* name, params_ptr, call_id_t )> rs 
-      = std::bind( TT::template serialize_request<T, params_json>, _1, _2, _3);
-    
+    std::function<data_ptr(const char* name, params_ptr, call_id_t )> rs;
     // response handler
-    std::function<void(incoming_holder holder)> rh 
-      = std::bind( TT::template process_response<T, result_json, error_json>, _1, callback);
+    std::function<void(incoming_holder holder)> rh;
+    
+    if ( callback!=nullptr )
+    {
+      rs  = std::bind( TT::template serialize_request<T, params_json>, _1, _2, _3);
+      rh = std::bind( TT::template process_response<T, result_json, error_json>, _1, callback);
+    }
 
     t.perform_send( 
       tt.name(), 
