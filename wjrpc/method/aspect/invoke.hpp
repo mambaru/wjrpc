@@ -21,7 +21,7 @@ struct invoke: Handler
   typedef invoke<JParams, JResult, Handler, JError> self;
   typedef fas::metalist::advice metatype;
   typedef _invoke_ tag;
-  typedef invoke<JParams, JResult, Handler> advice_class;
+  typedef invoke<JParams, JResult, Handler, JError> advice_class;
 
   advice_class& get_advice() { return *this;}
   const advice_class& get_advice() const { return *this;}

@@ -25,7 +25,7 @@ struct remote_call
 {
   typedef fas::metalist::advice metatype;
   typedef _call_ tag;
-  typedef remote_call<JParams, JResult> advice_class;
+  typedef remote_call<JParams, JResult, JError> advice_class;
 
   advice_class& get_advice() { return *this;}
   const advice_class& get_advice() const { return *this;}
