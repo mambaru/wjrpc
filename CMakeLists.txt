@@ -38,11 +38,13 @@ add_library(
 if ( BUILD_TESTING )
   if(UNIX AND PARANOID_WARNING)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wcast-align \
+                         -ftemplate-backtrace-limit=0 \
                          -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization\
-                         -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations \
-                         -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual \
-                         -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel \
+                         -Wformat=2 -Winit-self -Wmissing-declarations \
+                         -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual \
+                         -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo \
                          -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror")
+# -Wlogical-op  -Wnoexcept -Wstrict-null-sentinel
   endif()
   enable_testing()
   add_subdirectory(tests)

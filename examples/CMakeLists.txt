@@ -33,7 +33,5 @@ target_link_libraries(example10 wjrpc)
 add_executable(example11 example11.cpp calc/calc1.cpp calc/calc_p.cpp)
 target_link_libraries(example11 wjrpc)
 
-
-
 add_executable(calc_proxy calc_proxy.cpp calc/calc_p.cpp calc/calc1.cpp calc/pserver.cpp calc/pclient.cpp)
 target_link_libraries(calc_proxy wjrpc)

@@ -56,7 +56,7 @@ struct error_json
   typedef ::wjson::object<
     error,
     ::wjson::member_list<
-      ::wjson::member<n_code,    error, error_code_t,      &error::code>,
+      ::wjson::member<n_code,    error, error_code_t,      &error::code, ::wjson::value<error_code_t> >,
       ::wjson::member<n_message, error, error_code_t,      &error::code, error_codes_json>
     >
   > type;

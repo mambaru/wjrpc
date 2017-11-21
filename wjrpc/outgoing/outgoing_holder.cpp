@@ -81,15 +81,15 @@ data_ptr outgoing_holder::detach()
     // Отложенная сериализация
     if ( _request_serializer != nullptr )
     {
-      return std::move( _request_serializer(_name, _call_id)  );
+      return _request_serializer(_name, _call_id);
     }
     else if ( _notify_serializer != nullptr )
     {
-      return std::move( _notify_serializer(_name)  );
+      return _notify_serializer(_name);
     }
     else if ( _basic_serializer != nullptr )
     {
-      return std::move( _basic_serializer()  );
+      return _basic_serializer();
     }
   }
   else 
@@ -105,7 +105,7 @@ data_ptr outgoing_holder::detach()
       request.id = _call_id;
       request.params = std::move(_data);
       serializer(request, std::inserter(*result, result->end()));
-      return std::move(result);
+      return result;
     }
   }
   // в остальных случаях в _data полностью сериализованый объект или запрос 
@@ -136,7 +136,7 @@ outgoing_holder outgoing_holder::clone() const
   holder._result_handler = nullptr;
   holder._call_id = 0;
   */
-  return std::move(holder);
+  return holder;
 }
 
 outgoing_holder outgoing_holder::clone(call_id_t call_id) const
@@ -150,7 +150,7 @@ outgoing_holder outgoing_holder::clone(call_id_t call_id) const
   holder._notify_serializer = this->_notify_serializer;
   holder._result_handler = this->_result_handler;
   holder._call_id = call_id;
-  return std::move(holder);
+  return holder;
 }
 
 }

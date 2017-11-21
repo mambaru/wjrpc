@@ -62,7 +62,7 @@ namespace wjrpc{
       _time_set.erase( std::make_pair( itr->second.first, itr->first)  );
       _result_map.erase(itr);
     }
-    return std::move(result);
+    return result;
   }
   
   void call_map::clear()
@@ -125,7 +125,7 @@ namespace wjrpc{
       _time_set.erase( _time_set.begin() );
       _result_map.erase(itr);
     }
-    return std::move( odl );
+    return odl;
     /*
     auto now = std::chrono::system_clock::now();
     while ( !_time_queue.empty() && ( _time_queue.front().first < now)  )

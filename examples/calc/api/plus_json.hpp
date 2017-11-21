@@ -16,9 +16,9 @@ namespace request
         wjson::member<n_first, plus,  int,  &plus::first>,
         wjson::member<n_second, plus, int,  &plus::second>
       >
-    > type;
-    typedef typename type::serializer serializer;
-    typedef typename type::target target;
+    > type1;
+    typedef typename type1::serializer serializer;
+    typedef typename type1::target target;
   };
 }
 
@@ -32,8 +32,8 @@ namespace response
       wjson::member_list<
         wjson::member<n_value, plus, int, &plus::value>
       >
-    > type;
-    typedef typename type::serializer serializer;
-    typedef typename type::target target;
+    > type1;
+    typedef typename type1::serializer serializer;
+    typedef typename type1::target target;
   };
 }

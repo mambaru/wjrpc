@@ -8,12 +8,9 @@
 
 #include <wjrpc/incoming/incoming_holder.hpp>
 #include <wjrpc/outgoing/outgoing_holder.hpp>
-
 #include <wjrpc/method/aspect/tags.hpp>
-#include <wjrpc/errors/errors.hpp>
-#include <wjrpc/errors/error_json.hpp>
+#include <wjrpc/errors.hpp>
 #include <wjrpc/logger.hpp>
-
 #include <fas/aop/metalist.hpp>
 #include <functional>
 #include <memory>
@@ -30,12 +27,12 @@ struct remote_call
   advice_class& get_advice() { return *this;}
   const advice_class& get_advice() const { return *this;}
   
-  typedef JParams params_json;
-  typedef JResult result_json;
-  typedef JError  error_json;
-  typedef typename params_json::target params_type;
-  typedef typename result_json::target result_type;
-  typedef typename error_json::target  error_type;
+  typedef JParams params_json_t;
+  typedef JResult result_json_t;
+  typedef JError  error_json_t;
+  typedef typename params_json_t::target params_type;
+  typedef typename result_json_t::target result_type;
+  typedef typename error_json_t::target  error_type;
   
   typedef typename std::unique_ptr<params_type> params_ptr;
   typedef typename std::unique_ptr<result_type> result_ptr;
@@ -53,7 +50,7 @@ struct remote_call
     
     // notify serializer
     std::function<data_ptr(const char* name, params_ptr)> ns
-      = std::bind( TT::template serialize_notify<T, params_json>, _1, _2);
+      = std::bind( TT::template serialize_notify<T, params_json_t>, _1, _2);
 
     // request serializer
     std::function<data_ptr(const char* name, params_ptr, call_id_t )> rs;
@@ -62,8 +59,8 @@ struct remote_call
     
     if ( callback!=nullptr )
     {
-      rs  = std::bind( TT::template serialize_request<T, params_json>, _1, _2, _3);
-      rh = std::bind( TT::template process_response<T, result_json, error_json>, _1, callback);
+      rs  = std::bind( TT::template serialize_request<T, params_json_t>, _1, _2, _3);
+      rh = std::bind( TT::template process_response<T, result_json_t, error_json_t>, _1, callback);
     }
 
     t.perform_send( 

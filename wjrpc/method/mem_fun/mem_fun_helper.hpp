@@ -13,7 +13,7 @@
 namespace wjrpc{
 
 template<typename Result>
-inline auto mem_fun_make_callback( std::function< void(std::unique_ptr<Result>, std::unique_ptr< error>) >&& cb)
+inline auto mem_fun_make_callback( std::function< void(std::unique_ptr<Result>, std::unique_ptr<error> ) >&& cb)
   -> std::function<void(std::unique_ptr<Result>) >
 {
   if (cb==nullptr)
@@ -27,13 +27,13 @@ inline auto mem_fun_make_callback( std::function< void(std::unique_ptr<Result>, 
     }
     else
     {
-      cb( nullptr, std::make_unique< error >( bad_gateway() ) );
+      cb( nullptr, std::make_unique<error>( bad_gateway() ) );
     }
   };
 }
 
 template<typename Result>
-inline void mem_fun_service_unavailable( std::function< void(std::unique_ptr<Result>, std::unique_ptr< error>) >&& cb)
+inline void mem_fun_service_unavailable( std::function< void(std::unique_ptr<Result>, std::unique_ptr<error>) >&& cb)
 {
   if (cb!=nullptr)
   {

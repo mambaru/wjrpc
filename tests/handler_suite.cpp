@@ -41,12 +41,6 @@ UNIT(nohandler_unit, "")
 
   t << equal<expect>(test_count, 6) << FAS_TESTING_FILE_LINE;
   
-  /*if ( test_count!=6 )
-  {
-    std::cout << "ERROR. invalid test count " << test_count << std::endl;
-    exit(-1);
-  }
-  */
 }
 
 
@@ -64,21 +58,6 @@ struct itest1
   virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) = 0;
   virtual void method2(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) = 0;
 };
-
-/*
-template<typename R, typename Callback>
-std::function<void()> check_method(const R& r, const Callback& call)
-{
-  if ( r!=nullptr && call!=nullptr )
-    return nullptr;
-  
-  return [call]()
-  {
-    if ( call!=nullptr )
-      call( std::make_unique<R>() );
-  };
-}
-*/
 
 class test1: public itest1
 {
@@ -235,6 +214,7 @@ UNIT(handler4_unit, "")
   
   t << nothing;
 }
+
 
 BEGIN_SUITE(handler_suite, "")
   ADD_UNIT(nohandler_unit)

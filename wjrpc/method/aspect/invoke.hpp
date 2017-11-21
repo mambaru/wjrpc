@@ -19,20 +19,20 @@ template<typename JParams, typename JResult, typename Handler, typename JError =
 struct invoke: Handler
 {
   typedef invoke<JParams, JResult, Handler, JError> self;
+  typedef self advice_class;
   typedef fas::metalist::advice metatype;
   typedef _invoke_ tag;
-  typedef invoke<JParams, JResult, Handler, JError> advice_class;
 
   advice_class& get_advice() { return *this;}
   const advice_class& get_advice() const { return *this;}
 
-  typedef JParams params_json;
-  typedef JResult result_json;
-  typedef JError  error_json;
+  typedef JParams params_json_t;
+  typedef JResult result_json_t;
+  typedef JError  error_json_t;
 
-  typedef typename params_json::target  params_type;
-  typedef typename result_json::target  result_type;
-  typedef typename error_json::target   error_type;
+  typedef typename params_json_t::target  params_type;
+  typedef typename result_json_t::target  result_type;
+  typedef typename error_json_t::target   error_type;
 
   typedef typename std::unique_ptr<params_type> params_ptr;
   typedef typename std::unique_ptr<result_type> result_ptr;
@@ -44,10 +44,10 @@ struct invoke: Handler
     TT& ,
     incoming_holder holder, 
     OutgoingHandler outgoing_handler
-  ) 
+  ) const
   {
     ::wjson::json_error e;
-    params_ptr req = holder.template get_params<params_json>(&e);
+    params_ptr req = holder.template get_params<params_json_t>(&e);
 
     if ( e )
     {
@@ -55,7 +55,7 @@ struct invoke: Handler
 
       if ( holder.has_id() )
       {
-        TT::template send_error<T, error_json>( 
+        TT::template send_error<T, error_json_t>( 
           std::move(holder), 
           std::make_unique<invalid_params>(), 
           std::move(outgoing_handler) 
@@ -77,7 +77,7 @@ struct invoke: Handler
         {
           if (err == nullptr )
           {
-            TT::template send_result<T, result_json>( 
+            TT::template send_result<T, result_json_t>( 
               std::move(*ph),
               std::move(result),
               std::move(outgoing_handler) 
@@ -85,46 +85,16 @@ struct invoke: Handler
           }
           else
           {
-            TT::template send_error<T, error_json>( 
+            TT::template send_error<T, error_json_t>( 
               std::move(*ph), 
               std::move(err), 
               std::move(outgoing_handler)
             );
           }
-
-          /*
-          ::wjrpc::invoke<JParams, JResult, Handler, JError>
-                 ::template callback_<T, TT>(ph, outgoing_handler, std::move(result), std::move(err) );
-          */
         }
       );
     }
   }
-  /*
-private:
-
-  template<typename T, typename TT, typename HolderPtr, typename OutgoingHandler, typename Result, typename Error>
-  static void callback_( HolderPtr ph, OutgoingHandler outgoing_handler, Result result, Error err )
-  {
-    if (err == nullptr )
-    {
-      TT::template send_result<T, result_json>( 
-        std::move(*ph),
-        std::move(result),
-        std::move(outgoing_handler) 
-      );
-    }
-    else
-    {
-      TT::template send_error<T, error_json>( 
-        std::move(*ph), 
-        std::move(err), 
-        std::move(outgoing_handler)
-      );
-    }
-  }
-  */
-  
 };
 
 

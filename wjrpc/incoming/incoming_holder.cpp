@@ -72,7 +72,7 @@ data_ptr incoming_holder::parse(::wjson::json_error* e)
   {
      auto res =  std::make_unique<data_type>(next, _data->end());
     _data->resize( static_cast<size_t>( std::distance(_data->begin(), next) ) );
-    return std::move(res);
+    return res;
   }
   return nullptr;
 }
