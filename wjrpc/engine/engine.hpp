@@ -219,7 +219,7 @@ private:
   {
     this->perform_incoming_( std::move(holder), io_id, [handler](outgoing_holder oholder)
     {
-      handler( std::move(oholder.detach()) );
+      handler(oholder.detach());
     });
   }
 

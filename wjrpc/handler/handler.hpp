@@ -116,7 +116,7 @@ public:
       {
         this->invoke( std::move(iholder), [h](outgoing_holder oholder)
         {
-          h( std::move(oholder.detach()) );
+          h(oholder.detach());
         });
       }
       else

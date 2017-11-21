@@ -24,20 +24,20 @@ void test1()
   output.reserve(100);
   auto start = ::std::chrono::high_resolution_clock::now();
   int count = 10000;
-  for (int i=0; i < 10000; ++i)
+  for (int i=0; i < count; ++i)
   {
     output.clear();
     wjrpc::outgoing_result_json<param_json>::serializer serializer;
     wjrpc::outgoing_result<param_type> result;
     result.result = std::make_unique<param_type>(params1);
     serializer(result, std::back_inserter(output));
-    serializer(result, std::back_inserter(output));
+    //!serializer(result, std::back_inserter(output));
   }
   auto finish = ::std::chrono::high_resolution_clock::now();
   auto span = std::chrono::duration_cast< std::chrono::microseconds >(finish - start).count();
   float rate = float(count)*1000000 /span;
   std::cout << std::string( output.begin(), output.end() ) << std::endl;
-  std::cout << span << " microseconds " << rate << " persec" << std::endl;
+  std::cout << "test1: " << span << " microseconds " << rate << " persec" << std::endl;
 }
 
 void ttt(std::function<void()> f)
@@ -57,7 +57,7 @@ void test2()
   output.reserve(100);
   int count = 10000;
   auto start = ::std::chrono::high_resolution_clock::now();
-  for (int i=0; i < 10000; ++i)
+  for (int i=0; i < count; ++i)
   {
     auto params = std::make_unique<param_type>(params1);
     auto pparams = std::make_shared<param_ptr>( std::move(params) );
@@ -77,7 +77,7 @@ void test2()
   auto span = std::chrono::duration_cast< std::chrono::microseconds >(finish - start).count();
   float rate = float(count)*1000000 /span;
   std::cout << std::string( output.begin(), output.end() ) << std::endl;
-  std::cout << span << " microseconds " << rate << " persec" << std::endl;
+  std::cout << "test2: "<< span << " microseconds " << rate << " persec" << std::endl;
 }
 
 
@@ -88,7 +88,7 @@ void test3()
   output.reserve(100);
   auto start = ::std::chrono::high_resolution_clock::now();
   int count = 10000;
-  for (int i=0; i < 10000; ++i)
+  for (int i=0; i < count; ++i)
   {
     output.clear();
     outpar.clear();
@@ -104,7 +104,7 @@ void test3()
   auto span = std::chrono::duration_cast< std::chrono::microseconds >(finish - start).count();
   float rate = float(count)*1000000 /span;
   std::cout << std::string( output.begin(), output.end() ) << std::endl;
-  std::cout << span << " microseconds " << rate << " persec" << std::endl;
+  std::cout << "test3: " << span << " microseconds " << rate << " persec" << std::endl;
 }
 
 int main()

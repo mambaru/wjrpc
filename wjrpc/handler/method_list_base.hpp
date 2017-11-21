@@ -173,7 +173,7 @@ private:
   }
   
 private:
-  friend struct super::aspect::template advice_cast< _initialize_ >::type;
+  friend typename super::aspect::template advice_cast< _initialize_ >::type;
   typedef typename handler_types::sender_handler_t   sender_handler_t;
   sender_handler_t _sender_handler = sender_handler_t(nullptr);
 };
