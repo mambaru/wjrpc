@@ -1,4 +1,4 @@
-wjson:
+wjrpc:
   only:
     - master
     - devel
