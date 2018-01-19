@@ -37,50 +37,15 @@ struct ad_perform_send
       {
         return ns1(nname, std::move(*p));
       },
-      [p, rs1, this](const char* rname, typename T::call_id_t id) 
+      [p, rs1](const char* rname, typename T::call_id_t id) 
         -> typename T::data_ptr
       {
         return rs1(rname, std::move(*p), id);
       },
       std::move(rh)
     );
-
-    
-  }
-  
-};
-  
-  /*
-struct ad_send_request
-{
-  template<typename T, typename Params, typename Serializer>
-  void operator()(
-    T& t,
-    const char* name,
-    Params params, 
-    Serializer ser,
-    typename T::result_handler_t  result_handler
-  ) const
-  {
-    std::shared_ptr<Params> p = nullptr;
-
-    if (params!=nullptr)
-    {
-      p = std::make_shared<Params>( std::move(params) );
-    }
-
-    t.send_request(
-      name,
-      std::move(result_handler), 
-      [p, ser, this](const char* name, typename T::call_id_t id) 
-        -> typename T::data_ptr
-      {
-        return ser(name, std::move(*p), id);
-      }
-    );
   }
 };
-*/
 
 } // wjrpc
 
