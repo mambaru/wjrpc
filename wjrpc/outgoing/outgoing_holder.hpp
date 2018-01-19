@@ -29,20 +29,20 @@ public:
   explicit outgoing_holder(data_ptr d);
 
   // полностью сериализованный notify
-  outgoing_holder(const char* name, data_ptr d);
+  outgoing_holder(const char* n, data_ptr d);
 
   // полностью сериализованный request
-  outgoing_holder(const char* name, data_ptr d, result_handler_t result_handler, call_id_t call_id);
+  outgoing_holder(const char* n, data_ptr d, result_handler_t result_handler, call_id_t cid);
 
   // отложенная сериализация result или error
   explicit outgoing_holder(basic_serializer_t serializer);
 
   // отложенная сериализация исходящих запросов
-  outgoing_holder(const char* name, notify_serializer_t ns, request_serializer_t rs, result_handler_t rh, call_id_t call_id);
+  outgoing_holder(const char* n, notify_serializer_t ns, request_serializer_t rs, result_handler_t rh, call_id_t cid);
 
   data_ptr detach();
   outgoing_holder clone() const;
-  outgoing_holder clone(call_id_t call_id) const;
+  outgoing_holder clone(call_id_t cid) const;
 
   bool is_result() const  { return _result_handler==nullptr && _name==nullptr;}
   bool is_request() const { return _result_handler!=nullptr && _name!=nullptr;}
