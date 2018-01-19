@@ -440,10 +440,10 @@ private:
 
   // OutgoingHandler io::outgoing_handler_t или jsonrpc::outgoing_handler_t
   template<typename Opt, typename OutgoingHandler>
-  handler_ptr create_handler_(io_id_t io_id, Opt opt, OutgoingHandler handler, bool reg_io)
+  handler_ptr create_handler_(io_id_t io_id, Opt opt, OutgoingHandler handler, bool reg_io_flag)
   {
     bool reinit;
-    auto ph = _handler_map.findocre(io_id, reg_io, reinit);
+    auto ph = _handler_map.findocre(io_id, reg_io_flag, reinit);
     if ( reinit )
     {
       // ph->initialize(opt);

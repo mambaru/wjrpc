@@ -62,7 +62,7 @@ public:
   
   template<typename Params, typename NotifySerializer, typename RequestSerializer, typename ResultHandler >
   void perform_send( 
-    const char* name,
+    const char* method_name,
     Params params,
     NotifySerializer ns,
     RequestSerializer rs,
@@ -71,7 +71,7 @@ public:
   {
     super::get_aspect().template get<_perform_send_>()(
       *this,
-      name, 
+      method_name, 
       std::move(params),
       std::move(ns),
       std::move(rs),
@@ -80,11 +80,11 @@ public:
   }
 
   
-  void sender_handler( const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1) const
+  void sender_handler( const char* method_name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1) const
   {
     if ( this->_sender_handler != nullptr )
     {
-      this->_sender_handler( name, std::move(ns1), std::move(rs1), std::move(rh1) );
+      this->_sender_handler( method_name, std::move(ns1), std::move(rs1), std::move(rh1) );
     }
     else
     {

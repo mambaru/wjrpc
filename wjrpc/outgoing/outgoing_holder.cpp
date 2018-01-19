@@ -30,19 +30,19 @@ outgoing_holder::outgoing_holder(data_ptr d)
 }
 
 // полностью сериализованный notify
-outgoing_holder::outgoing_holder(const char* name, data_ptr d)
-  : _name(name)
+outgoing_holder::outgoing_holder(const char* n, data_ptr d)
+  : _name(n)
   , _data(std::move(d))
   , _call_id(0)
 {
 }
 
 // частично сериализованный request
-outgoing_holder::outgoing_holder(const char* name, data_ptr d, result_handler_t result_handler, call_id_t call_id)
-  : _name(name)
+outgoing_holder::outgoing_holder(const char* n, data_ptr d, result_handler_t rh, call_id_t cid)
+  : _name(n)
   , _data(std::move(d))
-  , _result_handler(std::move(result_handler))
-  , _call_id(call_id)
+  , _result_handler(std::move(rh))
+  , _call_id(cid)
 {
 }
 
@@ -56,16 +56,16 @@ outgoing_holder::outgoing_holder(basic_serializer_t serializer)
 
 // отложенная сериализация исходящих запросов
 outgoing_holder::outgoing_holder(
-  const char* name,
+  const char* n,
   notify_serializer_t ns,
   request_serializer_t rs,
   result_handler_t rh,
-  call_id_t call_id
-) : _name(name)
+  call_id_t cid
+) : _name(n)
   , _notify_serializer(ns)
   , _request_serializer(rs)
   , _result_handler(rh)
-  , _call_id(call_id)
+  , _call_id(cid)
 {
 }
 
@@ -139,7 +139,7 @@ outgoing_holder outgoing_holder::clone() const
   return holder;
 }
 
-outgoing_holder outgoing_holder::clone(call_id_t call_id) const
+outgoing_holder outgoing_holder::clone(call_id_t cid) const
 {
   outgoing_holder holder;
   holder._name = this->_name;
@@ -149,7 +149,7 @@ outgoing_holder outgoing_holder::clone(call_id_t call_id) const
   holder._request_serializer = this->_request_serializer;
   holder._notify_serializer = this->_notify_serializer;
   holder._result_handler = this->_result_handler;
-  holder._call_id = call_id;
+  holder._call_id = cid;
   return holder;
 }
 
