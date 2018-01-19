@@ -330,13 +330,12 @@ private:
         return;
       if ( rs1!=nullptr && rh1!=nullptr )
       {
-        auto call_id = pthis->_call_counter.fetch_add(1);
+        auto cid = pthis->_call_counter.fetch_add(1);
         
-        pthis->_call_map.set(call_id, std::move(rh1));
-        auto d = std::move( rs1(name, call_id) );
+        pthis->_call_map.set(cid, std::move(rh1));
+        auto d = std::move( rs1(name, cid) );
         
-        int cil = call_id;
-        handler( std::move(d), io_id, [wthis, handler, io_id, call_id, cil](data_ptr d2)
+        handler( std::move(d), io_id, [wthis, handler, io_id, cid](data_ptr d2)
         {
           auto pthis2 = wthis.lock();
           if ( pthis2 == nullptr )
@@ -345,7 +344,7 @@ private:
           // если данные не могут быть отправленны
           if ( d2==nullptr )
           {
-            auto rh = pthis2->_call_map.detach(call_id);
+            auto rh = pthis2->_call_map.detach(cid);
             if ( rh == nullptr )
               return;
             
@@ -354,7 +353,7 @@ private:
             outgoing_error<error> err;
             
             data_ptr pid = std::make_unique<data_type>();
-            ::wjson::value<int>::serializer()( call_id, std::back_inserter(*pid));
+            ::wjson::value<int>::serializer()( cid, std::back_inserter(*pid));
             err.error = std::make_unique<service_unavailable>();
             err.id = std::move(pid);
             
