@@ -364,7 +364,7 @@ private:
             return;
           }
 
-          pthis2->perform_io( std::move(d2), io_id, [wthis, io_id, call_id, handler](data_ptr d3)
+          pthis2->perform_io( std::move(d2), io_id, [io_id, handler](data_ptr d3)
           {
             handler( std::move(d3), io_id, nullptr);
           });
