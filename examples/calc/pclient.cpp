@@ -21,7 +21,7 @@ void pclient::initialize(int rd, int wd)
     LOG_WRITE(d->begin(), d->end() )
     ::write( wd, d->data(), d->size() );
     char buff[1024];
-    int s = ::read(rd, buff, 1024);
+    ssize_t s = ::read(rd, buff, 1024l);
     LOG_READ(buff, buff + s)
     handler( std::make_unique<wjrpc::data_type>(buff, buff + s) );
   } );

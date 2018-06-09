@@ -50,11 +50,11 @@ public:
   /// ///////////////////////////////////////////////////
   /// ///////////////////////////////////////////////////
 
-  template<typename T, typename OutgoingHandler>
+  template<typename T>
   void operator()(
     T& t, 
     incoming_holder holder, 
-    OutgoingHandler outgoing_handler
+    std::function<void(outgoing_holder)> outgoing_handler
   ) 
   {
     this->get_aspect().template get<_invoke_>()(
@@ -140,11 +140,11 @@ public:
   /// ///////////////////////////////////////////////////
 
   
-  template<typename T, typename ResultJson, typename OutgoingHandler>
+  template<typename T, typename ResultJson>
   static inline void send_result(
     incoming_holder holder, 
     std::unique_ptr<typename ResultJson::target> result, 
-    OutgoingHandler outgoing_handler
+    std::function<void(outgoing_holder)> outgoing_handler
   )
   {
     return super::aspect::template advice_cast<_send_result_>::type
@@ -161,11 +161,11 @@ public:
   /// ///////////////////////////////////////////////////
 
 
-  template<typename T, typename ErrorJson, typename OutgoingHandler>
+  template<typename T, typename ErrorJson>
   static inline void send_error(
     incoming_holder holder, 
     std::unique_ptr<typename ErrorJson::target> err, 
-    OutgoingHandler outgoing_handler
+    std::function<void(outgoing_holder)> outgoing_handler
   )
   {
     return super::aspect::template advice_cast<_send_error_>::type

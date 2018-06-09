@@ -21,3 +21,6 @@ CMakeCache.txt
 *build_info.h
 config.h
 Makefile
+faslib
+wjson
+wlog

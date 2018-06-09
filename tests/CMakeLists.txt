@@ -1,4 +1,3 @@
-include_directories(../../wjson/)
 
 add_executable(benchmark1 benchmark.cpp)
 
