@@ -55,9 +55,9 @@ void test2()
 {
   data_type output;
   output.reserve(100);
-  int count = 10000;
+  long count = 10000;
   auto start = ::std::chrono::high_resolution_clock::now();
-  for (int i=0; i < count; ++i)
+  for (long i=0; i < count; ++i)
   {
     auto params = std::make_unique<param_type>(params1);
     auto pparams = std::make_shared<param_ptr>( std::move(params) );
@@ -75,7 +75,7 @@ void test2()
   }
   auto finish = ::std::chrono::high_resolution_clock::now();
   auto span = std::chrono::duration_cast< std::chrono::microseconds >(finish - start).count();
-  float rate = float(count*1000000) / float(span);
+  float rate = float(count*1000000L) / float(span);
   std::cout << std::string( output.begin(), output.end() ) << std::endl;
   std::cout << "test2: "<< span << " microseconds " << rate << " persec" << std::endl;
 }
@@ -87,8 +87,8 @@ void test3()
   data_type outpar;
   output.reserve(100);
   auto start = ::std::chrono::high_resolution_clock::now();
-  int count = 10000;
-  for (int i=0; i < count; ++i)
+  long count = 10000;
+  for (long i=0; i < count; ++i)
   {
     output.clear();
     outpar.clear();

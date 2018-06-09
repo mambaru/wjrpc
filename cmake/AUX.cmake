@@ -59,17 +59,39 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 set(store_BUILD_TESTING ${BUILD_TESTING})
-set(BUILD_TESTING OFF)
+unset(BUILD_TESTING)
 include(ConfigureLibrary)
 
-CONFIGURE_LIBRARY( fas/aop.hpp "/usr/include/faslib /usr/local/include/faslib ${CMAKE_CURRENT_SOURCE_DIR}/faslib ${CMAKE_SOURCE_DIR}/faslib ${CMAKE_SOURCE_DIR}/../faslib" 
-                   faslib "" )
-clone_library(faslib "FASLIB_DIR" "https://github.com/migashko/faslib.git")
+
+unset(FASLIB_DIR CACHE)
+find_path( 
+  FASLIB_DIR NAMES "fas/aop.hpp"
+  PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" 
+  PATH_SUFFIXES "build/faslib" "../build/faslib" "faslib" "../faslib"
+)
+if ( "${FASLIB_DIR}" STREQUAL "FASLIB_DIR-NOTFOUND") 
+  unset(FASLIB_DIR CACHE)
+  clone_library(faslib "FASLIB_DIR" "https://github.com/migashko/faslib.git")
+endif()
+include_directories("${FASLIB_DIR}")
 set(FAS_TESTING_CPP "${FASLIB_DIR}/fas/testing/testing.cpp")
 
-CONFIGURE_LIBRARY( wjson/json.hpp "/usr/include/wjson /usr/local/include/wjson ${CMAKE_CURRENT_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/../wjson" 
-                   wjson "" )
-clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wjson.git")
+
+unset(WJSON_DIR CACHE)
+find_path( 
+  WJSON_DIR NAMES "wjson/json.hpp"
+  PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" 
+  PATH_SUFFIXES "build/wjson" "../build/wjson" "wjson" "../wjson"
+)
+if ( "${WJSON_DIR}" STREQUAL "WJSON_DIR-NOTFOUND") 
+  unset(WJSON_DIR CACHE)
+  clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wlog.git")
+endif()
+include_directories("${WJSON_DIR}")
+
+#CONFIGURE_LIBRARY( wjson/json.hpp "/usr/include/wjson /usr/local/include/wjson ${CMAKE_CURRENT_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/../wjson" 
+ #                  wjson "" )
+#clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wjson.git")
 
 #if (NOT WFLOW_DISABLE_LOG)
 #  CONFIGURE_LIBRARY( wlog/wlog.hpp "/usr/include/wlog /usr/local/include/wlog" 
