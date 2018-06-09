@@ -23,7 +23,6 @@ void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shar
   {
     srv->initialize(rd, wd, calc);
     srv->run();
-    return;
   }
 
   int up[2], down[2];
