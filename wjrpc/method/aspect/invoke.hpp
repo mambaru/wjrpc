@@ -53,7 +53,7 @@ struct invoke: Handler
     {
       WJRPC_LOG_ERROR( &t, "jsonrpc::invoke Invalid Params: " << holder.params_error_message(e) );
 
-      if ( holder.has_id() )
+      if ( holder.has_id() && outgoing_handler!=nullptr )
       {
         TT::template send_error<T, error_json_t>( 
           std::move(holder), 
@@ -64,7 +64,7 @@ struct invoke: Handler
       return;
     }
 
-    if ( holder.is_notify() )
+    if ( holder.is_notify() || outgoing_handler==nullptr )
     {
       Handler::operator()( t, std::move(req) );
     }
