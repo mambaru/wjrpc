@@ -80,22 +80,22 @@ public:
 
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
     _outgoing_factory = 
-      [opt, this](io_id_t io_id, outgoing_handler_t handler, bool reg_io) 
+      [opt, this](io_id_t io_id, outgoing_handler_t handler, bool reg_io_flag) 
         -> handler_ptr
     {
-      return this->create_handler_(io_id, opt, std::move(handler), reg_io );
+      return this->create_handler_(io_id, opt, std::move(handler), reg_io_flag);
     };
 
     _input_factory = 
-      [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io) 
+      [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io_flag) 
         -> handler_ptr
     {
-      return this->create_handler_(io_id, opt, std::move(handler), reg_io );
+      return this->create_handler_(io_id, opt, std::move(handler), reg_io_flag);
     };
  
-    _output_factory = [opt, this](io_id_t io_id, output_handler_t handler, bool reg_io) -> handler_ptr
+    _output_factory = [opt, this](io_id_t io_id, output_handler_t handler, bool reg_io_flag) -> handler_ptr
     {
-      return this->create_handler_(io_id, opt, std::move(handler), reg_io );
+      return this->create_handler_(io_id, opt, std::move(handler), reg_io_flag);
     };
   }
 
