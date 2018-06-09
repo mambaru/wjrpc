@@ -62,12 +62,12 @@ set(store_BUILD_TESTING ${BUILD_TESTING})
 set(BUILD_TESTING OFF)
 include(ConfigureLibrary)
 
-CONFIGURE_LIBRARY( fas/aop.hpp "/usr/include/faslib /usr/local/include/faslib " 
+CONFIGURE_LIBRARY( fas/aop.hpp "/usr/include/faslib /usr/local/include/faslib ${CMAKE_CURRENT_SOURCE_DIR}/faslib ${CMAKE_SOURCE_DIR}/faslib ${CMAKE_SOURCE_DIR}/../faslib" 
                    faslib "" )
 clone_library(faslib "FASLIB_DIR" "https://github.com/migashko/faslib.git")
 set(FAS_TESTING_CPP "${FASLIB_DIR}/fas/testing/testing.cpp")
 
-CONFIGURE_LIBRARY( wjson/json.hpp "/usr/include/wjson /usr/local/include/wjson" 
+CONFIGURE_LIBRARY( wjson/json.hpp "/usr/include/wjson /usr/local/include/wjson ${CMAKE_CURRENT_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/../wjson" 
                    wjson "" )
 clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wjson.git")
 

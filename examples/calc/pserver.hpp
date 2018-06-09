@@ -7,6 +7,8 @@ class pserver
 {
 public:
   void initialize(int rd, int wd, const std::shared_ptr<icalc>& target);
+  
+  [[noreturn]]
   void run();
 private:
   class engine;
