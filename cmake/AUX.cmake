@@ -85,7 +85,7 @@ find_path(
 )
 if ( "${WJSON_DIR}" STREQUAL "WJSON_DIR-NOTFOUND") 
   unset(WJSON_DIR CACHE)
-  clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wlog.git")
+  clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wjson.git")
 endif()
 include_directories("${WJSON_DIR}")
 
