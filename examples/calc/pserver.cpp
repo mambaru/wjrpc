@@ -14,6 +14,7 @@ void pserver::initialize(int rd, int wd, const std::shared_ptr<icalc>& target)
   _target = target;
 }
 
+[[noreturn]]
 void pserver::run()
 {
   engine::options_type opt;
@@ -24,7 +25,7 @@ void pserver::run()
   char buff[1024];
   for (;;)
   {
-    int s = ::read( _rd, buff, 1024 );
+    ssize_t s = ::read( _rd, buff, 1024 );
     LOG_READ(buff, buff + s)
 
     auto d = std::make_unique<wjrpc::data_type>( buff, buff + s );

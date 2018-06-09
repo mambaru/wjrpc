@@ -1,31 +1,13 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(wjrpc)
 
-include_directories(.)
-include_directories(../wjson/)
-include_directories(../faslib/)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(AUX)
 
-
-if ( NOT FAS_TESTING_CPP )
-  set( FAS_TESTING_CPP ${CMAKE_SOURCE_DIR}/../faslib/fas/testing/testing.cpp )
-  include_directories( ${CMAKE_SOURCE_DIR} )
-  include_directories( ${CMAKE_SOURCE_DIR}/../faslib )
-endif()
-
-if (NOT CMAKE_BUILD_TYPE)
-  message(STATUS "No build type selected, default to Release")
-  set(CMAKE_BUILD_TYPE "Release")
-endif()
-
-if(UNIX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Werror -pedantic -fno-rtti -std=c++11")
-  message(STATUS "CMAKE_CXX_COMPILER_VERSION = ${CMAKE_CXX_COMPILER_VERSION}")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG ")
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "-O2 -g -DNDEBUG")
-  set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
-endif(UNIX)
-
+#include_directories(.)
+#include_directories(../wjson/)
+#include_directories(../faslib/)
 
 add_library(
   wjrpc
@@ -36,17 +18,19 @@ add_library(
 )
 
 if ( BUILD_TESTING )
-  if(UNIX AND PARANOID_WARNING)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wcast-align \
-                         -ftemplate-backtrace-limit=0 \
-                         -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization\
-                         -Wformat=2 -Winit-self -Wmissing-declarations \
-                         -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual \
-                         -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo \
-                         -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror")
-# -Wlogical-op  -Wnoexcept -Wstrict-null-sentinel
-  endif()
   enable_testing()
   add_subdirectory(tests)
   add_subdirectory(examples)
 endif()
+
+set(CPACK_PACKAGE_NAME "wjrpc")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "7")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/Readme.md")
+set(CPACK_PACKAGE_CONTACT "migashko@gmail.com")
+
+install(DIRECTORY wjrpc DESTINATION include FILES_MATCHING PATTERN "*.hpp" )
+install(TARGETS wjrpc LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+include(CPack)

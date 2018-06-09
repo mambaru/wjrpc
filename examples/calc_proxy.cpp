@@ -11,6 +11,8 @@
 std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p>& proxy);
 void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy);
 void run_iter(std::shared_ptr<icalc> cli);
+
+[[noreturn]]
 void run_bench(std::shared_ptr<icalc> cli);
 void run_client(int mode, std::shared_ptr<calc1>& calc, int count, std::shared_ptr<calc_p> proxy);
 
@@ -21,7 +23,6 @@ void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shar
   {
     srv->initialize(rd, wd, calc);
     srv->run();
-    return;
   }
 
   int up[2], down[2];
@@ -127,6 +128,7 @@ void run_iter(std::shared_ptr<icalc> cli)
   }
 }
 
+[[noreturn]]
 void run_bench(std::shared_ptr<icalc> cli)
 {
   std::vector<time_t> times;
@@ -145,12 +147,13 @@ void run_bench(std::shared_ptr<icalc> cli)
       if ( times.size() == 1000 )
       {
         std::sort(times.begin(), times.end());
-        std::cout << "100%: " << times.back() << " ns ( " << size_t(( 1000000000.0/times.back() ) * 1) << " persec), "
-                  << "99%: " << times[990] << " ns ( " << size_t(( 1000000000.0/times[990] ) * 1) << " persec), "
-                  << "90%: " << times[900] << " ns ( " << size_t(( 1000000000.0/times[900] ) * 1) << " persec), "
-                  << "80%: " << times[800] << " ns ( " << size_t(( 1000000000.0/times[800] ) * 1) << " persec), "
-                  << "50%: " << times[500] << " ns ( " << size_t(( 1000000000.0/times[500] ) * 1) << " persec), " 
-                  << "0% " << times.front() << " ns ( " << size_t(( 1000000000.0/times.front() ) * 1) << " persec)" << std::endl;
+        std::cout << "100%: " << times.back() << " ns ( " << size_t(( 1000000000.0/float(times.back())) * 1) << " persec), "
+                  << "99%: " << times[990]    << " ns ( " << size_t(( 1000000000.0/float(times[990]) ) * 1)  << " persec), "
+                  << "90%: " << times[900]    << " ns ( " << size_t(( 1000000000.0/float(times[900]) ) * 1)  << " persec), "
+                  << "80%: " << times[800]    << " ns ( " << size_t(( 1000000000.0/float(times[800]) ) * 1)  << " persec), "
+                  << "50%: " << times[500]    << " ns ( " << size_t(( 1000000000.0/float(times[500]) ) * 1)  << " persec), " 
+                  << "0% " << times.front()   << " ns ( " << size_t(( 1000000000.0/float(times.front()))* 1) << " persec)" 
+                  << std::endl;
         times.clear();
       }
       
