@@ -58,10 +58,11 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "/Yd /O2 /DNDEBUG")
 endif()
 
+include(ConfigureLibrary)
 set(store_BUILD_TESTING ${BUILD_TESTING})
 unset(BUILD_TESTING)
-include(ConfigureLibrary)
 
+### faslib
 
 unset(FASLIB_DIR CACHE)
 find_path( 
@@ -76,6 +77,7 @@ endif()
 include_directories("${FASLIB_DIR}")
 set(FAS_TESTING_CPP "${FASLIB_DIR}/fas/testing/testing.cpp")
 
+### wjson
 
 unset(WJSON_DIR CACHE)
 find_path( 
