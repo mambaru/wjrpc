@@ -51,7 +51,7 @@ struct invoke: Handler
 
     if ( e )
     {
-      WJRPC_LOG_ERROR( &t, "jsonrpc::invoke Invalid Params: " << holder.params_error_message(e) );
+      WJRPC_LOG_ERROR("jsonrpc::invoke Invalid Params: " << holder.params_error_message(e) );
 
       if ( holder.has_id() && outgoing_handler!=nullptr )
       {

@@ -103,7 +103,6 @@ struct invoke_method_plus:
   ::wjrpc::basic_method<
     ::wjrpc::name<_plus_>,
     ::wjrpc::invoke< request::plus_json, response::plus_json, plus_handler >,
-    ::wjrpc::log_aspect, 
     ::wjrpc::send_result<80>
 >
 {};

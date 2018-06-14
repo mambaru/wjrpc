@@ -63,7 +63,7 @@ struct ad_invoke
 
     if ( !holder.has_method() )
     {
-      WJRPC_LOG_ERROR( &t, "jsonrpc::invoke: Invalid Request " );
+      WJRPC_LOG_ERROR("jsonrpc::invoke: Invalid Request " );
       t.get_aspect().template get<_invoke_error_>()
         (t, std::move(holder), std::make_unique<invalid_request>(), std::move(outgoing_handler));
       return;
@@ -71,7 +71,7 @@ struct ad_invoke
 
     if ( !fas::for_each_group<_method_>(t, f_invoke<HolderType,OutgoingHandler>( holder, outgoing_handler ) ) )
     {
-      WJRPC_LOG_ERROR( &t, "jsonrpc::invoke: Procedure Not Found: " << holder.method() );
+      WJRPC_LOG_ERROR("jsonrpc::invoke: Procedure Not Found: " << holder.method() );
 
       t.get_aspect().template get<_invoke_error_>()
         (t, std::move(holder), std::make_unique<procedure_not_found>(), std::move(outgoing_handler));

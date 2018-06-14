@@ -11,6 +11,11 @@
 
 #include <iostream>
 
+/**
+ * @example example01.cpp
+ * @brief Простые примеры защищенных заданий в однопоточном режиме.
+ * @remark Ожидание выполнения всех заданий с помощью io_service::run работает только в однопоточном режиме.
+ */
 int main()
 {
   std::vector<std::string> req_list = 

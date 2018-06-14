@@ -20,7 +20,6 @@ namespace wjrpc{
 template<typename JsonrpcHandler>
 class engine
   : public std::enable_shared_from_this< engine<JsonrpcHandler> >
-  , public ::wjrpc::logger
 {
 public:
   typedef engine<JsonrpcHandler> self;
@@ -67,7 +66,6 @@ public:
   void reconfigure(O&& opt1)
   {
     typename std::decay<O>::type opt = opt1;
-    logger::initialize(opt);
 
     if ( opt.disable_handler_map )
     {
@@ -170,11 +168,11 @@ public:
       }
       else
       {
-        WJRPC_LOG_ERROR( this, "jsonrpc::engine: Parse error: " << holder.str() )
+        WJRPC_LOG_ERROR( "jsonrpc::engine: Parse error: " << holder.str() )
         aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), [this, handler](data_ptr err)
         {
           if ( err != nullptr)
-            { WJRPC_LOG_ERROR( this, std::string(err->begin(), err->end()) ) }
+            { WJRPC_LOG_ERROR( std::string(err->begin(), err->end()) ) }
           handler( std::move(err) );
         });
       }
@@ -235,13 +233,13 @@ private:
     }
     else
     {
-      WJRPC_LOG_ERROR( this, "jsonrpc::engine: Invalid Request: " << holder.str() )
+      WJRPC_LOG_ERROR("jsonrpc::engine: Invalid Request: " << holder.str() )
       aux::send_error( std::move(holder), std::make_unique<invalid_request>(), [this, handler](outgoing_holder oholder)
       {
         auto h2 = oholder.clone( oholder.call_id() );
         if ( auto d = h2.detach() )
         {
-          WJRPC_LOG_ERROR( this, std::string(d->begin(), d->end()) )
+          WJRPC_LOG_ERROR(std::string(d->begin(), d->end()) )
         }
         handler( std::move(oholder) );
       });
@@ -256,7 +254,7 @@ private:
     }
     else
     {
-      WJRPC_LOG_FATAL( this, "_outgoing_factory==nullptr engine.hpp:267" )
+      WJRPC_LOG_FATAL( "_outgoing_factory==nullptr engine.hpp:267" )
     }
   }
 
@@ -277,13 +275,13 @@ private:
         time_t now = time(0);
         if ( now > _log_time1 )
         {
-          WJRPC_LOG_ERROR( this, "jsonrpc::engin incoming response with call_id=" << call_id << " not found. Total lost results " << _lost_results)
+          WJRPC_LOG_ERROR( "jsonrpc::engin incoming response with call_id=" << call_id << " not found. Total lost results " << _lost_results)
           _log_time1 = now;
         }
       }
       else
       {
-        WJRPC_LOG_ERROR(this, "jsonrpc::engin incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
+        WJRPC_LOG_ERROR( "jsonrpc::engin incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
       }
       handler( outgoing_holder() );
     }

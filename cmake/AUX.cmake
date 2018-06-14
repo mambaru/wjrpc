@@ -91,6 +91,25 @@ if ( "${WJSON_DIR}" STREQUAL "WJSON_DIR-NOTFOUND")
 endif()
 include_directories("${WJSON_DIR}")
 
+### wlog
+
+if (NOT WJRPC_DISABLE_LOG)
+  unset(WLOG_DIR CACHE)
+  find_path( 
+    WLOG_DIR NAMES "wlog/wlog.hpp"
+    PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" 
+    PATH_SUFFIXES "build/wlog" "../build/wlog" "wlog" "../wlog"
+  )
+  if ( "${WLOG_DIR}" STREQUAL "WLOG_DIR-NOTFOUND") 
+    unset(WLOG_DIR CACHE)
+    clone_library(wlog "WLOG_DIR" "https://github.com/mambaru/wlog.git")
+  endif()
+  include_directories("${WLOG_DIR}")
+  link_directories("${WLOG_DIR}/build")
+else()
+  add_definitions(-DWJRPC_DISABLE_LOG)
+endif(NOT WJRPC_DISABLE_LOG)
+
 #CONFIGURE_LIBRARY( wjson/json.hpp "/usr/include/wjson /usr/local/include/wjson ${CMAKE_CURRENT_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/../wjson" 
  #                  wjson "" )
 #clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wjson.git")

@@ -17,10 +17,10 @@ namespace wjrpc{
 
 template< typename A = fas::aspect<> >
 class method_list_base
-  : public ::fas::aspect_class< typename fas::merge_aspect<A, ::wjrpc::log_aspect>::type >
+  : public ::fas::aspect_class< A >
 {
 public:
-  typedef ::fas::aspect_class< typename fas::merge_aspect<A, ::wjrpc::log_aspect>::type > super;
+  typedef ::fas::aspect_class< A > super;
   typedef method_list_base<A> self;
     
   typedef typename super::aspect::template advice_cast<_handler_types_>
@@ -88,7 +88,7 @@ public:
     }
     else
     {
-      WJRPC_LOG_FATAL(this, " (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
+      WJRPC_LOG_FATAL(" (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
     }
   }
 
