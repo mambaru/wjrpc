@@ -1,69 +1,37 @@
-#include "calc/api/plus.hpp"
-#include "calc/api/plus_json.hpp"
-
-#include <wjrpc/errors/error_json.hpp>
+#include <wjrpc/incoming/incoming.hpp>
 #include <wjrpc/incoming/incoming_holder.hpp>
-#include <wjrpc/outgoing/outgoing_holder.hpp>
-#include <wjrpc/outgoing/outgoing_result.hpp>
-#include <wjrpc/outgoing/outgoing_result_json.hpp>
-#include <wjrpc/outgoing/outgoing_error.hpp>
-#include <wjrpc/outgoing/outgoing_error_json.hpp>
+#include <wjson/_json.hpp>
 
 #include <iostream>
 
 /**
  * @example example01.cpp
- * @brief Простые примеры защищенных заданий в однопоточном режиме.
- * @remark Ожидание выполнения всех заданий с помощью io_service::run работает только в однопоточном режиме.
+ * @brief Пример предварительного парсинга jsonrpc-запроса в структуру wjrpc::incoming с помощью класса wjrpc::incoming_holder
  */
+
+/**
+ * Output:
+      method: "plus"
+      params: { "first":2, "second":3 }
+      id: 1
+      result: 
+      error: 
+*/
 int main()
 {
-  std::vector<std::string> req_list = 
-  {
-    "{\"method\":\"plus\", \"params\":{ \"first\":2, \"second\":3 }, \"id\" :1 }",
-    "{\"method\":\"minus\", \"params\":{ \"first\":5, \"second\":10 }, \"id\" :1 }",
-    "{\"method\":\"multiplies\", \"params\":{ \"first\":2, \"second\":2 }, \"id\" :1 }",
-    "{\"method\":\"divides\", \"params\":{ \"first\":9, \"second\":3 }, \"id\" :1 }"
-  };
-  std::vector<std::string> res_list;
+  using namespace wjson::literals;
 
-  for ( auto& sreq : req_list )
-  {
-    wjrpc::incoming_holder inholder( sreq );
-    // Парсим без проверок на ошибки
-    inholder.parse(nullptr);
+  wjrpc::incoming_holder inholder( "{'method':'plus', 'params':{ 'first':2, 'second':3 }, 'id' :1 }"_json );
+  
+  // Парсим без проверок на ошибки
+  inholder.parse(nullptr);
 
-    // Есть имя метода и идентификатор вызова
-    if ( inholder.method() == "plus" )
-    {
-      // Десериализация параметров без проверок
-      auto params = inholder.get_params<request::plus_json>(nullptr);
-      
-      // Объект для ответа
-      wjrpc::outgoing_result<response::plus> res;
-      res.result = std::make_unique<response::plus>();
-      res.result->value = params->first + params->second;
-      
-      // Забираем id в сыром виде как есть
-      auto raw_id = inholder.raw_id();
-      res.id = std::make_unique<wjrpc::data_type>( raw_id.first, raw_id.second );
-      
-      // Сериализатор ответа
-      typedef wjrpc::outgoing_result_json<response::plus_json> result_json;
-      res_list.push_back(std::string());
-      result_json::serializer()( res, std::back_inserter(res_list.back()) );
-    }
-    /* else if ( inholder.method() == "minus" ) { ... } */
-    /* else if ( inholder.method() == "multiplies" ) { ... } */
-    /* else if ( inholder.method() == "divides" ) { ... } */
-  }
-
-  for ( size_t i =0; i != res_list.size(); ++i)
-  {
-    std::cout << req_list[i] << std::endl;
-    std::cout << res_list[i] << std::endl;
-    std::cout << std::endl;
-  }
+  wjrpc::incoming incom = inholder.get();
+  std::cout << "method: " << std::string(incom.method.first, incom.method.second) << std::endl;
+  std::cout << "params: " << std::string(incom.params.first, incom.params.second) << std::endl;
+  std::cout << "id: " << std::string(incom.id.first, incom.id.second) << std::endl;
+  std::cout << "result: " << std::string(incom.result.first, incom.result.second) << std::endl;
+  std::cout << "error: " << std::string(incom.error.first, incom.error.second) << std::endl;
 }
 
 

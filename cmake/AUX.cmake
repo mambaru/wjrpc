@@ -68,7 +68,7 @@ unset(FASLIB_DIR CACHE)
 find_path( 
   FASLIB_DIR NAMES "fas/aop.hpp"
   PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" 
-  PATH_SUFFIXES "build/faslib" "../build/faslib" "faslib" "../faslib"
+  PATH_SUFFIXES "../faslib" "faslib" "build/faslib" "../build/faslib" 
 )
 if ( "${FASLIB_DIR}" STREQUAL "FASLIB_DIR-NOTFOUND") 
   unset(FASLIB_DIR CACHE)
@@ -83,7 +83,7 @@ unset(WJSON_DIR CACHE)
 find_path( 
   WJSON_DIR NAMES "wjson/json.hpp"
   PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" 
-  PATH_SUFFIXES "build/wjson" "../build/wjson" "wjson" "../wjson"
+  PATH_SUFFIXES "../wjson" "wjson"  "build/wjson" "../build/wjson"
 )
 if ( "${WJSON_DIR}" STREQUAL "WJSON_DIR-NOTFOUND") 
   unset(WJSON_DIR CACHE)

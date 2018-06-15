@@ -3,6 +3,12 @@ include_directories(.)
 add_executable(example01 example01.cpp)
 target_link_libraries(example01 wjrpc)
 
+add_executable(example02 example02.cpp)
+target_link_libraries(example02 wjrpc)
+
+add_executable(example03 example03.cpp)
+target_link_libraries(example03 wjrpc)
+
 add_executable(example2 example2.cpp)
 target_link_libraries(example2 wjrpc)
 

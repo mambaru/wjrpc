@@ -16,17 +16,6 @@
 namespace wjrpc{
 
 
-incoming_holder::~incoming_holder()
-{
-  if ( _data == nullptr)
-    return;
-  
-}
-
-incoming_holder::incoming_holder()
-  : _parsed(false)
-{
-}
 
 incoming_holder::incoming_holder(data_ptr d, time_point tp)
   : _parsed(false)

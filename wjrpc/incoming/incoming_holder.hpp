@@ -19,6 +19,9 @@ namespace wjrpc{
 
 class outgoing_holder;
 
+/**
+  @brief incoming_holder
+  */
 class incoming_holder
 {
 public:
@@ -32,10 +35,14 @@ public:
   typedef clock_t::time_point time_point;
 
 public:
-  ~incoming_holder();
+  ~incoming_holder() = default;
+  incoming_holder() = default;
   incoming_holder(const incoming_holder& ) = delete;
+  incoming_holder& operator = (const incoming_holder& ) = delete;
+  
   incoming_holder(incoming_holder&& ) = default;
-  incoming_holder();
+  incoming_holder& operator =(incoming_holder&& ) = default;
+  
   explicit incoming_holder(data_ptr    d,  time_point tp=time_point() );
   explicit incoming_holder(data_type   d,  time_point tp=time_point() );
   explicit incoming_holder(std::string d,  time_point tp=time_point() );
@@ -81,7 +88,6 @@ public:
 
   const incoming& get() const ;
   
-
   time_point get_time_point() const ;
 
   data_ptr acquire_params();
@@ -106,8 +112,7 @@ private:
 
 private:
 
-  /*std::function<void(data_ptr)> _free;*/
-  bool     _parsed;
+  bool     _parsed = false;
   data_ptr _data;
   incoming _incoming;
   iterator _begin;
