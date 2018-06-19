@@ -34,7 +34,7 @@ incoming_holder::incoming_holder(std::string d,  time_point tp )
 {
 }
 
-void incoming_holder::attach(data_ptr d,  time_point tp)
+data_ptr incoming_holder::attach(data_ptr d,  time_point tp)
 {
   if ( _data==nullptr || _data->empty() )
     _data = std::move(d);
@@ -43,10 +43,11 @@ void incoming_holder::attach(data_ptr d,  time_point tp)
 
   _parsed = false;
   _time_point = tp;
+  return std::move(d);
 }
 
 
-data_ptr incoming_holder::parse(::wjson::json_error* e)
+data_ptr incoming_holder::parse(json_error* e)
 {
   if ( _data == nullptr )
     return nullptr;
@@ -137,29 +138,29 @@ std::string incoming_holder::str() const
 }
 
 
-std::string incoming_holder::error_message(const ::wjson::json_error& e) const
+std::string incoming_holder::error_message(const json_error& e) const
 {
   if ( _data != nullptr   )
     return ::wjson::strerror::message_trace( e, _data->begin(), _data->end() );
   return ::wjson::strerror::message(e);
 }
 
-std::string incoming_holder::params_error_message(const ::wjson::json_error& e) const
+std::string incoming_holder::params_error_message(const json_error& e) const
 {
   return ::wjson::strerror::message_trace( e, _incoming.params.first, _incoming.params.second);
 }
 
-std::string incoming_holder::result_error_message(const ::wjson::json_error& e) const
+std::string incoming_holder::result_error_message(const json_error& e) const
 {
   return ::wjson::strerror::message_trace( e, _incoming.result.first, _incoming.result.second);
 }
 
-std::string incoming_holder::error_error_message(const ::wjson::json_error& e) const
+std::string incoming_holder::error_error_message(const json_error& e) const
 {
   return ::wjson::strerror::message_trace( e, _incoming.error.first, _incoming.error.second);
 }
 
-std::string incoming_holder::id_error_message(const ::wjson::json_error& e) const
+std::string incoming_holder::id_error_message(const json_error& e) const
 {
   return ::wjson::strerror::message_trace( e, _incoming.id.first, _incoming.id.second);
 }
@@ -176,6 +177,7 @@ incoming_holder::time_point incoming_holder::get_time_point() const
 
 data_ptr incoming_holder::detach()
 {
+  _parsed = false;
   _incoming = incoming();
   return std::move(_data);
 }
@@ -194,6 +196,11 @@ data_ptr incoming_holder::acquire_params()
   _data->resize( static_cast<size_t>( std::distance(_incoming.params.first, _incoming.params.second) ) );
   _incoming = incoming();
   return std::move(_data);
+}
+
+bool incoming_holder::ready_() const
+{
+  return _data != nullptr && _parsed;
 }
 
 }
