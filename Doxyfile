@@ -787,6 +787,14 @@ INPUT                  = wjrpc/engine/engine.hpp \
                          wjrpc/types.hpp \
                          wjrpc/incoming/incoming.hpp \
                          wjrpc/incoming/incoming_holder.hpp \
+                         wjrpc/handler/handler.hpp \
+                         wjrpc/handler/method_list.hpp \
+                         wjrpc/handler/method_list_base.hpp \
+                         wjrpc/handler/aspect/target.hpp \
+                         wjrpc/handler/aspect/peeper.hpp \
+                         wjrpc/handler/aspect/interface_.hpp \
+                         wjrpc/method/mem_fun/invoke_method.hpp \
+                         wjrpc/method/jsonrpc_tag \
                          examples/example01.cpp \
                          examples/example02.cpp \
                          Readme.md 

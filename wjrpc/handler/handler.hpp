@@ -12,12 +12,20 @@
 #include <wjrpc/outgoing/outgoing_error_json.hpp>
 #include <wjrpc/types.hpp>
 #include <wjrpc/method/aspect/tags.hpp>
+#include <wjrpc/handler/handler_options.hpp>
 #include <fas/aop.hpp>
 #include <mutex>
 #include <iostream>
 
 namespace wjrpc{
 
+/**
+ * @brief JSONRPC обработчик. 
+ * @tparam MethodList список методов сформированный с помощью `wjrpc::method_list`
+ * @details Принимает на вход строку (`wjrpc::data_ptr`) или предварительно распарсенное сообщение (`wjrpc::incoming_holder`), 
+ *          определяет его тип, имя метода и вызывает его обработчик. Основной функционал реализован в списке методов, который можно сформировать 
+ *          с помощью `wjrpc::method_list` и передать в качестве шаблонного параметра
+ */
 template<typename MethodList>
 class handler
   : public MethodList
@@ -31,7 +39,8 @@ public:
   typedef typename super::target_type target_type;
   typedef typename super::peeper_type peeper_type;
   typedef typename super::context_type context_type;
-  typedef typename super::options_type options_type;
+  typedef handler_options<target_type, peeper_type> options_type;
+  //typedef typename super::options_type options_type;
   
   //typedef typename super::holder_type holder_type;
   typedef typename super::io_id_t io_id_t;

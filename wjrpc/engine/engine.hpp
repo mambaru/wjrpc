@@ -17,6 +17,11 @@
 
 namespace wjrpc{
 
+/**
+ * @brief JSONRPC движок. По сути, реестр jsonrpc-обработчиков, который позволяет вынести их в отдельный модуль и управлять временем жизни
+ * @tparam JsonrpcHandler - JSONRPC обработчик, может быть реализован с помощью `wjrpc::handler`
+ * @details 
+  */
 template<typename JsonrpcHandler>
 class engine
   : public std::enable_shared_from_this< engine<JsonrpcHandler> >
@@ -129,7 +134,6 @@ public:
   /***************************************************************/
   /* data_ptr                                                    */
   /***************************************************************/
-  
   
   outgoing_handler_t io2rpc( output_handler_t handler )
   {
@@ -435,7 +439,6 @@ private:
     }; // opt.sender_handler
   }
 
-  // OutgoingHandler io::outgoing_handler_t или jsonrpc::outgoing_handler_t
   template<typename Opt, typename OutgoingHandler>
   handler_ptr create_handler_(io_id_t io_id, Opt opt, OutgoingHandler handler, bool reg_io_flag)
   {

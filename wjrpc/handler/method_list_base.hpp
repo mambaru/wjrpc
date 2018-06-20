@@ -15,83 +15,84 @@
 
 namespace wjrpc{
 
+/** 
+ * @brief базовый класс для `wjrpc::method_list` 
+ * @tparam A - аспект частично определяеться в `wjrpc::method_list`, а сам список методов и цели пользователем
+ */
 template< typename A = fas::aspect<> >
 class method_list_base
   : public ::fas::aspect_class< A >
 {
-public:
   typedef ::fas::aspect_class< A > super;
   typedef method_list_base<A> self;
-    
   typedef typename super::aspect::template advice_cast<_handler_types_>
                         ::type  handler_types;
+public:
+
+  /** Тип целевого объекта, который задан `wjrpc::target` */
   typedef typename super::aspect::template advice_cast<_target_>
                         ::type  target_type;
+
+  /** Тип целевого объекта, который задан `wjrpc::peeper` */
   typedef typename super::aspect::template advice_cast<_peeper_>
                         ::type  peeper_type;
+                        
+  /** Тип целевого объекта, который задан `wjrpc::interface_` */
   typedef typename super::aspect::template advice_cast<_interface_>
                         ::type  interface_type;
+  
+  /** Пользовательский набор данных, который может быть задан `wjrpc::context` */
   typedef typename super::aspect::template advice_cast<_context_>
                         ::type  context_type;
+
+  /** Тип мьютекса */
   typedef typename super::aspect::template advice_cast<_mutex_type_>
                         ::type  mutex_type;
 
+  /** Тип идентификатора поля JSONRPC запроса (поле \b id) */
   typedef typename handler_types::call_id_t        call_id_t;
+  
+  /** Тип идентификатора источника. Определяеться пользователем, по умолчанию `size_t` */
   typedef typename handler_types::io_id_t          io_id_t;
+  
+  /** Тип буфера сообщения (по умолчанию `std::vector< char >`) */
   typedef typename handler_types::data_type        data_type;
+  
+  /** Указатель на буфер сообщения (по умолчанию `std::unique_ptr< data_type >`) */
   typedef typename handler_types::data_ptr         data_ptr;
+  
+  /** Тип сообщения об ошибке, который будет сериализовыватся в случае ошибки (`wjrpc::error`)  */
   typedef typename handler_types::error_type       error_type;
+  
+  /** JSON-описание ошибки (`wjrpc::error_json`)  */
   typedef typename handler_types::error_json       error_json;
+  
+  /** по умолчанию `std::unique_ptr< error_type >`*/
   typedef typename handler_types::error_ptr        error_ptr;
   
+  /** тип функции обратного вызова, для финальной сериализации ( по умолчанию `wjrpc::incoming_handler_t` ) */
   typedef typename handler_types::outgoing_handler_t    outgoing_handler_t;
+  
+  /** Функция сериализации запросов ( по умолчанию `wjrpc::handler_types::request_serializer_t` ) */
   typedef typename handler_types::request_serializer_t  request_serializer_t;
-  typedef typename handler_types::result_handler_t      result_handler_t;
+  
+  /** Функция сериализации уведомлений ( по умолчанию `wjrpc::handler_types::notify_serializer_t` ) */
   typedef typename handler_types::notify_serializer_t   notify_serializer_t;
   
-  typedef handler_options<target_type, peeper_type> options_type;
+  /** Обработчик ответов для удаленных запросов( по умолчанию `wjrpc::handler_types::result_handler_t` ) */
+  typedef typename handler_types::result_handler_t      result_handler_t;
+  
   
   ~method_list_base()
   {
     _sender_handler = nullptr;
   }
+  
   method_list_base()
   {
     _sender_handler = nullptr;
   }
   
-  template<typename Params, typename NotifySerializer, typename RequestSerializer, typename ResultHandler >
-  void perform_send( 
-    const char* method_name,
-    Params params,
-    NotifySerializer ns,
-    RequestSerializer rs,
-    ResultHandler  rh
-  ) const
-  {
-    super::get_aspect().template get<_perform_send_>()(
-      *this,
-      method_name, 
-      std::move(params),
-      std::move(ns),
-      std::move(rs),
-      std::move(rh) 
-    );
-  }
-
-  
-  void sender_handler( const char* method_name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1) const
-  {
-    if ( this->_sender_handler != nullptr )
-    {
-      this->_sender_handler( method_name, std::move(ns1), std::move(rs1), std::move(rh1) );
-    }
-    else
-    {
-      WJRPC_LOG_FATAL(" (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
-    }
-  }
-
   template<typename Tg>
   struct call_params_ptr
   {
@@ -116,6 +117,15 @@ public:
                           ::error_ptr type;
   };
 
+  /**
+   * @brief вызов "удаленного" метода
+   * @tparam Tg тэг и имя метода
+   * @tparam ReqPtr тип указателя на запрос
+   * @param req параметры запроса, определяеться в `wjrpc::call_method`
+   * @param callback обработчик ответа
+   * @details Сериализует запрос
+   * 
+   */
   template<typename Tg, typename ReqPtr>
   void call(
     ReqPtr req, 
@@ -151,6 +161,37 @@ public:
       std::move(req),
       std::move(callback)
     );
+  }
+  
+  template<typename Params, typename NotifySerializer, typename RequestSerializer, typename ResultHandler >
+  void perform_send( 
+    const char* method_name,
+    Params params,
+    NotifySerializer ns,
+    RequestSerializer rs,
+    ResultHandler  rh
+  ) const
+  {
+    super::get_aspect().template get<_perform_send_>()(
+      *this,
+      method_name, 
+      std::move(params),
+      std::move(ns),
+      std::move(rs),
+      std::move(rh) 
+    );
+  }
+
+  void sender_handler( const char* method_name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1) const
+  {
+    if ( this->_sender_handler != nullptr )
+    {
+      this->_sender_handler( method_name, std::move(ns1), std::move(rs1), std::move(rh1) );
+    }
+    else
+    {
+      WJRPC_LOG_FATAL(" (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
+    }
   }
 
 private:

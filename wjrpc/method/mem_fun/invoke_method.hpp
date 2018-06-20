@@ -14,7 +14,7 @@
 
 
 namespace wjrpc{
-
+  
 template<
   typename TgName, 
   typename JParams, 
@@ -39,6 +39,17 @@ struct basic_invoke_method
     >
 {};
 
+
+/**
+ * @brief конструкция для описания обработчика конкретного метода 
+ * @tparam TgName Имя метода. Задатеться с помощью `JSONRPC_TAG`
+ * @tparam JParams JSON-описание параметров запроса
+ * @tparam JResult JSON-описание структуры ответа 
+ * @tparam I тип целевого класса (интерфейса), которые был задан в `wjrpc::target`
+ * @tparam mem_ptr указатель на функцию-член класс I
+ * @tparam Args дополнительные параметры обработчика метода
+ * @details С помощью таких конструкций определяеться списко методов для `wjrpc::member_list`
+ */
 template<
   typename TgName, 
   typename JParams, 

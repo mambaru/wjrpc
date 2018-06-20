@@ -1,5 +1,5 @@
 //
-// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2013-2016
+// Author: Vladimir Migashko <migashko@gmail.com>, (C) 2013-2018
 //
 // Copyright: See COPYING file that comes with this distribution
 //
@@ -20,10 +20,10 @@ namespace wjrpc{
 class outgoing_holder;
 
 /**
- * @brief Пердварительно распарсенное перемещаемое входящее JSONRPC-сообщение
+ * @brief Предварительно распарсенное перемещаемое входящее JSONRPC-сообщение
  * @details Позволяет обрабатывать сообщение без его полной десериализации, например чтобы 
  *          определить тип сообщения, получить имя метода или идентификатор запроса. Также содержит
- *          методы для десереализации параметров. 
+ *          методы для десериализации параметров. 
  * @see incoming
  */
 
@@ -67,7 +67,7 @@ public:
   /**
     * @brief Конструктор с захватом буфера сообщения
     * @param d буфер сообщения (`std::unique_ptr< wjrpc::data_type >`)
-    * @param tp временная отметка может быть исползованна для замера времени прохождения запроса по системе
+    * @param tp временная отметка может быть использована для замера времени прохождения запроса по системе
     * @details Просто захватывает буфер сообщения без парсинга. Для последующего анализа необходимо вызвать метод `incoming_holder::parse`
     */
   explicit incoming_holder(data_ptr    d,  time_point tp=time_point() );
@@ -75,7 +75,7 @@ public:
   /**
     * @brief Конструктор с копированием буфера сообщения
     * @param d буфер сообщения (`std::vector< char >`)
-    * @param tp временная отметка может быть исползованна для замера времени прохождения запроса по системе
+    * @param tp временная отметка может быть использована для замера времени прохождения запроса по системе
     * @details Создает буфер и копирует сообщение из `d` без парсинга. Для последующего анализа необходимо вызвать метод `incoming_holder::parse`
     */
   explicit incoming_holder(data_type   d,  time_point tp=time_point() );
@@ -83,7 +83,7 @@ public:
   /**
     * @brief Конструктор с копированием буфера сообщения
     * @param s строка с jsonrpc-сообщением
-    * @param tp временная отметка может быть исползованна для замера времени прохождения запроса по системе
+    * @param tp временная отметка может быть использована для замера времени прохождения запроса по системе
     * @details Создает буфер и копирует сообщение из строки `s` без парсинга. Для последующего анализа необходимо вызвать метод `incoming_holder::parse`
     */
   explicit incoming_holder(std::string s,  time_point tp=time_point() );
@@ -93,9 +93,9 @@ public:
     * @param [out] e - результат выполнения (сообщение об ошибке). Может быть nullptr.
     * @return Если в буфере более одного сообщения, то копирует оставшиеся их в отдельный буфер и возвращает. 
     * @details Производится парсинг первого json объекта в буфере. Парсинг считается успешным, 
-    *          если сообщение json валидно (не обязательно быть jsonrpc). На правильность jsonrpc можно праверить 
+    *          если сообщение json валидно (не обязательно быть jsonrpc). На правильность jsonrpc можно проверить 
     *          методом `incoming_holder::is_valid`. Если в буфере, за первым сообщением обнаруживается следующее, 
-    *          то создаеться новый буфер, в него копируется остаток текущего и возвращается. 
+    *          то создается новый буфер, в него копируется остаток текущего и возвращается. 
     */
   data_ptr parse(json_error* e);
   
@@ -146,10 +146,10 @@ public:
   /**
    * @brief Инициализирует объект или копирует в конец
    * @param d буфер сообщения (`std::unique_ptr< wjrpc::data_type >`)
-   * @param tp временная отметка может быть исползованна для замера времени прохождения запроса по системе
-   * @return \b d, если объект уже содержал буффер, либо nullptr
+   * @param tp временная отметка может быть использована для замера времени прохождения запроса по системе
+   * @return \b d, если объект уже содержал буфер, либо nullptr
    * @details Если в текущем состоянии объект пуст, то захавтывает буфер. В противном случае копирует буфер \b d 
-   *          в конец и возвращает \b d. Все флаги сбрасывются и необходимо вызвать вновь `incoming_holder::parse`
+   *          в конец и возвращает \b d. Все флаги сбрасываются и необходимо вызвать вновь `incoming_holder::parse`
    */
   data_ptr attach(data_ptr d, time_point tp=time_point() );
   
@@ -172,51 +172,93 @@ public:
   raw_t raw_id() const;
 
   /**
-    * @brief Десереализация идентификатора запроса
+    * @brief Десериализация идентификатора запроса (поле \b id)
     * @tparam V - исходный тип идентификатора (чаще всего int) 
     * @tparam J - json-описание для идентификатора. Для простых типов достаточно значения по умолчанию 
-    * @param [out] e - описание ошибки (м.б. nullptr)
+    * @param [out] e - описание ошибки json-десериализации(м.б. nullptr)
     * @return Значение идентификатора, или V() в случае ошибки
-    * @details Аналоично `incoming_holder::get_params` можно было обойтись только json-описанием, но как правило, для 
-    *          идентификаторов используются простые типы, для которых запись в виде `get_id< int >` выглядет более уместной
+    * @details Аналогично `incoming_holder::get_params` можно было обойтись только json-описанием, но как правило, для 
+    *          идентификаторов используются простые типы, для которых запись в виде `get_id< int >` выглядит более уместной
     */
   template<typename V, typename J = ::wjson::value<V> >
   V get_id( json_error* e) const;
 
   
   /**
-    * @brief Десереализация параметров запроса
+    * @brief Десериализация параметров запроса (поле \b params)
     * @tparam J - json-описание структуры параметров
-    * @param [out] e - описание ошибки (м.б. nullptr)
+    * @param [out] e - описание ошибки json-десериализации(м.б. nullptr)
     * @return `std::unique_ptr< typename J::target >` десериализованный объект 
     */
   template<typename J>
   std::unique_ptr<typename J::target> get_params( json_error* e) const;
 
+  /**
+    * @brief Десериализация параметров ответа (поле \b result)
+    * @tparam J - json-описание структуры параметров
+    * @param [out] e - описание ошибки json-десериализации(м.б. nullptr)
+    * @return `std::unique_ptr< typename J::target >` десериализованный объект 
+    */
   template<typename J>
   std::unique_ptr<typename J::target> get_result( json_error* e) const;
 
+  /**
+    * @brief Десериализация параметров ошибки (поле \b error)
+    * @tparam J - json-описание структуры параметров
+    * @param [out] e - описание ошибки json-десериализации(м.б. nullptr)
+    * @return `std::unique_ptr< typename J::target >` десериализованный объект 
+    */
   template<typename J>
   std::unique_ptr<typename J::target> get_error( json_error* e) const;
 
+  /** @brief ссылка на данные wjrpc::incoming */
   const incoming& get() const ;
   
+  /** Получить временную отметку, когда было получено сообщение (если было задано при инициализации)*/
   time_point get_time_point() const ;
 
+  /**
+   * @brief в буфере сообщения оставить только JSON-объект \b params и извлечь его
+   * @return буфер с JSON-объекта с параметрами запроса
+   * @details По эффекту аналогичен методу `incoming_holder::detach`
+   * @see incoming_holder::detach
+   */
   data_ptr acquire_params();
 
+  /** @brief сделать дубликат текущего объекта */
   incoming_holder clone() const;
 
+  /** @brief строка с исходным JSONRPC-сообщением */
   std::string str() const;
 
+  /** 
+   * @brief Возвращает текстовое описание ошибки с указанием места (относительно всего JSONRPC-сообщения) 
+   * @details Этот метод нужно вызывать, если ошибка произошла в методе `incoming_holder::parse`
+   */
   std::string error_message(const json_error& e) const;
 
+  /** 
+   * @brief Возвращает текстовое описание ошибки с указанием места (относительно секции \b params JSONRPC-сообщения) 
+   * @details Этот метод нужно вызывать, если ошибка произошла в методе `incoming_holder::get_params`
+   */
   std::string params_error_message(const json_error& e) const;
 
+  /** 
+   * @brief Возвращает текстовое описание ошибки с указанием места (относительно секции \b result JSONRPC-сообщения) 
+   * @details Этот метод нужно вызывать, если ошибка произошла в методе `incoming_holder::get_result`
+   */
   std::string result_error_message(const json_error& e) const;
 
+  /** 
+   * @brief Возвращает текстовое описание ошибки с указанием места (относительно секции \b error JSONRPC-сообщения) 
+   * @details Этот метод нужно вызывать, если ошибка произошла в методе `incoming_holder::get_error`
+   */
   std::string error_error_message(const json_error& e) const;
 
+  /** 
+   * @brief Возвращает текстовое описание ошибки с указанием места (относительно секции \b id JSONRPC-сообщения) 
+   * @details Этот метод нужно вызывать, если ошибка произошла в методе `incoming_holder::get_id`
+   */
   std::string id_error_message(const json_error& e) const;
 
 private:
@@ -288,3 +330,5 @@ std::unique_ptr<typename J::target> incoming_holder::get_error( json_error* e) c
 }
 
 }
+
+

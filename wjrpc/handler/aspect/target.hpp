@@ -11,6 +11,12 @@
 
 namespace wjrpc{
   
+/**
+ * @brief определяет тип целевого объекта  и хранит указатель на него
+ * @tparam I тип целевого объекта
+ * @details Хранит `std::shared_ptr< I >`, который используется для вызова методов 
+ * описанных в конструкциях `wjrpc::invoke_method`
+ */
 template<typename I>
 struct target
   : fas::value<_target_, std::shared_ptr<I> >

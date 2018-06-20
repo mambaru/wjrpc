@@ -5,20 +5,24 @@
 //
 #pragma once
 
-#include <wjrpc/handler/basic_method_list.hpp>
+#include <wjrpc/handler/method_list_base.hpp>
+#include <wjrpc/handler/aspect_handler.hpp>
+#include <fas/aop.hpp>
 
 namespace wjrpc{
 
+/**
+ * @brief JSONRPC обработчик. 
+ * @tparam MethodList список методов сформированный с помощью `wjrpc::method_list`
+ * @details Принимает на вход строку (`wjrpc::data_ptr`) или предварительно распарсенное сообщение (`wjrpc::incoming_holder`), 
+ *          определяет его тип, имя метода и вызывает его обработчик. Основной функционал реализован в списке методов, который можно сформировать 
+ *          с помощью `wjrpc::method_list` и передать в качестве шаблонного параметра
+ */
 template<typename... Args >
 class method_list
-  : public basic_method_list<Args...>
+  : public method_list_base< typename fas::merge_aspect< fas::aspect<Args...>, aspect_handler>::type >
 {
-public:
-  typedef basic_method_list<Args...> super;
-  typedef typename basic_method_list<Args...>::interface_type interface_type;
-  typedef typename basic_method_list<Args...>::handler_types handler_types;
 };
-
 
 } // wjrpc
 
