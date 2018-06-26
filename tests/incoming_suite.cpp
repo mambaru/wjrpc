@@ -36,7 +36,8 @@ UNIT(incoming2, "")
   using namespace fas::testing;
   using namespace ::wjrpc;
   using namespace std::chrono;
-  std::string json = "{'method':'test','params':[1,2,3]}"_wjson;
+  using namespace wjson::literals;
+  std::string json = "{'method':'test','params':[1,2,3]}"_json;
   incoming_holder h( std::make_unique<data_type>(json.begin(), json.end()), high_resolution_clock::now() );
   ::wjson::json_error e;
   h.parse(&e);

@@ -17,6 +17,10 @@ add_library(
   wjrpc/incoming/send_error.cpp
 )
 
+if (NOT WJRPC_DISABLE_LOG)
+  target_link_libraries(wjrpc wlog  )
+endif()
+
 if ( BUILD_TESTING )
   enable_testing()
   add_subdirectory(tests)
