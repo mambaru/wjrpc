@@ -103,7 +103,7 @@ push-to-github:
     - git push -f ${REMOTE_SSH} mambaru
     - git push -f --tags ${REMOTE_SSH} mambaru
     - doxygen
-    - cd doc/html
+    - cd docs/html
     - git init 
     - git add .
     - git commit -m "doxygen"

@@ -1,7 +1,3 @@
-if ( NOT "${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}" )
-  message(STATUS "${PROJECT_NAME} is not top level project")
-  return()
-endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -42,11 +38,11 @@ if ( ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunreachable-code -Wunused -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-variable  -Wvariadic-macros -Wvolatile-register-var  -Wwrite-strings")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo ")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wstrict-overflow=2 -Wswitch -Wswitch-default -Wundef -Werror")
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-      # -Wunsafe-loop-optimizations
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlogical-op  -Wnoexcept -Wstrict-null-sentinel -Wno-pragma-once-outside-header")
+      #-Wredundant-move
     endif()
   endif(PARANOID_WARNING)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
@@ -57,72 +53,4 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set(CMAKE_CXX_FLAGS_DEBUG  "/Od /D_DEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "/Yd /O2 /DNDEBUG")
 endif()
-
-include(ConfigureLibrary)
-set(store_BUILD_TESTING ${BUILD_TESTING})
-unset(BUILD_TESTING)
-
-### faslib
-
-unset(FASLIB_DIR CACHE)
-find_path( 
-  FASLIB_DIR NAMES "fas/aop.hpp"
-  PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" 
-  PATH_SUFFIXES "../faslib" "faslib" "build/faslib" "../build/faslib" 
-)
-if ( "${FASLIB_DIR}" STREQUAL "FASLIB_DIR-NOTFOUND") 
-  unset(FASLIB_DIR CACHE)
-  clone_library(faslib "FASLIB_DIR" "https://github.com/migashko/faslib.git")
-endif()
-include_directories("${FASLIB_DIR}")
-set(FAS_TESTING_CPP "${FASLIB_DIR}/fas/testing/testing.cpp")
-
-### wjson
-
-unset(WJSON_DIR CACHE)
-find_path( 
-  WJSON_DIR NAMES "wjson/json.hpp"
-  PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" 
-  PATH_SUFFIXES "../wjson" "wjson"  "build/wjson" "../build/wjson"
-)
-if ( "${WJSON_DIR}" STREQUAL "WJSON_DIR-NOTFOUND") 
-  unset(WJSON_DIR CACHE)
-  clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wjson.git")
-endif()
-include_directories("${WJSON_DIR}")
-
-### wlog
-
-if (NOT WJRPC_DISABLE_LOG)
-  unset(WLOG_DIR CACHE)
-  find_path( 
-    WLOG_DIR NAMES "wlog/wlog.hpp"
-    PATHS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" 
-    PATH_SUFFIXES "build/wlog" "../build/wlog" "wlog" "../wlog"
-  )
-  if ( "${WLOG_DIR}" STREQUAL "WLOG_DIR-NOTFOUND") 
-    unset(WLOG_DIR CACHE)
-    clone_library(wlog "WLOG_DIR" "https://github.com/mambaru/wlog.git")
-  endif()
-  include_directories("${WLOG_DIR}")
-  link_directories("${WLOG_DIR}/build")
-else()
-  add_definitions(-DWJRPC_DISABLE_LOG)
-endif(NOT WJRPC_DISABLE_LOG)
-
-#CONFIGURE_LIBRARY( wjson/json.hpp "/usr/include/wjson /usr/local/include/wjson ${CMAKE_CURRENT_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/wjson ${CMAKE_SOURCE_DIR}/../wjson" 
- #                  wjson "" )
-#clone_library(wjson "WJSON_DIR" "https://github.com/mambaru/wjson.git")
-
-#if (NOT WFLOW_DISABLE_LOG)
-#  CONFIGURE_LIBRARY( wlog/wlog.hpp "/usr/include/wlog /usr/local/include/wlog" 
-#                     wlog "/usr/lib /usr/local/lib /usr/lib64" )
-#  clone_library(wlog "WLOG_DIR" "https://github.com/mambaru/wlog.git")
-#else()
-#  add_definitions(-DWFLOW_DISABLE_LOG)
-#endif(NOT WFLOW_DISABLE_LOG)
-
-set(BUILD_TESTING ${store_BUILD_TESTING})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 
