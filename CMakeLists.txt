@@ -5,15 +5,6 @@ project(wjrpc)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(mambaru)
 
-get_faslib()
-get_mambaru(wjson WJSON_DIR "")
-
-if (NOT WJRPC_DISABLE_LOG)
-  get_mambaru(wlog WLOG_DIR WLOG_LIB)
-else()
-  add_definitions(-DWJRPC_DISABLE_LOG)
-endif()
-
 add_library(
   wjrpc
   wjrpc/engine/call_map.cpp
