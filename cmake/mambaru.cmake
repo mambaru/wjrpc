@@ -7,12 +7,12 @@ include(mambaopt)
 include(mambalibs)
 
 get_faslib()
-get_mambaru(wjson WJSON_DIR "")
+get_mambaru(wjson WJSON_DIR "" "")
 
 if (NOT WJRPC_DISABLE_LOG)
-  get_mambaru(wlog WLOG_DIR WLOG_LIB)
+  get_mambaru(wlog WLOG_DIR WLOG_LIB "")
 else()
-  add_definitions(-DWJRPC_DISABLE_LOG)
+  add_definitions(-DWJRPC_DISABLE_LOG "")
 endif()
 
 
