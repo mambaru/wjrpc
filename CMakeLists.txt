@@ -3,11 +3,7 @@ cmake_minimum_required(VERSION 3.1)
 project(wjrpc)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(AUX)
-
-#include_directories(.)
-#include_directories(../wjson/)
-#include_directories(../faslib/)
+include(mambaru)
 
 add_library(
   wjrpc
@@ -18,7 +14,7 @@ add_library(
 )
 
 if (NOT WJRPC_DISABLE_LOG)
-  target_link_libraries(wjrpc wlog  )
+  target_link_libraries(wjrpc ${WLOG_LIB} )
 endif()
 
 if ( BUILD_TESTING )

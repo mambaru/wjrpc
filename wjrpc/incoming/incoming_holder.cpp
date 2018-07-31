@@ -43,7 +43,7 @@ data_ptr incoming_holder::attach(data_ptr d,  time_point tp)
 
   _parsed = false;
   _time_point = tp;
-  return std::move(d);
+  return d;
 }
 
 
