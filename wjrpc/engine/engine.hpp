@@ -173,7 +173,7 @@ public:
       else
       {
         WJRPC_LOG_ERROR( "jsonrpc::engine: Parse error: " << holder.str() )
-        aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), [this, handler](data_ptr err)
+        aux::send_error_raw( std::move(holder), std::make_unique<parse_error>(), [handler](data_ptr err)
         {
           if ( err != nullptr)
             { WJRPC_LOG_ERROR( std::string(err->begin(), err->end()) ) }
@@ -238,7 +238,7 @@ private:
     else
     {
       WJRPC_LOG_ERROR("jsonrpc::engine: Invalid Request: " << holder.str() )
-      aux::send_error( std::move(holder), std::make_unique<invalid_request>(), [this, handler](outgoing_holder oholder)
+      aux::send_error( std::move(holder), std::make_unique<invalid_request>(), [handler](outgoing_holder oholder)
       {
         auto h2 = oholder.clone( oholder.call_id() );
         if ( auto d = h2.detach() )
