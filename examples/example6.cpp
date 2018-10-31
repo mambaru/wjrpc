@@ -80,7 +80,7 @@ int main()
   
   for ( auto& sreq : req_list )
   {
-    h.perform( sreq, [&res_list](std::string out) { res_list.push_back(out);} );
+    h.perform_string( sreq, [&res_list](std::string out) { res_list.push_back(out);} );
   }
 
   for ( size_t i =0; i != res_list.size(); ++i)
