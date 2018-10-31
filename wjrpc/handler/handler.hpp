@@ -112,7 +112,7 @@ public:
     this->get_aspect().template get<_initialize_>()(*this, std::move(opt) );
   }
 
-  void perform_io(data_ptr d, output_handler_t h) 
+  void perform_data(data_ptr d, output_handler_t h) 
   {
     using namespace std::placeholders;
 
@@ -135,9 +135,9 @@ public:
     }
   }
   
-  void perform(std::string str, std::function<void(std::string)> h) 
+  void perform_string(std::string str, std::function<void(std::string)> h) 
   {
-    this->perform_io( std::make_unique<data_type>( str.begin(), str.end() ), [h](data_ptr d)
+    this->perform_data( std::make_unique<data_type>( str.begin(), str.end() ), [h](data_ptr d)
     {
       h( std::string(d->begin(), d->end()) );
     });
