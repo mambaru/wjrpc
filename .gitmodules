@@ -1,3 +1,12 @@
 [submodule "external/cmake-ci"]
 	path = external/cmake-ci
 	url = git@github.lan:cpp/cmake-ci.git
+[submodule "external/faslib"]
+	path = external/faslib
+	url = git@github.lan:cpp/faslib.git
+[submodule "external/wjson"]
+	path = external/wjson
+	url = git@github.lan:cpp/wjson.git
+[submodule "external/wlog"]
+	path = external/wlog
+	url = git@github.lan:cpp/wlog.git
