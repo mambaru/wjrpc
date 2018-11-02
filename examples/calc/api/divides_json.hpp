@@ -1,5 +1,5 @@
 #pragma once
-#include "calc/api/divides.hpp"
+#include <calc/api/divides.hpp>
 #include <wjson/json.hpp>
 #include <wjson/name.hpp>
 
