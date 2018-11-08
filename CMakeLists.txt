@@ -2,8 +2,14 @@ cmake_minimum_required(VERSION 3.1)
 
 project(wjrpc)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(mambaru)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(ci)
+
+if ( STANDALONE )
+  list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/wfc/cmake)
+  #set(liblist faslib wjson wlog)
+  getlibs(faslib wjson wlog)
+endif()
 
 include_directories(.)
 add_library(

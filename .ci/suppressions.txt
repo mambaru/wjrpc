@@ -1,3 +1,4 @@
 syntaxError:./tests/engine_suite.cpp:128
-syntaxError:./tests/method_suite.cpp:118
-
+syntaxError:./tests/method_suite.cpp:117
+unusedFunction:./wjrpc/incoming/send_error.cpp:18
+unusedFunction:./wjrpc/incoming/send_error.cpp:42
