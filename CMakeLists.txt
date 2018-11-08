@@ -5,6 +5,7 @@ project(wjrpc)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(mambaru)
 
+include_directories(.)
 add_library(
   wjrpc
   wjrpc/engine/call_map.cpp
