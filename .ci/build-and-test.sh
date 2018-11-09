@@ -1,1 +1,0 @@
-../external/cmake-ci/ci/build-and-test.sh
