@@ -1,7 +1,6 @@
 
 add_executable(benchmark1 benchmark.cpp)
 
-#message(STATUS "-->: ${FAS_TESTING_CPP}")
 add_executable(
   jsonrpc_test
   incoming_suite.cpp
