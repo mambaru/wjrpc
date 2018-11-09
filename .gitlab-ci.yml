@@ -104,8 +104,10 @@ devel-any:
 pre-release:
   stage: merge
   script:
-    - echo git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
-    - git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
+    #- echo git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
+    #- git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
+    - echo git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
+    - git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
   only:
     - devel
     - tags
