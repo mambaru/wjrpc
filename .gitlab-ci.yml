@@ -104,13 +104,10 @@ devel-any:
 pre-release:
   stage: merge
   script:
-    #- echo git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
-    #- git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
-    - echo git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
-    - git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
+    - echo git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
+    - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
   only:
     - devel
-    - tags
 
 master-release:
   stage: merge
@@ -118,6 +115,7 @@ master-release:
     - HOST=${CI_PROJECT_URL}  CI_PROJECT_ID=${CI_PROJECT_ID} GITLAB_USER_ID=${GITLAB_USER_ID} PRIVATE_TOKEN=${PRIVATE_TOKEN} ./.ci/automr.sh master false
   only:
     - pre-release
+    - tags
 
 master-hotfix:
   stage: merge
