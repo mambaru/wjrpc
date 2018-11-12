@@ -11,11 +11,9 @@ Usage:
   make help
   make shared
   make static
-  make all
   make doc
-  make clean
-  make install
-```
-Если установлен doxygen то в папке `/docs/html` будет документация.
 
+```
+
+Если установлен doxygen то в папке `/docs/html` будет документация.
 Все примеры с описанием в `examples`.

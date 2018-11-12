@@ -106,8 +106,6 @@ pre-release:
   script:
     - git checkout ${CI_COMMIT_REF_NAME}
     - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
-    #- echo git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/remotes/pre-release
-    #- git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/remotes/pre-release
   only:
     - devel
 
@@ -139,8 +137,6 @@ release:
   script:
     - git checkout ${CI_COMMIT_REF_NAME}
     - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:${RELEASE_BRANCH}
-#    - echo git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/remotes/${RELEASE_BRANCH}
-#    - git push -f ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/remotes/${RELEASE_BRANCH}
   only:
     - master
     
