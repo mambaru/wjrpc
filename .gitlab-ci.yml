@@ -147,6 +147,10 @@ push-to-github:
   script:
     - git branch -f mambaru
     - git checkout mambaru
+    - git submodule deinit -f
+    - rm -rf .git/modules
+    - git rm -f external 
+    - git commit -m "autocommit github.com export"
     - git push -f ${REMOTE_SSH} mambaru
     - git push -f --tags ${REMOTE_SSH} mambaru
     - doxygen
