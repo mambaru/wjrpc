@@ -104,8 +104,8 @@ devel-any:
 pre-release:
   stage: merge
   script:
-    #- git checkout -f ${CI_COMMIT_REF_NAME}
-    #- git pull
+    - git checkout -f ${CI_COMMIT_REF_NAME}
+    - git pull
     - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
   only:
     - devel
@@ -136,7 +136,8 @@ delete-branches:
 release:
   stage: publish
   script:
-    #- git checkout ${CI_COMMIT_REF_NAME}
+    - git checkout -f ${CI_COMMIT_REF_NAME}
+    - git pull
     - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:${RELEASE_BRANCH}
   only:
     - master
