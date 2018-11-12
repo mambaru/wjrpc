@@ -25,6 +25,11 @@ tests: 	external build
 clean:
 	rm -r docs
 	cd build && make clean
+update: external build
+	git submodule foreach git checkout master
+	git submodule foreach git pull origin master
+	cd build && cmake .. 
+	cmake --build ./build
 upgrade: 
 	rm -f upgrade.sh
 	wget http://github.lan/cpp/cmake-ci/raw/master/upgrade.sh
