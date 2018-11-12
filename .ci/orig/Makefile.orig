@@ -3,7 +3,9 @@ help:
 	@echo "	make help"
 	@echo "	make shared"
 	@echo "	make static"
+	@echo "	make tests"
 	@echo "	make doc"
+	@echo "	make update"
 	@echo "	make upgrade"
 doc:
 	rm -rf ./docs
@@ -22,6 +24,7 @@ shared: external build
 tests: 	external build
 	cd build && cmake .. -DBUILD_TESTING=ON 
 	cmake --build ./build 
+	cd build && ctest 
 clean:
 	rm -r docs
 	cd build && make clean
