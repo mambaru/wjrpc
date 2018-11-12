@@ -104,6 +104,7 @@ devel-any:
 pre-release:
   stage: merge
   script:
+    - git fetch origin pre-release
     - echo git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
     - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:refs/heads/pre-release
   only:
