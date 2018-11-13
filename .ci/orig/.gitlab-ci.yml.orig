@@ -10,7 +10,10 @@ variables:
 # wip-devel
 
 before_script:
-  - git submodule update --init
+  - git checkout -f ${CI_COMMIT_REF_NAME}
+  - git pull
+  - git submodule sync
+  - git submodule update --init --force
 
 stages:
   - build
@@ -104,7 +107,6 @@ devel-any:
 pre-release:
   stage: merge
   script:
-    - git checkout ${CI_COMMIT_REF_NAME}
     - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
   only:
     - devel
@@ -124,6 +126,13 @@ master-hotfix:
   only:
     - /^hotfix-.*$/
 
+release:
+  stage: merge
+  script:
+    - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:${RELEASE_BRANCH}
+  only:
+    - master
+
 delete-branches:
   stage: clean
   script:
@@ -131,14 +140,7 @@ delete-branches:
   only:
     - /^build.*$/
     - /^check.*$/
-    
-release:
-  stage: publish
-  script:
-    - git checkout ${CI_COMMIT_REF_NAME}
-    - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:${RELEASE_BRANCH}
-  only:
-    - master
+   
     
 push-to-github:
   stage: publish
@@ -147,6 +149,11 @@ push-to-github:
   script:
     - git branch -f mambaru
     - git checkout mambaru
+    - git submodule deinit -f .
+    - rm -rf .git/modules
+    - git rm -rf external 
+    - git submodule add --force https://github.com/mambaru/cmake-ci.git external/cmake-ci
+    - git commit -m "autocommit github.com export"
     - git push -f ${REMOTE_SSH} mambaru
     - git push -f --tags ${REMOTE_SSH} mambaru
     - doxygen

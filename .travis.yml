@@ -21,13 +21,10 @@ compiler:
 branches:
   only:
     - mambaru
+    - master
 
 script:
-  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
-  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
-  - mkdir build
-  - cd build
-  - echo "CMAKE_CXX_STANDARD=     $STANDARD"
-  - cmake .. -DBUILD_TESTING=ON -DPARANOID_WARNING=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_STANDARD=$STANDARD -DCMAKE_RULE_MESSAGES:BOOL=OFF -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCLANG_LIBPP="-stdlib=libc++"
-  - cmake --build .
-  - ctest --output-on-failure
+  - git submodule sync
+  - git submodule update --init --force
+  - bash .ci/build-and-test.sh g++ 11 Release
+  - bash .ci/build-and-test.sh clang++ 11 Release

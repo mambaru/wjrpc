@@ -1,6 +1,3 @@
-# copy this file to root project: cp external/cmake-ci/ci.cmake cmake/
-# include(cmake/ci.cmake)
-
 if ( CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR )
   set(STANDALONE ON)
 else()
