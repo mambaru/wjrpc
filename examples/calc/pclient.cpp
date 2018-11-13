@@ -19,7 +19,8 @@ void pclient::initialize(int rd, int wd)
   _impl->reg_io( io_id,  [rd, wd]( wjrpc::data_ptr d, wjrpc::io_id_t, wjrpc::output_handler_t handler)
   {
     LOG_WRITE(d->begin(), d->end() )
-    ::write( wd, d->data(), d->size() );
+    if ( -1 == ::write( wd, d->data(), d->size() ) )
+      return;
     char buff[1024];
     ssize_t s = ::read(rd, buff, 1024l);
     LOG_READ(buff, buff + s)

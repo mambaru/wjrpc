@@ -33,7 +33,8 @@ void pserver::run()
     _impl->perform_io( std::move(d), io_id, [this]( wjrpc::data_ptr d2 )
     {
       LOG_WRITE(d2->begin(), d2->end() )
-      ::write( this->_wd, d2->data(), d2->size());
+      if ( -1 == ::write( this->_wd, d2->data(), d2->size()) )
+        return;
     });
   }
 }
