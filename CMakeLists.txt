@@ -19,7 +19,7 @@ add_library(
 )
 
 if ( STANDALONE )
-  target_link_libraries(wjrpc ${WLOG_LIB} )
+  target_link_libraries(wjrpc wlog)
 endif()
 
 if ( BUILD_TESTING )

@@ -12,7 +12,7 @@ add_executable(
   test_jsonrpc.cpp
 )
 
-target_link_libraries(jsonrpc_test wjrpc wlog)
+target_link_libraries(jsonrpc_test wjrpc)
 
 
 add_test(NAME jsonrpc_test COMMAND jsonrpc_test WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
