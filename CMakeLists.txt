@@ -6,7 +6,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(ci)
 
 if ( STANDALONE )
-  list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/wfc/cmake)
   getlibs(faslib wjson wlog)
 endif()
 
@@ -19,7 +18,7 @@ add_library(
   wjrpc/incoming/send_error.cpp
 )
 
-if (NOT WJRPC_DISABLE_LOG)
+if ( STANDALONE )
   target_link_libraries(wjrpc ${WLOG_LIB} )
 endif()
 

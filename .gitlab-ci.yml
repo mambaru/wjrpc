@@ -149,7 +149,7 @@ push-to-github:
   script:
     - git branch -f mambaru
     - git checkout mambaru
-    - git submodule deinit -f
+    - git submodule deinit -f .
     - rm -rf .git/modules
     - git rm -f external 
     - git commit -m "autocommit github.com export"
