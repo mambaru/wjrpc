@@ -9,7 +9,6 @@ if ( STANDALONE )
   getlibs(faslib wjson wlog)
 endif()
 
-include_directories(.)
 add_library(
   wjrpc
   wjrpc/engine/call_map.cpp
@@ -18,12 +17,10 @@ add_library(
   wjrpc/incoming/send_error.cpp
 )
 
-if ( STANDALONE )
-  target_link_libraries(wjrpc wlog)
-endif()
-
 if ( BUILD_TESTING )
   enable_testing()
+  include_directories(.)
+  target_link_libraries(wjrpc wlog)
   add_subdirectory(tests)
   add_subdirectory(examples)
 endif()
