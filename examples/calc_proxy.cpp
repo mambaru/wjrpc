@@ -26,8 +26,10 @@ void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shar
   }
 
   int up[2], down[2];
-  ::pipe(up);
-  ::pipe(down);
+  if ( -1 == ::pipe(up) )
+    return;
+  if ( -1 == ::pipe(down)
+    return;
 
   auto cli = std::make_shared<pclient>();
   cli->initialize(down[0], up[1] );
@@ -80,8 +82,11 @@ std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int c
   else if ( mode==2 )
   {
     int up[2], down[2];
-    ::pipe(up);
-    ::pipe(down);
+    if ( -1 == ::pipe(up) )
+      return;
+    if ( -1 == ::pipe(down) )
+      return;
+    
     auto cli = std::make_shared<pclient>();
     // Так делать не надо
     static std::shared_ptr<pclient> main_client = cli;
