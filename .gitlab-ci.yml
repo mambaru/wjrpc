@@ -2,6 +2,7 @@ variables:
   RELEASE_BRANCH: 'release-0.7'
   PROJECT_SSH: "git@github.lan:${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}.git"
   REMOTE_SSH:  "git@github.com:mambaru/${CI_PROJECT_NAME}.git"
+  DEVEL_DENY: "false"
 
 # master
 # release-0.7
@@ -10,10 +11,11 @@ variables:
 # wip-devel
 
 before_script:
-  - git checkout --force ${CI_COMMIT_REF_NAME}
-  - git pull --force origin ${CI_COMMIT_REF_NAME}
+  - git checkout ${CI_COMMIT_REF_NAME}
+  - git pull ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}
+  - git submodule deinit --force .
   - git submodule sync
-  - git submodule update --init --force
+  - git submodule update --init
 
 stages:
   - build
@@ -22,6 +24,20 @@ stages:
   - publish
   - clean
   
+night-build:
+  stage: build
+  script:
+    - git pull origin devel
+    - git pull origin wip-devel
+    - git submodule foreach git pull origin master
+    - git add .
+    - if git commit -am "night build all submodules update autocommit"; then
+    -   echo "Submodules Update Succeed!!"
+    -   git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:wip-devel
+    - fi
+  only:
+    - night-build
+
 main-build:
   stage: build
   script:
@@ -76,6 +92,10 @@ build-clang++14:
     - /^build.*$/
     - pre-release
 
+#
+# ###########################################
+# 
+
 cppcheck:
   stage: check
   script:
@@ -93,20 +113,29 @@ cppcheck:
 devel-wip:
   stage: merge
   script:
-    - HOST=${CI_PROJECT_URL}  CI_PROJECT_ID=${CI_PROJECT_ID} GITLAB_USER_ID=${GITLAB_USER_ID} PRIVATE_TOKEN=${PRIVATE_TOKEN} ./.ci/automr.sh devel false
+    - export HOST=${CI_PROJECT_URL}  
+    - export CI_PROJECT_ID=${CI_PROJECT_ID} 
+    - export GITLAB_USER_ID=${GITLAB_USER_ID} 
+    - export PRIVATE_TOKEN=${PRIVATE_TOKEN} 
+    - ./.ci/automr.sh devel false
   only:
     - wip-devel
 
 devel-any:
   stage: merge
   script:
-    - HOST=${CI_PROJECT_URL}  CI_PROJECT_ID=${CI_PROJECT_ID} GITLAB_USER_ID=${GITLAB_USER_ID} PRIVATE_TOKEN=${PRIVATE_TOKEN} ./.ci/automr.sh devel true
+    - export HOST=${CI_PROJECT_URL}  
+    - export CI_PROJECT_ID=${CI_PROJECT_ID} 
+    - export GITLAB_USER_ID=${GITLAB_USER_ID} 
+    - export PRIVATE_TOKEN=${PRIVATE_TOKEN} 
+    - ./.ci/automr.sh devel true
   only:
     - /^devel-.*$/
     
 pre-release:
   stage: merge
   script:
+    - echo git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
     - git push ${PROJECT_SSH} ${CI_COMMIT_REF_NAME}:pre-release
   only:
     - devel
@@ -114,14 +143,22 @@ pre-release:
 master-release:
   stage: merge
   script:
-    - HOST=${CI_PROJECT_URL}  CI_PROJECT_ID=${CI_PROJECT_ID} GITLAB_USER_ID=${GITLAB_USER_ID} PRIVATE_TOKEN=${PRIVATE_TOKEN} ./.ci/automr.sh master false
+    - export HOST=${CI_PROJECT_URL} 
+    - export CI_PROJECT_ID=${CI_PROJECT_ID} 
+    - export GITLAB_USER_ID=${GITLAB_USER_ID} 
+    - export PRIVATE_TOKEN=${PRIVATE_TOKEN} 
+    - ./.ci/automr.sh master false
   only:
     - pre-release
 
 master-hotfix:
   stage: merge
   script:
-    - HOST=${CI_PROJECT_URL}  CI_PROJECT_ID=${CI_PROJECT_ID} GITLAB_USER_ID=${GITLAB_USER_ID} PRIVATE_TOKEN=${PRIVATE_TOKEN} ./.ci/automr.sh master true
+    - export HOST=${CI_PROJECT_URL}  
+    - export CI_PROJECT_ID=${CI_PROJECT_ID} 
+    - export GITLAB_USER_ID=${GITLAB_USER_ID} 
+    - export PRIVATE_TOKEN=${PRIVATE_TOKEN} 
+    - ./.ci/automr.sh master true
   only:
     - /^hotfix-.*$/
 
@@ -139,7 +176,6 @@ delete-branches:
   only:
     - /^build.*$/
     - /^check.*$/
-   
     
 push-to-github:
   stage: publish
