@@ -1,0 +1,62 @@
+{
+  /* Open source проект (публикация на github.com) */
+  "public":false,
+  "tag":"0.7.1",
+  /* Текущий релиз бранч  */
+  "release":"release-0.7",
+  
+  "build_threads": 4,
+
+  /* Сборка и тестирование*/
+  "build-and-test":{
+    "Release":true,
+    "Debug":true,
+    "RelWithDebInfo":false,
+    "g++":{
+      "98":false,
+      "11":true,
+      "14":true,
+      "17":false
+    },
+    "clang++":{
+      "98":false,
+      "11":true,
+      "14":true,
+      "17":false
+    }
+  },
+  /* Следующие опции работают только для финальной сборки демонов для деплоя */
+  "deploy": 
+  {
+    "standard":11,
+    "compiler":"g++",
+    
+    "Release":{
+      "static":true,
+      "shared":true,
+      
+      "production":true,
+      "loads":true,
+      "stress":true,
+      "devel":true
+    },
+    "RelWithDebInfo":{
+      "static":true,
+      "shared":true,
+      
+      "production":true,
+      "loads":true,
+      "stress":true,
+      "devel":true
+    },
+    "Debug":{
+      "static":true,
+      "shared":true,
+      
+      "production":true,
+      "loads":true,
+      "stress":true,
+      "devel":true
+    }
+  }
+}
