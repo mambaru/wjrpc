@@ -135,7 +135,6 @@ struct method_list: wjrpc::method_list
 
 struct handler: ::wjrpc::handler<method_list> {};
 
-
 UNIT(engine1, "")
 {
   using namespace ::fas::testing;
