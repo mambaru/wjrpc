@@ -253,20 +253,6 @@ public:
     return create_schema<Schema>(params);
   }
   
-  /*
-  template<typename Schema>
-  static Schema generate_schema()
-  {
-    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
-    typedef typename invoker_advice::params_type params_type;
-    typedef typename invoker_advice::result_type result_type;
-    typedef typename invoker_advice::error_type error_type;
-    params_type params = self::template create_value<params_type>();
-    result_type result = self::template create_value<result_type>();
-    error_type  error = self::template create_value<error_type>();
-    return create_schema<Schema>(params, result, error);
-  }*/
-  
   template<typename V>
   static V create_value()
   {
