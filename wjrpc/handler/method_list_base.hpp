@@ -197,9 +197,9 @@ public:
   template<typename Schema>
   static std::vector<Schema> create_schema()
   {
-    typedef typename super::aspect::template select_group<_method_>::type method_list;
+    typedef typename super::aspect::template select_group<_method_>::type method_tag_list_t;
     std::vector<Schema> sch_list;
-    create_schema_(&sch_list, method_list());
+    create_schema_(&sch_list, method_tag_list_t());
     return sch_list;
   }
   
