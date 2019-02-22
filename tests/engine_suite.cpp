@@ -1,6 +1,7 @@
 #include <wjrpc/handler.hpp>
 #include <wjrpc/engine.hpp>
 #include <wjrpc/method.hpp>
+#include <wjson/_json.hpp>
 #include <fas/testing.hpp>
 
 #include <algorithm>
@@ -21,7 +22,16 @@ struct base
 };
 
 struct plus: base<plus> {};
-struct munus: base<munus> {};
+struct minus: base<minus> 
+{
+   minus create_schema()
+  {
+    minus m;
+    m.first = 11;
+    m.second = 22;
+    return m;
+  }
+};
 
 /// -------------------
 template<typename T>
@@ -42,7 +52,7 @@ struct T_json
 };
 
 struct plus_json: T_json<plus> {};
-struct munus_json: T_json<munus> {};
+struct minus_json: T_json<minus> {};
 
 }
 
@@ -57,7 +67,7 @@ struct base
 };
 
 struct plus: base<plus> {};
-struct munus: base<munus> {};
+struct minus: base<minus> {};
 
 /// -------------------
 
@@ -77,7 +87,7 @@ struct T_json
 };
 
 struct plus_json: T_json<plus> {};
-struct munus_json: T_json<munus> {};
+struct minus_json: T_json<minus> {};
 
 }
 
@@ -85,7 +95,7 @@ struct icalc
 {
   virtual ~icalc() {}
   virtual void plus( request::plus::ptr req, response::plus::callback cb) = 0;
-  virtual void minus( request::plus::ptr req, response::plus::callback cb) = 0;
+  virtual void minus( request::minus::ptr req, response::minus::callback cb) = 0;
 };
 
 class calc
@@ -102,10 +112,10 @@ public:
 
     auto res = std::make_unique<response::plus>();
     res->value = req->first + req->second;
-    cb( std::make_unique<response::plus>() );
+    cb( std::move(res) );
   }
 
-  virtual void minus( request::plus::ptr , response::plus::callback cb)
+  virtual void minus( request::minus::ptr , response::minus::callback cb)
   {
     if ( cb == nullptr )
       return;
@@ -119,7 +129,8 @@ JSONRPC_TAG(minus)
 struct method_list: wjrpc::method_list
 <
   wjrpc::target<icalc>,
-  wjrpc::invoke_method<_plus_, request::plus_json, response::plus_json, icalc, &icalc::plus>
+  wjrpc::invoke_method<_plus_, request::plus_json, response::plus_json, icalc, &icalc::plus>,
+  wjrpc::invoke_method<_minus_, request::minus_json, response::minus_json, icalc, &icalc::minus>
 >{};
 
 struct handler: ::wjrpc::handler<method_list> {};
@@ -129,6 +140,7 @@ UNIT(engine1, "")
 {
   using namespace ::fas::testing;
   using namespace ::wjrpc;
+  using namespace wjson::literals;
   typedef ::wjrpc::engine< handler > engine_type;
   //typedef std::shared_ptr<engine_type> engine_ptr;
   engine_type::options_type opt;
@@ -140,13 +152,19 @@ UNIT(engine1, "")
   };*/
   auto e = std::make_shared<engine_type>();
   e->start(opt, 1);
-  std::string sreq = "{\"method\":\"test1\",\"params\":{\"first\":2, \"first\":3},\"id\":1}";
+  std::string sreq = "{\"method\":\"plus\",\"params\":{\"first\":2, \"second\":3},\"id\":1}";
   e->perform_io( std::make_unique<data_type>(sreq.begin(), sreq.end()), 1, [&t](data_ptr d) 
   {
     using namespace ::fas::testing;
-    t << message("responce: ") << std::string( d->begin(), d->end() );
+    std::string ress( d->begin(), d->end() );
+    t << message("responce: ") << ress;
+    t << equal<expect, std::string>( ress, "{'jsonrpc':'2.0','result':{'value':5},'id':1}"_json);
   });
   
+  auto schl = e->create_schema();
+  std::string sch_json;
+  decltype(schl)::value_type::json::list::serializer()(schl, std::back_inserter(sch_json) );
+  t << equal<expect, std::string>( sch_json, "[{'name':'plus','params':{'first':0,'second':0},'result':{'value':0},'error':{'code':0,'message':'No error'}},{'name':'minus','params':{'first':11,'second':22},'result':{'value':0},'error':{'code':0,'message':'No error'}}]"_json);
   t << nothing;
 }
 

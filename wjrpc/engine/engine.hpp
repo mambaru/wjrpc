@@ -7,6 +7,7 @@
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/outgoing/outgoing_error.hpp>
 #include <wjrpc/outgoing/outgoing_error_json.hpp>
+#include <wjrpc/method/default_schema.hpp>
 #include <wjrpc/errors/error_json.hpp>
 #include <wjrpc/types.hpp>
 #include <wjrpc/incoming/send_error.hpp>
@@ -213,6 +214,17 @@ public:
     si.result_queue = cmi.second;
     si.handler_map = _handler_map.size();
     return si;
+  }
+  
+  template<typename Schema>
+  static std::vector<Schema> create_schema_t()
+  {
+    return handler_type::template create_schema<Schema>();
+  }
+
+  static std::vector<default_schema> create_schema()
+  {
+    return create_schema_t<default_schema>();
   }
 
 private:

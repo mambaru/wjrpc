@@ -10,9 +10,31 @@
 #include <wjrpc/logger.hpp>
 #include <fas/aop.hpp>
 #include <memory>
+#include <string>
+
+#define FAS_HAS_MEMBER_FUNCTION0P(N, D)\
+namespace N##_detail{\
+template < typename T, typename R, R (T::*)() > struct op_mf {}; \
+struct N##_helper {\
+  typedef char small_type;\
+  typedef struct big_tag { char dummy[2];} big_type;\
+  template<typename P, typename R>\
+  static small_type test(op_mf<P, R, &P::D>*);\
+  template<typename P, typename R>\
+  static big_type test(...);\
+}; \
+} \
+template<typename T, typename R>\
+struct N\
+{\
+  typedef N##_detail::N##_helper helper; \
+  enum { value = sizeof( helper::test<T, R>(0) ) == sizeof(helper::small_type) };\
+};
+
+FAS_HAS_MEMBER_FUNCTION0P(has_schema_creator, create_schema)
 
 namespace wjrpc{
-  
+
 template< 
   typename A = fas::aspect<>, 
   template<typename> class AspectClass = fas::aspect_class 
@@ -24,11 +46,8 @@ public:
   typedef method_base<A> self;
   typedef AspectClass<A> super;
 
-  
-  // TODO: в _method_types_;
   typedef ::wjrpc::data_type data_type;
   typedef ::wjrpc::data_ptr  data_ptr;
-
   
   typedef fas::metalist::advice metatype;
   typedef typename super::aspect::template advice_cast<_name_>::type::name_type tag;
@@ -132,7 +151,6 @@ public:
                 std::move(holder), 
                 std::move(callback) 
               );
-
   }
   
   /// ///////////////////////////////////////////////////
@@ -153,7 +171,6 @@ public:
                 std::move(result), 
                 std::move(outgoing_handler) 
             );
-
   }
   
   /// ///////////////////////////////////////////////////
@@ -176,6 +193,94 @@ public:
             );
 
   }
+
+  
+  /// ///////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////
+
+  template<
+    typename Schema, // method_schema
+    typename Params, 
+    typename Result,  
+    typename Error
+  >
+  static Schema create_schema(const Params& params, const Result& result, const Error& error)
+  {
+    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
+    typedef typename super::aspect::template advice_cast<_name_>::type name_advice;
+     
+    Schema sch;
+    const char* n = name_advice()();
+    std::copy(n, n + std::strlen(n), std::back_inserter(sch.name) );
+    invoker_advice::serialize_params(params, std::back_inserter(sch.params));
+    invoker_advice::serialize_result(result, std::back_inserter(sch.result));
+    invoker_advice::serialize_error(error, std::back_inserter(sch.error));
+    return sch;
+  }
+  
+  template<
+    typename Schema,
+    typename Params, 
+    typename Result
+  >
+  static Schema create_schema(const Params& params, const Result& result)
+  {
+    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
+    typedef typename invoker_advice::error_type error_type;
+    error_type error = self::template create_value<error_type>();
+    return create_schema<Schema>(params, result, error);
+  }
+
+  template<
+    typename Schema, 
+    typename Params
+  >
+  static Schema create_schema(const Params& params)
+  {
+    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
+    typedef typename invoker_advice::result_type result_type;
+    result_type result = self::template create_value<result_type>();
+    return create_schema<Schema>(params, result);
+  }
+
+  template<typename Schema>
+  static Schema create_schema()
+  {
+    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
+    typedef typename invoker_advice::params_type params_type;
+    params_type params = self::template create_value<params_type>();
+    return create_schema<Schema>(params);
+  }
+  
+  /*
+  template<typename Schema>
+  static Schema generate_schema()
+  {
+    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
+    typedef typename invoker_advice::params_type params_type;
+    typedef typename invoker_advice::result_type result_type;
+    typedef typename invoker_advice::error_type error_type;
+    params_type params = self::template create_value<params_type>();
+    result_type result = self::template create_value<result_type>();
+    error_type  error = self::template create_value<error_type>();
+    return create_schema<Schema>(params, result, error);
+  }*/
+  
+  template<typename V>
+  static V create_value()
+  {
+    V value = V();
+    generate_value_(&value, fas::bool_<has_schema_creator<V, V>::value>() );
+    return value;
+  }
+
+private:
+  template<typename V>
+  static void generate_value_(V*, fas::false_) { }
+
+  template<typename V>
+  static void generate_value_(V* value, fas::true_){ *value = V().create_schema(); }
 };
 
 }

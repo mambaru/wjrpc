@@ -193,8 +193,34 @@ public:
       WJRPC_LOG_FATAL(" (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
     }
   }
-
+  
+  template<typename Schema>
+  static std::vector<Schema> create_schema()
+  {
+    typedef typename super::aspect::template select_group<_method_>::type method_list;
+    std::vector<Schema> sch_list;
+    create_schema_(&sch_list, method_list());
+    return sch_list;
+  }
+  
 private:
+
+  template<typename Schema, typename L, typename R>
+  static void create_schema_(std::vector<Schema>* sch_list, fas::type_list<L, R>)
+  {
+    typedef L head_tag;
+    typedef R tail_type;
+    typedef typename super::aspect::template advice_cast<head_tag>::type method_type;
+    sch_list->push_back( method_type::template create_schema<Schema>() );
+    create_schema_(sch_list, tail_type() );
+  }
+
+  template<typename Schema>
+  static void create_schema_(std::vector<Schema>*,  fas::empty_list)
+  {
+  }
+  
+  
 
   template<typename Tg>
   static inline void response_handler(

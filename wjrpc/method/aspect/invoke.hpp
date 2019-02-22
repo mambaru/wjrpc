@@ -95,6 +95,25 @@ struct invoke: Handler
       );
     }
   }
+  
+  template <typename OItr>
+  static OItr serialize_params(const params_type& params, OItr oitr )
+  {
+    return typename params_json_t::serializer()(params, oitr);
+  }
+  
+  template <typename OItr>
+  static OItr serialize_result(const result_type& result, OItr oitr )
+  {
+    return typename result_json_t::serializer()(result, oitr);
+  }
+
+  template <typename OItr>
+  static OItr serialize_error(const error_type& error, OItr oitr )
+  {
+    return typename error_json_t::serializer()(error, oitr);
+  }
+  
 };
 
 

@@ -1,5 +1,6 @@
 #include <wjrpc/handler.hpp>
 #include <wjrpc/method.hpp>
+#include <wjrpc/method/default_schema.hpp>
 
 #include <fas/testing.hpp>
 #include "req.hpp"
@@ -106,18 +107,19 @@ UNIT(handler1_unit, "")
   using namespace fas::testing;
   using namespace ::wjrpc;
 
-   std::string unavailable = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32003,\"message\":\"Service Unavailable.\"},\"id\":1}";
+   std::string unavailable = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32003,\"message\":\"Service unavailable\"},\"id\":1}";
   
   test_count = 0;
   handler1 h;
-  for (auto r: good_request)
+  auto r = good_request[0];
   {
     auto req = std::make_unique< data_type>( r[0].begin(), r[0].end() );
     incoming_holder hold( std::move(req) );
     hold.parse(nullptr);
     
-    h.invoke(std::move(hold), [&t, unavailable, r](data_ptr res)
+    h.invoke(std::move(hold), [&t, unavailable, r](outgoing_holder holder)
     {
+      data_ptr res = holder.detach();
       t << message("request: ") << r[0];
       t << message("response: ") << std::string(res->begin(), res->end());
       if ( std::string(res->begin(), res->end()) != unavailable )
@@ -127,6 +129,35 @@ UNIT(handler1_unit, "")
       ++test_count;
     });
   }
+}
+
+UNIT(gen1, "")
+{
+  using namespace fas::testing;
+  
+  typedef method_list::aspect::template advice_cast<_method1_>::type method1_t;
+  typedef method1_t::aspect::template advice_cast< wjrpc::_invoke_>::type::params_json_t request1_json;
+  
+  typedef request1_json::target value_type;
+  value_type val;
+  val.push_back(1);
+  val.push_back(2);
+  std::string json;
+  request1_json::serializer()(val, std::back_inserter(json) );
+  t << equal<expect, std::string>(json, "[1,2]") << FAS_FL;
+  
+  auto sch = method1_t::create_schema<wjrpc::default_schema>();
+  
+  typedef std::vector<wjrpc::default_schema> schema_list_t;
+  schema_list_t schl = method_list::create_schema<wjrpc::default_schema>();
+  t << equal<assert, size_t>(schl.size(), 2) << FAS_FL;
+  t << flush;
+  t << equal<assert, std::string>(schl[0].name, "method1") << FAS_FL;
+  t << equal<assert, std::string>(schl[0].params, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[0].result, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].name, "method2") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].params, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].result, "[]") << FAS_FL;
 }
 
 UNIT(handler2_unit, "")
@@ -218,6 +249,8 @@ UNIT(handler4_unit, "")
 
 BEGIN_SUITE(handler_suite, "")
   ADD_UNIT(nohandler_unit)
+  ADD_UNIT(handler1_unit)
+  ADD_UNIT(gen1)
   ADD_UNIT(handler2_unit)
   ADD_UNIT(handler4_unit)
 END_SUITE(handler_suite)
