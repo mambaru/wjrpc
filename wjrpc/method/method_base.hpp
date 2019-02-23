@@ -199,23 +199,35 @@ public:
   /// ///////////////////////////////////////////////////
   /// ///////////////////////////////////////////////////
 
+  // Сначала проверяем _call_, т.к. на _invoke_ по умолчанию стоит заглушка "method not impl" 
+  typedef typename fas::if_c<
+    super::aspect::template has_advice<_call_>::value,
+    _call_,
+    _invoke_
+  >::type schema_tag;
+  
+  typedef typename super::aspect::template advice_cast<schema_tag>::type schema_advice;
+  
   template<
-    typename Schema, // method_schema
+    typename Schema, // default_schema
     typename Params, 
     typename Result,  
     typename Error
   >
   static Schema create_schema(const Params& params, const Result& result, const Error& error)
   {
-    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
+    typedef typename schema_advice::params_json_t::serializer params_serializer;
+    typedef typename schema_advice::result_json_t::serializer result_serializer;
+    typedef typename schema_advice::error_json_t::serializer  error_serializer; 
+    
     typedef typename super::aspect::template advice_cast<_name_>::type name_advice;
      
     Schema sch;
     const char* n = name_advice()();
     std::copy(n, n + std::strlen(n), std::back_inserter(sch.name) );
-    invoker_advice::serialize_params(params, std::back_inserter(sch.params));
-    invoker_advice::serialize_result(result, std::back_inserter(sch.result));
-    invoker_advice::serialize_error(error, std::back_inserter(sch.error));
+    params_serializer()(params, std::back_inserter(sch.params));
+    result_serializer()(result, std::back_inserter(sch.result));
+    error_serializer()(error, std::back_inserter(sch.error));
     return sch;
   }
   
@@ -226,8 +238,7 @@ public:
   >
   static Schema create_schema(const Params& params, const Result& result)
   {
-    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
-    typedef typename invoker_advice::error_type error_type;
+    typedef typename schema_advice::error_type error_type;
     error_type error = self::template create_value<error_type>();
     return create_schema<Schema>(params, result, error);
   }
@@ -238,8 +249,7 @@ public:
   >
   static Schema create_schema(const Params& params)
   {
-    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
-    typedef typename invoker_advice::result_type result_type;
+    typedef typename schema_advice::result_type result_type;
     result_type result = self::template create_value<result_type>();
     return create_schema<Schema>(params, result);
   }
@@ -247,8 +257,7 @@ public:
   template<typename Schema>
   static Schema create_schema()
   {
-    typedef typename super::aspect::template advice_cast<_invoke_>::type invoker_advice;
-    typedef typename invoker_advice::params_type params_type;
+    typedef typename schema_advice::params_type params_type;
     params_type params = self::template create_value<params_type>();
     return create_schema<Schema>(params);
   }

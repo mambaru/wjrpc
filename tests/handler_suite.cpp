@@ -246,6 +246,75 @@ UNIT(handler4_unit, "")
   t << nothing;
 }
 
+UNIT(gen2, "")
+{
+  using namespace fas::testing;
+  
+  typedef method_list2::aspect::template advice_cast<_method1_>::type method1_t;
+  typedef method1_t::aspect::template advice_cast< wjrpc::_invoke_>::type::params_json_t request1_json;
+  
+  typedef request1_json::target value_type;
+  value_type val;
+  val.push_back(1);
+  val.push_back(2);
+  std::string json;
+  request1_json::serializer()(val, std::back_inserter(json) );
+  t << equal<expect, std::string>(json, "[1,2]") << FAS_FL;
+  
+  auto sch = method1_t::create_schema<wjrpc::default_schema>();
+  
+  typedef std::vector<wjrpc::default_schema> schema_list_t;
+  schema_list_t schl = method_list::create_schema<wjrpc::default_schema>();
+  t << equal<assert, size_t>(schl.size(), 2) << FAS_FL;
+  t << flush;
+  t << equal<assert, std::string>(schl[0].name, "method1") << FAS_FL;
+  t << equal<assert, std::string>(schl[0].params, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[0].result, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].name, "method2") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].params, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].result, "[]") << FAS_FL;
+}
+
+struct method_list3: wjrpc::method_list
+<
+  wjrpc::interface_<itest1>,
+  wjrpc::call_method< _method1_, test1_json,      test1_json>,
+  wjrpc::call_method< _method2_, test1_json,      test1_json>
+>
+{
+  virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
+  {
+    this->call<_method1_>(std::move(req), std::move(callback), nullptr);
+  }
+
+  virtual void method2(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
+  {
+    this->call<_method2_>(std::move(req), std::move(callback), nullptr);
+  }
+};
+
+typedef wjrpc::handler<method_list3> handler3;
+
+UNIT(gen3, "")
+{
+  using namespace fas::testing;
+  
+  typedef method_list3::aspect::template advice_cast<_method1_>::type method1_t;
+  auto sch = method1_t::create_schema<wjrpc::default_schema>();
+  
+  typedef std::vector<wjrpc::default_schema> schema_list_t;
+  schema_list_t schl = method_list::create_schema<wjrpc::default_schema>();
+  t << equal<assert, size_t>(schl.size(), 2) << FAS_FL;
+  t << flush;
+  t << equal<assert, std::string>(schl[0].name, "method1") << FAS_FL;
+  t << equal<assert, std::string>(schl[0].params, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[0].result, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].name, "method2") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].params, "[]") << FAS_FL;
+  t << equal<assert, std::string>(schl[1].result, "[]") << FAS_FL;
+}
+
+
 
 BEGIN_SUITE(handler_suite, "")
   ADD_UNIT(nohandler_unit)
@@ -253,4 +322,6 @@ BEGIN_SUITE(handler_suite, "")
   ADD_UNIT(gen1)
   ADD_UNIT(handler2_unit)
   ADD_UNIT(handler4_unit)
+  ADD_UNIT(gen2)
+  ADD_UNIT(gen3)
 END_SUITE(handler_suite)
