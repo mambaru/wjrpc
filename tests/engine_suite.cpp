@@ -24,7 +24,7 @@ struct base
 struct plus: base<plus> {};
 struct minus: base<minus> 
 {
-   minus create_schema()
+  static minus create_schema()
   {
     minus m;
     m.first = 11;
