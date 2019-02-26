@@ -14,7 +14,7 @@
 
 #define FAS_HAS_MEMBER_FUNCTION0P(N, D)\
 namespace N##_detail{\
-template < typename T, typename R, R (T::*)() > struct op_mf {}; \
+template < typename T, typename R, R(*)() > struct op_mf {}; \
 struct N##_helper {\
   typedef char small_type;\
   typedef struct big_tag { char dummy[2];} big_type;\
