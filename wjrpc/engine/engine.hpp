@@ -219,7 +219,7 @@ public:
   template<typename Schema>
   static std::vector<Schema> create_schema_t()
   {
-    return handler_type::template create_schema<Schema>();
+    return handler_type::template create_schema_t<Schema>();
   }
 
   static std::vector<default_schema> create_schema()
