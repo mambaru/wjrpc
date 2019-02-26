@@ -146,10 +146,10 @@ UNIT(gen1, "")
   request1_json::serializer()(val, std::back_inserter(json) );
   t << equal<expect, std::string>(json, "[1,2]") << FAS_FL;
   
-  auto sch = method1_t::create_schema<wjrpc::default_schema>();
+  auto sch = method1_t::create_schema_t<wjrpc::default_schema>();
   
   typedef std::vector<wjrpc::default_schema> schema_list_t;
-  schema_list_t schl = method_list::create_schema<wjrpc::default_schema>();
+  schema_list_t schl = method_list::create_schema_t<wjrpc::default_schema>();
   t << equal<assert, size_t>(schl.size(), 2) << FAS_FL;
   t << flush;
   t << equal<assert, std::string>(schl[0].name, "method1") << FAS_FL;
@@ -261,10 +261,10 @@ UNIT(gen2, "")
   request1_json::serializer()(val, std::back_inserter(json) );
   t << equal<expect, std::string>(json, "[1,2]") << FAS_FL;
   
-  auto sch = method1_t::create_schema<wjrpc::default_schema>();
+  auto sch = method1_t::create_schema_t<wjrpc::default_schema>();
   
   typedef std::vector<wjrpc::default_schema> schema_list_t;
-  schema_list_t schl = method_list::create_schema<wjrpc::default_schema>();
+  schema_list_t schl = method_list::create_schema_t<wjrpc::default_schema>();
   t << equal<assert, size_t>(schl.size(), 2) << FAS_FL;
   t << flush;
   t << equal<assert, std::string>(schl[0].name, "method1") << FAS_FL;
@@ -300,10 +300,10 @@ UNIT(gen3, "")
   using namespace fas::testing;
   
   typedef method_list3::aspect::template advice_cast<_method1_>::type method1_t;
-  auto sch = method1_t::create_schema<wjrpc::default_schema>();
+  auto sch = method1_t::create_schema_t<wjrpc::default_schema>();
   
   typedef std::vector<wjrpc::default_schema> schema_list_t;
-  schema_list_t schl = method_list::create_schema<wjrpc::default_schema>();
+  schema_list_t schl = method_list::create_schema_t<wjrpc::default_schema>();
   t << equal<assert, size_t>(schl.size(), 2) << FAS_FL;
   t << flush;
   t << equal<assert, std::string>(schl[0].name, "method1") << FAS_FL;
