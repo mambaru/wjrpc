@@ -8,6 +8,7 @@
 
 #include <wjrpc/handler/aspect/tags.hpp>
 #include <wjrpc/handler/handler_options.hpp>
+#include <wjrpc/method/default_schema.hpp>
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/logger.hpp>
 #include <fas/aop.hpp>
@@ -195,12 +196,19 @@ public:
   }
   
   template<typename Schema>
-  static std::vector<Schema> create_schema()
+  static std::vector<Schema> create_schema_t()
   {
     typedef typename super::aspect::template select_group<_method_>::type method_tag_list_t;
     std::vector<Schema> sch_list;
     create_schema_(&sch_list, method_tag_list_t());
     return sch_list;
+  }
+
+  typedef std::vector<default_schema> schema_list_t;
+  
+  static schema_list_t create_schema()
+  {
+    return create_schema_t<default_schema>();
   }
   
 private:
@@ -211,7 +219,7 @@ private:
     typedef L head_tag;
     typedef R tail_type;
     typedef typename super::aspect::template advice_cast<head_tag>::type method_type;
-    sch_list->push_back( method_type::template create_schema<Schema>() );
+    sch_list->push_back( method_type::template create_schema_t<Schema>() );
     create_schema_(sch_list, tail_type() );
   }
 

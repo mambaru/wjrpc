@@ -214,7 +214,7 @@ public:
     typename Result,  
     typename Error
   >
-  static Schema create_schema(const Params& params, const Result& result, const Error& error)
+  static Schema create_schema_t(const Params& params, const Result& result, const Error& error)
   {
     typedef typename schema_advice::params_json_t::serializer params_serializer;
     typedef typename schema_advice::result_json_t::serializer result_serializer;
@@ -236,30 +236,30 @@ public:
     typename Params, 
     typename Result
   >
-  static Schema create_schema(const Params& params, const Result& result)
+  static Schema create_schema_t(const Params& params, const Result& result)
   {
     typedef typename schema_advice::error_type error_type;
     error_type error = self::template create_value<error_type>();
-    return create_schema<Schema>(params, result, error);
+    return create_schema_t<Schema>(params, result, error);
   }
 
   template<
     typename Schema, 
     typename Params
   >
-  static Schema create_schema(const Params& params)
+  static Schema create_schema_t(const Params& params)
   {
     typedef typename schema_advice::result_type result_type;
     result_type result = self::template create_value<result_type>();
-    return create_schema<Schema>(params, result);
+    return create_schema_t<Schema>(params, result);
   }
 
   template<typename Schema>
-  static Schema create_schema()
+  static Schema create_schema_t()
   {
     typedef typename schema_advice::params_type params_type;
     params_type params = self::template create_value<params_type>();
-    return create_schema<Schema>(params);
+    return create_schema_t<Schema>(params);
   }
   
   template<typename V>
