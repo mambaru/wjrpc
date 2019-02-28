@@ -65,7 +65,7 @@ struct mem_fun_handler2
         std::move(req), 
         mem_fun_make_callback( std::move(cb)),
         t.get_id(),
-        [pthis, this](request2_ptr req2, std::function< void(responce2_ptr) > callback)
+        [pthis](request2_ptr req2, std::function< void(responce2_ptr) > callback)
         {
           if (callback == nullptr)
           {
