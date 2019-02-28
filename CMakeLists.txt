@@ -5,9 +5,8 @@ project(wjrpc)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(ci)
 
-if ( STANDALONE )
-  getlibs(faslib wjson wlog)
-endif()
+rootlibs(faslib wjson wlog)
+
 
 include_directories(.)
 add_library(
@@ -20,7 +19,6 @@ add_library(
 
 if ( BUILD_TESTING )
   enable_testing()
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UNIT_TEST_BIN_OUTPUT_DIR})                                                                                                                 
   target_link_libraries(wjrpc wlog)
   add_subdirectory(tests)
   add_subdirectory(examples)

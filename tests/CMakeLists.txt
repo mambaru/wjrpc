@@ -1,3 +1,4 @@
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UNIT_TEST_BIN_OUTPUT_DIR})                                                                                                                 
 
 add_executable(benchmark1 benchmark.cpp)
 
@@ -15,5 +16,10 @@ add_executable(
 target_link_libraries(jsonrpc_test wjrpc)
 
 
-add_test(NAME jsonrpc_test COMMAND jsonrpc_test WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
-add_test(NAME jsonrpc_test-memcheck COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/memcheck.sh ${CMAKE_CURRENT_BINARY_DIR}/jsonrpc_test WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
+add_test(NAME jsonrpc_test 
+        COMMAND jsonrpc_test 
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
+
+add_test(NAME jsonrpc_test-memcheck 
+        COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/memcheck.sh ${CMAKE_CURRENT_BINARY_DIR}/jsonrpc_test 
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
