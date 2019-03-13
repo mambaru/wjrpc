@@ -2,11 +2,9 @@ cmake_minimum_required(VERSION 3.1)
 
 project(wjrpc)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-include(ci)
+include(cmake/ci.cmake)
 
 rootlibs(faslib wjson wlog)
-
 
 include_directories(.)
 add_library(
@@ -21,7 +19,9 @@ if ( BUILD_TESTING )
   enable_testing()
   target_link_libraries(wjrpc wlog)
   add_subdirectory(tests)
-  add_subdirectory(examples)
+  if ( WITH_SAMPLES )
+    add_subdirectory(examples)
+  endif()
 endif()
 
 set(CPACK_PACKAGE_NAME "wjrpc")
