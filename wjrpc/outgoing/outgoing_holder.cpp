@@ -130,6 +130,7 @@ void outgoing_holder::result_handler(result_handler_t handler)
 outgoing_holder outgoing_holder::clone() const
 {
   outgoing_holder holder = this->clone(0);
+  holder._request_serializer = nullptr;
   holder._result_handler = nullptr;
   /*
   holder._name = this->_name;
