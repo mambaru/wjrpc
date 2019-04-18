@@ -7,6 +7,7 @@
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/outgoing/outgoing_request_json.hpp>
 #include <wjrpc/incoming/incoming_holder.hpp>
+#include <wjrpc/logger.hpp>
 #include <wjrpc/basic_types.hpp>
 #include <wjrpc/memory.hpp>
 
@@ -81,14 +82,17 @@ data_ptr outgoing_holder::detach()
     // Отложенная сериализация
     if ( _request_serializer != nullptr )
     {
+      WJRPC_LOG_MESSAGE("outgoing_holder::detach() _request_serializer ")
       return _request_serializer(_name, _call_id);
     }
     else if ( _notify_serializer != nullptr )
     {
+      WJRPC_LOG_MESSAGE("outgoing_holder::detach() _notify_serializer ")
       return _notify_serializer(_name);
     }
     else if ( _basic_serializer != nullptr )
     {
+      WJRPC_LOG_MESSAGE("outgoing_holder::detach() _basic_serializer ")
       return _basic_serializer();
     }
   }
@@ -97,6 +101,7 @@ data_ptr outgoing_holder::detach()
     // Параметры или результат уже сериализованны
     if ( this->is_request() )
     {
+      WJRPC_LOG_MESSAGE("outgoing_holder::detach() this->is_request() ")
       auto result = std::make_unique<data_type>();
       result->reserve(_data->size() + 50);
       outgoing_request<data_type> request;
