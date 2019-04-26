@@ -18,13 +18,13 @@ struct ad_invoke_error
     typename Error, 
     typename OutgoingHandler
   >
-  void operator()(T&, Holder holder, Error e, OutgoingHandler handler)
+  void operator()(T&, Holder holder, Error e, OutgoingHandler ohandler)
   {
     T::aspect::template advice_cast<_send_error_>::type
       ::template send<T, error_json>( 
           std::move(holder), 
           std::move(e), 
-          std::move(handler) 
+          std::move(ohandler) 
       );
   }
 };

@@ -26,26 +26,26 @@ struct plus_handler
   }
 
   template<typename T, typename Handler>
-  void operator()( T& t, request::plus::ptr req, Handler handler) const
+  void operator()( T& t, request::plus::ptr req, Handler rhandler) const
   {
     // обработка запроса
-    t.target()->plus( std::move(req), [handler](response::plus::ptr res)
+    t.target()->plus( std::move(req), [rhandler](response::plus::ptr res)
     {
       if ( res != nullptr )
-        handler( std::move(res), nullptr );
+        rhandler( std::move(res), nullptr );
       else
-        handler( nullptr, std::make_unique<wjrpc::service_unavailable>() );
+        rhandler( nullptr, std::make_unique<wjrpc::service_unavailable>() );
     });
     
     if (req==nullptr)
     {
-      handler( nullptr, std::make_unique<wjrpc::invalid_params>() );
+      rhandler( nullptr, std::make_unique<wjrpc::invalid_params>() );
       return;
     }
     
     auto res = std::make_unique<response::plus>();
     res->value = req->first + req->second;
-    handler( std::move(res), nullptr );
+    rhandler( std::move(res), nullptr );
   }
 };
 
