@@ -27,7 +27,7 @@ namespace wjrpc{
  *          с помощью `wjrpc::method_list` и передать в качестве шаблонного параметра
  */
 template<typename MethodList>
-class handler
+class handler 
   : public MethodList
   , public std::enable_shared_from_this< handler<MethodList> >
 {
@@ -47,7 +47,7 @@ public:
   typedef typename super::outgoing_handler_t outgoing_handler_t;
   typedef typename super::mutex_type mutex_type;
   
-  //~handler() = default;
+  //virtual ~handler() {}
   
   target_type target() const
   {

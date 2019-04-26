@@ -32,22 +32,22 @@ class calc_interface
   , public icalc
 {
 public:
-  virtual void plus( request::plus::ptr req, response::plus::callback cb)  override
+  virtual void plus( request::plus::ptr req, response::plus::callback cb)  override final
   {
     this->template call<_plus_>( std::move(req), cb, nullptr );
   }
 
-  virtual void minus( request::minus::ptr req, response::minus::callback cb) override
+  virtual void minus( request::minus::ptr req, response::minus::callback cb) override final
   {
     this->template call<_minus_>( std::move(req), cb, nullptr );
   }
 
-  virtual void multiplies( request::multiplies::ptr req, response::multiplies::callback cb) override
+  virtual void multiplies( request::multiplies::ptr req, response::multiplies::callback cb) override final
   {
     this->template call<_multiplies_>( std::move(req), cb, nullptr );
   }
 
-  virtual void divides( request::divides::ptr req, response::divides::callback cb) override
+  virtual void divides( request::divides::ptr req, response::divides::callback cb) override final
   {
     this->template call<_divides_>( std::move(req), cb, nullptr );
   }
@@ -68,10 +68,10 @@ int main()
   e->start(opt, 11);
   
   wjrpc::output_handler_t result_handler;
-  e->reg_io(22, [&req_list, &result_handler]( wjrpc::data_ptr d, wjrpc::io_id_t io_id, wjrpc::output_handler_t handler)
+  e->reg_io(22, [&req_list, &result_handler]( wjrpc::data_ptr d, wjrpc::io_id_t io_id, wjrpc::output_handler_t handler1)
   {
     std::cout << "io_id=" << io_id << std::endl;
-    if ( !result_handler ) result_handler = handler;
+    if ( !result_handler ) result_handler = handler1;
     req_list.push_back( std::string(d->begin(), d->end() ) );
   });
   

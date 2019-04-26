@@ -203,12 +203,12 @@ struct method_list2: wjrpc::method_list
 >
 {
   virtual ~method_list2() = default;
-  virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
+  virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) final
   {
     this->call<_method1_>(std::move(req), std::move(callback), nullptr);
   }
 
-  virtual void method2(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
+  virtual void method2(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) final
   {
     this->call<_method2_>(std::move(req), std::move(callback), nullptr);
   }

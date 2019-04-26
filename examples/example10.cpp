@@ -29,7 +29,7 @@ struct method_list: wjrpc::method_list
 >{};
 
 
-class handler: public ::wjrpc::handler<method_list> {};
+class handler final: public ::wjrpc::handler<method_list> {};
 
 typedef wjrpc::engine<handler> engine_type;
 }
@@ -56,22 +56,22 @@ namespace gateway
     , public icalc
   {
   public:
-    virtual void plus( request::plus::ptr req, response::plus::callback cb)  override
+    virtual void plus( request::plus::ptr req, response::plus::callback cb)  override final
     {
       this->template call<_plus_>( std::move(req), cb, nullptr );
     }
 
-    virtual void minus( request::minus::ptr req, response::minus::callback cb) override
+    virtual void minus( request::minus::ptr req, response::minus::callback cb) override final
     {
       this->template call<_minus_>( std::move(req), cb, nullptr );
     }
 
-    virtual void multiplies( request::multiplies::ptr req, response::multiplies::callback cb) override
+    virtual void multiplies( request::multiplies::ptr req, response::multiplies::callback cb) override final
     {
       this->template call<_multiplies_>( std::move(req), cb, nullptr );
     }
 
-    virtual void divides( request::divides::ptr req, response::divides::callback cb) override
+    virtual void divides( request::divides::ptr req, response::divides::callback cb) override final
     {
       this->template call<_divides_>( std::move(req), cb, nullptr );
     }
