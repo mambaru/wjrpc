@@ -2,7 +2,7 @@
 
 #include "icalc.hpp"
 
-class calc1
+class calc1 final
   : public icalc
 {
 public:

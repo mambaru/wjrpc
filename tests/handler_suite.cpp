@@ -60,11 +60,11 @@ struct itest1
   virtual void method2(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) = 0;
 };
 
-class test1: public itest1
+class test1 final: public itest1
 {
 public:
-  
-  virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
+  virtual ~test1() = default;
+  virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) override
   {
     if ( req==nullptr  )
     {
@@ -79,7 +79,7 @@ public:
       callback(std::move(req));
   }
 
-  virtual void method2(std::unique_ptr<test1_params> , std::function< void(std::unique_ptr<test1_params>) > callback)
+  virtual void method2(std::unique_ptr<test1_params> , std::function< void(std::unique_ptr<test1_params>) > callback) override
   {
     if ( callback )
       callback(nullptr);
@@ -202,12 +202,13 @@ struct method_list2: wjrpc::method_list
   wjrpc::dual_method< _method2_, test1_json,      test1_json,      itest1, &itest1::method2>
 >
 {
-  virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
+  virtual ~method_list2() = default;
+  virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) final
   {
     this->call<_method1_>(std::move(req), std::move(callback), nullptr);
   }
 
-  virtual void method2(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
+  virtual void method2(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback) final
   {
     this->call<_method2_>(std::move(req), std::move(callback), nullptr);
   }
@@ -282,6 +283,7 @@ struct method_list3: wjrpc::method_list
   wjrpc::call_method< _method2_, test1_json,      test1_json>
 >
 {
+  virtual ~method_list3() = default;
   virtual void method1(std::unique_ptr<test1_params> req, std::function< void(std::unique_ptr<test1_params>) > callback)
   {
     this->call<_method1_>(std::move(req), std::move(callback), nullptr);
@@ -313,8 +315,6 @@ UNIT(gen3, "")
   t << equal<assert, std::string>(schl[1].params, "[]") << FAS_FL;
   t << equal<assert, std::string>(schl[1].result, "[]") << FAS_FL;
 }
-
-
 
 BEGIN_SUITE(handler_suite, "")
   ADD_UNIT(nohandler_unit)

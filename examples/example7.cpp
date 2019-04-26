@@ -27,7 +27,7 @@ struct method_list: wjrpc::method_list
 >{};
 
 
-class handler: public ::wjrpc::handler<method_list> {};
+class handler final: public ::wjrpc::handler<method_list> {};
 
 
 int main()

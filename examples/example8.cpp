@@ -26,7 +26,7 @@ struct method_list: wjrpc::method_list
 >
 {};
 
-class handler
+class handler 
   : public ::wjrpc::handler<method_list>
   , public icalc
 {

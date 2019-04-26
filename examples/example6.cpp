@@ -58,7 +58,7 @@ struct method_list: wjrpc::method_list
   wjrpc::invoke_method<_divides_, request::divides_json, response::divides_json, icalc, &icalc::divides>
 >{};
 
-class handler: public ::wjrpc::handler<method_list> {};
+using handler = wjrpc::handler<method_list>;
 
 int main()
 {
