@@ -7,6 +7,7 @@
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/outgoing/outgoing_request_json.hpp>
 #include <wjrpc/incoming/incoming_holder.hpp>
+#include <wjrpc/logger.hpp>
 #include <wjrpc/basic_types.hpp>
 #include <wjrpc/memory.hpp>
 
@@ -125,17 +126,8 @@ void outgoing_holder::result_handler(result_handler_t handler)
 outgoing_holder outgoing_holder::clone() const
 {
   outgoing_holder holder = this->clone(0);
+  holder._request_serializer = nullptr;
   holder._result_handler = nullptr;
-  /*
-  holder._name = this->_name;
-  if ( this->_data != nullptr )
-    holder._data = std::make_unique<data_type>(*(this->_data));
-  holder._basic_serializer = this->_basic_serializer;
-  holder._request_serializer = this->_request_serializer;
-  holder._notify_serializer = this->_notify_serializer;
-  holder._result_handler = nullptr;
-  holder._call_id = 0;
-  */
   return holder;
 }
 

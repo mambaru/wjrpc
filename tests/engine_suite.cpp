@@ -102,7 +102,7 @@ class calc
   : public icalc
 {
 public:
-  virtual void plus( request::plus::ptr req, response::plus::callback cb)
+  virtual void plus( request::plus::ptr req, response::plus::callback cb) override
   {
     if ( cb == nullptr )
       return;
@@ -115,7 +115,7 @@ public:
     cb( std::move(res) );
   }
 
-  virtual void minus( request::minus::ptr , response::minus::callback cb)
+  virtual void minus( request::minus::ptr , response::minus::callback cb) override
   {
     if ( cb == nullptr )
       return;
