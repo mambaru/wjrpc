@@ -3,10 +3,11 @@
 
 #include "icalc.hpp"
 
-class calc_p
+class calc_p final
   : public icalc
 {
 public:
+  virtual ~calc_p() = default;
   void initialize(const std::shared_ptr<icalc>&);
   virtual void plus( request::plus::ptr req, response::plus::callback cb) override;
   virtual void minus( request::minus::ptr req, response::minus::callback cb) override;

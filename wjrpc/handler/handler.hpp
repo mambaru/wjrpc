@@ -47,6 +47,8 @@ public:
   typedef typename super::outgoing_handler_t outgoing_handler_t;
   typedef typename super::mutex_type mutex_type;
   
+  //~handler() = default;
+  
   target_type target() const
   {
     return this->get_aspect().template get<_target_>();

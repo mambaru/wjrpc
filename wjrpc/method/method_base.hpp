@@ -53,7 +53,7 @@ public:
   typedef typename super::aspect::template advice_cast<_name_>::type::name_type tag;
   typedef self advice_class;
 
-  advice_class& get_advice() { return *this;};
+  advice_class& get_advice() { return *this;}
   const advice_class& get_advice() const { return *this;}
 
   /// ///////////////////////////////////////////////////
@@ -238,8 +238,8 @@ public:
   >
   static Schema create_schema_t(const Params& params, const Result& result)
   {
-    typedef typename schema_advice::error_type error_type;
-    error_type error = self::template create_value<error_type>();
+    typedef typename schema_advice::error_type error_type_t;
+    error_type_t error = self::template create_value<error_type_t>();
     return create_schema_t<Schema>(params, result, error);
   }
 
@@ -249,16 +249,16 @@ public:
   >
   static Schema create_schema_t(const Params& params)
   {
-    typedef typename schema_advice::result_type result_type;
-    result_type result = self::template create_value<result_type>();
+    typedef typename schema_advice::result_type result_type_t;
+    result_type_t result = self::template create_value<result_type_t>();
     return create_schema_t<Schema>(params, result);
   }
 
   template<typename Schema>
   static Schema create_schema_t()
   {
-    typedef typename schema_advice::params_type params_type;
-    params_type params = self::template create_value<params_type>();
+    typedef typename schema_advice::params_type params_type_t;
+    params_type_t params = self::template create_value<params_type_t>();
     return create_schema_t<Schema>(params);
   }
   

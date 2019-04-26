@@ -52,7 +52,7 @@ public:
   
   engine()
     : _call_counter(1)
-    , _log_time1(time(0))
+    , _log_time1(time(nullptr))
     , _lost_results(0)
   {
   }
@@ -288,7 +288,7 @@ private:
       if ( !e )
       {  
         ++_lost_results;
-        time_t now = time(0);
+        time_t now = time(nullptr);
         if ( now > _log_time1 )
         {
           WJRPC_LOG_ERROR( "jsonrpc::engin incoming response with call_id=" << call_id << " not found. Total lost results " << _lost_results)
