@@ -19,21 +19,21 @@ struct notify_serializer
   : fas::type<_notify_serializer_, notify_serializer<ReserveSize> >
 {
   template<typename T, typename JParams>
-  static inline auto 
+  static inline auto
   serialize(
-    const char* name, 
+    const char* name,
     std::unique_ptr<typename JParams::target> req
   ) -> typename T::data_ptr
   {
     typedef typename JParams::target params_type;
     outgoing_notify<params_type> notify;
     notify.params = std::move(req);
-    notify.method = name; 
+    notify.method = name;
     auto d = std::make_unique< typename T::data_type>();
-    d->reserve(ReserveSize); 
+    d->reserve(ReserveSize);
     typedef outgoing_notify_json<JParams> send_json;
     typename send_json::serializer()(notify, std::inserter( *d, d->end() ));
-    return std::move(d);
+    return d;
   }
 };
 
@@ -41,9 +41,9 @@ struct notify_serializer_proxy
   : fas::type<_notify_serializer_, notify_serializer_proxy >
 {
   template<typename T, typename JParams>
-  static inline auto 
+  static inline auto
   serialize(
-    const char* name, 
+    const char* name,
     std::unique_ptr<typename JParams::target> req
   ) -> typename T::data_ptr
   {
