@@ -18,16 +18,22 @@ JSONRPC_TAG(divides)
 
 struct plus_handler
 {
-  
+
   template<typename T>
   void operator()( T& t, request::plus::ptr req) const
-  { // обработка уведомления 
+  { // обработка уведомления
     t.target()->plus( std::move(req), nullptr );
   }
 
   template<typename T, typename Handler>
   void operator()( T& t, request::plus::ptr req, Handler rhandler) const
   {
+    if ( req==nullptr )
+    {
+      rhandler( nullptr, std::make_unique<wjrpc::invalid_params>() );
+      return;
+    }
+
     // обработка запроса
     t.target()->plus( std::move(req), [rhandler](response::plus::ptr res)
     {
@@ -36,16 +42,6 @@ struct plus_handler
       else
         rhandler( nullptr, std::make_unique<wjrpc::service_unavailable>() );
     });
-    
-    if (req==nullptr)
-    {
-      rhandler( nullptr, std::make_unique<wjrpc::invalid_params>() );
-      return;
-    }
-    
-    auto res = std::make_unique<response::plus>();
-    res->value = req->first + req->second;
-    rhandler( std::move(res), nullptr );
   }
 };
 
@@ -62,7 +58,7 @@ using handler = wjrpc::handler<method_list>;
 
 int main()
 {
-  std::vector<std::string> req_list = 
+  std::vector<std::string> req_list =
   {
     "{\"method\":\"plus\", \"params\":{ \"first\":2, \"second\":3 }, \"id\" :1 }",
     "{\"method\":\"minus\", \"params\":{ \"first\":5, \"second\":10 }, \"id\" :1 }",
@@ -70,14 +66,14 @@ int main()
     "{\"method\":\"multiplies\", \"params\":{ \"first\":2, \"second\":2 }, \"id\" :1 }"
   };
   std::vector<std::string> res_list;
- 
+
   auto calc = std::make_shared<calc1>();
   handler h;
 
   handler::options_type opt;
   opt.target = calc;
   h.start(opt, 1);
-  
+
   for ( auto& sreq : req_list )
   {
     h.perform_string( sreq, [&res_list](std::string out) { res_list.push_back(out);} );
