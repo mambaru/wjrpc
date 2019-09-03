@@ -1,5 +1,3 @@
-[![pipeline status](http://github.lan/cpp/wjrpc/badges/wip-devel/pipeline.svg)](http://gitlab7.lan/cpp/wjrpc/commits/wip-devel)
-[![coverage report](http://gitlab7.lan/cpp/wjrpc/badges/wip-devel/coverage.svg)](http://gitlab7.lan/cpp/wjrpc/commits/wip-devel)
 
 * Документация [doxygen](https://mambaru.github.io/wjrpc/index.html).
 * Статья на [хабре](https://habr.com/post/312994/)
