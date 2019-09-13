@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - wjrpc/handler/handler.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">wjrpc/handler</a> - handler.hpp<span style="font-size: 80%;"> (source / <a href="handler.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">28</td>
+            <td class="headerCovTableEntryLo">67.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntry">26</td>
+            <td class="headerCovTableEntryMed">88.5 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2011-2016
+<span class="lineNum">       3 </span>            : //
+<span class="lineNum">       4 </span>            : // Copyright: See COPYING file that comes with this distribution
+<span class="lineNum">       5 </span>            : //
+<span class="lineNum">       6 </span>            : #pragma once
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : #include &lt;wjrpc/handler/aspect/tags.hpp&gt;
+<span class="lineNum">       9 </span>            : #include &lt;wjrpc/errors.hpp&gt;
+<span class="lineNum">      10 </span>            : #include &lt;wjrpc/incoming/incoming_holder.hpp&gt;
+<span class="lineNum">      11 </span>            : #include &lt;wjrpc/incoming/send_error.hpp&gt;
+<span class="lineNum">      12 </span>            : #include &lt;wjrpc/outgoing/outgoing_error_json.hpp&gt;
+<span class="lineNum">      13 </span>            : #include &lt;wjrpc/types.hpp&gt;
+<span class="lineNum">      14 </span>            : #include &lt;wjrpc/method/aspect/tags.hpp&gt;
+<span class="lineNum">      15 </span>            : #include &lt;wjrpc/handler/handler_options.hpp&gt;
+<span class="lineNum">      16 </span>            : #include &lt;fas/aop.hpp&gt;
+<span class="lineNum">      17 </span>            : #include &lt;mutex&gt;
+<span class="lineNum">      18 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      19 </span>            : 
+<span class="lineNum">      20 </span>            : namespace wjrpc{
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            : /**
+<span class="lineNum">      23 </span>            :  * @brief JSONRPC обработчик. 
+<span class="lineNum">      24 </span>            :  * @tparam MethodList список методов сформированный с помощью `wjrpc::method_list`
+<span class="lineNum">      25 </span>            :  * @details Принимает на вход строку (`wjrpc::data_ptr`) или предварительно распарсенное сообщение (`wjrpc::incoming_holder`), 
+<span class="lineNum">      26 </span>            :  *          определяет его тип, имя метода и вызывает его обработчик. Основной функционал реализован в списке методов, который можно сформировать 
+<span class="lineNum">      27 </span>            :  *          с помощью `wjrpc::method_list` и передать в качестве шаблонного параметра
+<a name="28"><span class="lineNum">      28 </span>            :  */</a>
+<span class="lineNum">      29 </span>            : template&lt;typename MethodList&gt;
+<span class="lineNum">      30 </span><span class="lineCov">         14 : class handler </span>
+<span class="lineNum">      31 </span>            :   : public MethodList
+<span class="lineNum">      32 </span>            :   , public std::enable_shared_from_this&lt; handler&lt;MethodList&gt; &gt;
+<span class="lineNum">      33 </span>            : {
+<span class="lineNum">      34 </span>            : public:
+<span class="lineNum">      35 </span>            :   typedef handler&lt;MethodList&gt; self;
+<span class="lineNum">      36 </span>            :   typedef std::shared_ptr&lt;self&gt; ptr;
+<span class="lineNum">      37 </span>            :   typedef MethodList super;
+<span class="lineNum">      38 </span>            :   typedef typename super::interface_type interface_type;
+<span class="lineNum">      39 </span>            :   typedef typename super::target_type target_type;
+<span class="lineNum">      40 </span>            :   typedef typename super::peeper_type peeper_type;
+<span class="lineNum">      41 </span>            :   typedef typename super::context_type context_type;
+<span class="lineNum">      42 </span>            :   typedef handler_options&lt;target_type, peeper_type&gt; options_type;
+<span class="lineNum">      43 </span>            :   //typedef typename super::options_type options_type;
+<span class="lineNum">      44 </span>            :   
+<span class="lineNum">      45 </span>            :   //typedef typename super::holder_type holder_type;
+<span class="lineNum">      46 </span>            :   typedef typename super::io_id_t io_id_t;
+<span class="lineNum">      47 </span>            :   typedef typename super::outgoing_handler_t outgoing_handler_t;
+<span class="lineNum">      48 </span>            :   typedef typename super::mutex_type mutex_type;
+<span class="lineNum">      49 </span>            :   
+<a name="50"><span class="lineNum">      50 </span>            :   //virtual ~handler() {}</a>
+<span class="lineNum">      51 </span>            :   
+<span class="lineNum">      52 </span><span class="lineCov">          6 :   target_type target() const</span>
+<span class="lineNum">      53 </span>            :   {
+<span class="lineNum">      54 </span><span class="lineCov">          6 :     return this-&gt;get_aspect().template get&lt;_target_&gt;();</span>
+<span class="lineNum">      55 </span>            :   }
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            :   peeper_type peeper() const
+<span class="lineNum">      58 </span>            :   {
+<span class="lineNum">      59 </span>            :     return this-&gt;get_aspect().template get&lt;_peeper_&gt;();
+<span class="lineNum">      60 </span>            :   }
+<span class="lineNum">      61 </span>            :   
+<span class="lineNum">      62 </span>            :   context_type&amp; context()
+<span class="lineNum">      63 </span>            :   {
+<span class="lineNum">      64 </span>            :     return this-&gt;get_aspect().template get&lt;_context_&gt;();
+<span class="lineNum">      65 </span>            :   }
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            :   const context_type&amp; context() const
+<span class="lineNum">      68 </span>            :   {
+<span class="lineNum">      69 </span>            :     return this-&gt;get_aspect().template get&lt;_context_&gt;();
+<span class="lineNum">      70 </span>            :   }
+<span class="lineNum">      71 </span>            :   
+<span class="lineNum">      72 </span>            :   std::vector&lt;std::string&gt; get_methods() const
+<span class="lineNum">      73 </span>            :   {
+<span class="lineNum">      74 </span>            :     // TODO: в аспект
+<span class="lineNum">      75 </span>            :     return fas::for_each_group&lt;_method_&gt;(*this, f_get_methods() ).result;
+<a name="76"><span class="lineNum">      76 </span>            :   }</a>
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span><span class="lineCov">         11 :   void invoke(incoming_holder holder, outgoing_handler_t outgoing_handler) </span>
+<span class="lineNum">      79 </span>            :   {
+<span class="lineNum">      80 </span><span class="lineCov">         11 :     std::lock_guard&lt; mutex_type &gt; lk( _mutex );</span>
+<span class="lineNum">      81 </span><span class="lineCov">         11 :     super::get_aspect().template get&lt;_invoke_&gt;()(*this, std::move(holder), std::move(outgoing_handler) );</span>
+<a name="82"><span class="lineNum">      82 </span><span class="lineCov">         11 :   }</span></a>
+<span class="lineNum">      83 </span>            :   
+<span class="lineNum">      84 </span><span class="lineCov">          1 :   bool status() const </span>
+<span class="lineNum">      85 </span>            :   {
+<span class="lineNum">      86 </span><span class="lineCov">          1 :     return _io_id!=0;</span>
+<span class="lineNum">      87 </span>            :   }
+<span class="lineNum">      88 </span>            :   
+<span class="lineNum">      89 </span>            :   io_id_t get_id() const
+<span class="lineNum">      90 </span>            :   {
+<span class="lineNum">      91 </span>            :     return _io_id;
+<span class="lineNum">      92 </span>            :   }
+<a name="93"><span class="lineNum">      93 </span>            : </a>
+<span class="lineNum">      94 </span>            :   template&lt;typename O&gt;
+<span class="lineNum">      95 </span><span class="lineCov">          4 :   void start(O&amp;&amp; opt, io_id_t io_id)</span>
+<span class="lineNum">      96 </span>            :   {
+<span class="lineNum">      97 </span><span class="lineCov">          4 :     std::lock_guard&lt; mutex_type &gt; lk( _mutex );</span>
+<span class="lineNum">      98 </span><span class="lineCov">          4 :     _io_id = io_id;</span>
+<span class="lineNum">      99 </span><span class="lineCov">          4 :     this-&gt;get_aspect().template get&lt;_initialize_&gt;()(*this, std::move(opt) );</span>
+<span class="lineNum">     100 </span><span class="lineCov">          4 :     this-&gt;get_aspect().template get&lt;_connect_&gt;()(*this, io_id );</span>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">          4 :   }</span></a>
+<span class="lineNum">     102 </span>            : 
+<span class="lineNum">     103 </span><span class="lineCov">          1 :   void stop()</span>
+<span class="lineNum">     104 </span>            :   {
+<span class="lineNum">     105 </span><span class="lineCov">          1 :     std::lock_guard&lt; mutex_type &gt; lk( _mutex );</span>
+<span class="lineNum">     106 </span><span class="lineCov">          1 :     this-&gt;get_aspect().template get&lt;_disconnect_&gt;()(*this, _io_id );</span>
+<span class="lineNum">     107 </span>            :     //super::stop_(*this);
+<span class="lineNum">     108 </span><span class="lineCov">          1 :   }</span>
+<a name="109"><span class="lineNum">     109 </span>            : </a>
+<span class="lineNum">     110 </span>            :   template&lt;typename O&gt;
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :   void initialize(O&amp;&amp; opt)</span>
+<span class="lineNum">     112 </span>            :   {
+<span class="lineNum">     113 </span><span class="lineNoCov">          0 :     std::lock_guard&lt; mutex_type &gt; lk( _mutex );</span>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :     this-&gt;get_aspect().template get&lt;_initialize_&gt;()(*this, std::move(opt) );</span>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :   }</span>
+<span class="lineNum">     116 </span>            : 
+<span class="lineNum">     117 </span>            :   void perform_data(data_ptr d, output_handler_t h) 
+<span class="lineNum">     118 </span>            :   {
+<span class="lineNum">     119 </span>            :     using namespace std::placeholders;
+<span class="lineNum">     120 </span>            : 
+<span class="lineNum">     121 </span>            :     while ( d != nullptr )
+<span class="lineNum">     122 </span>            :     {
+<span class="lineNum">     123 </span>            :       incoming_holder iholder(std::move(d));
+<span class="lineNum">     124 </span>            :       ::wjson::json_error e;
+<span class="lineNum">     125 </span>            :       d = iholder.parse(&amp;e);
+<span class="lineNum">     126 </span>            :       if ( !e &amp;&amp; iholder )
+<span class="lineNum">     127 </span>            :       {
+<span class="lineNum">     128 </span>            :         this-&gt;invoke( std::move(iholder), [h](outgoing_holder oholder)
+<span class="lineNum">     129 </span>            :         {
+<span class="lineNum">     130 </span>            :           h(oholder.detach());
+<span class="lineNum">     131 </span>            :         });
+<span class="lineNum">     132 </span>            :       }
+<span class="lineNum">     133 </span>            :       else
+<span class="lineNum">     134 </span>            :       {
+<span class="lineNum">     135 </span>            :         aux::send_error_raw( std::move(iholder), std::make_unique&lt;parse_error&gt;(), h );
+<span class="lineNum">     136 </span>            :       }
+<span class="lineNum">     137 </span>            :     }
+<span class="lineNum">     138 </span>            :   }
+<span class="lineNum">     139 </span>            :   
+<span class="lineNum">     140 </span>            :   void perform_string(std::string str, std::function&lt;void(std::string)&gt; h) 
+<span class="lineNum">     141 </span>            :   {
+<span class="lineNum">     142 </span>            :     this-&gt;perform_data( std::make_unique&lt;data_type&gt;( str.begin(), str.end() ), [h](data_ptr d)
+<span class="lineNum">     143 </span>            :     {
+<span class="lineNum">     144 </span>            :       h( std::string(d-&gt;begin(), d-&gt;end()) );
+<span class="lineNum">     145 </span>            :     });
+<a name="146"><span class="lineNum">     146 </span>            :   }</a>
+<span class="lineNum">     147 </span>            :   
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :   std::shared_ptr&lt;self&gt; clone()</span>
+<span class="lineNum">     149 </span>            :   {
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :     auto clon = std::make_shared&lt;self&gt;();</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :     static_cast&lt;super&amp;&gt;(*clon) = static_cast&lt;const super&amp;&gt;(*this);</span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :     clon-&gt;_io_id = _io_id;</span>
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :     return clon;</span>
+<span class="lineNum">     154 </span>            :   }
+<span class="lineNum">     155 </span>            : 
+<span class="lineNum">     156 </span>            : private:
+<span class="lineNum">     157 </span>            :   struct f_get_methods
+<span class="lineNum">     158 </span>            :   {
+<span class="lineNum">     159 </span>            :     std::vector&lt;std::string&gt; result;
+<span class="lineNum">     160 </span>            :     template&lt;typename T, typename Tg&gt;
+<span class="lineNum">     161 </span>            :     void operator()(T&amp; t, fas::tag&lt;Tg&gt; )
+<span class="lineNum">     162 </span>            :     {
+<span class="lineNum">     163 </span>            :       result.push_back( t.get_aspect().template get&lt;Tg&gt;().name() );
+<span class="lineNum">     164 </span>            :     }
+<span class="lineNum">     165 </span>            :   };
+<span class="lineNum">     166 </span>            : 
+<span class="lineNum">     167 </span>            : private:
+<span class="lineNum">     168 </span>            :   mutable mutex_type _mutex;
+<span class="lineNum">     169 </span>            :   io_id_t _io_id = 0;
+<span class="lineNum">     170 </span>            : };
+<span class="lineNum">     171 </span>            : 
+<span class="lineNum">     172 </span>            : } // wjrpc
+<span class="lineNum">     173 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

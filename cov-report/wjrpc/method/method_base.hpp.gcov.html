@@ -1,0 +1,357 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - wjrpc/method/method_base.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">wjrpc/method</a> - method_base.hpp<span style="font-size: 80%;"> (source / <a href="method_base.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">52</td>
+            <td class="headerCovTableEntry">59</td>
+            <td class="headerCovTableEntryMed">88.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">84</td>
+            <td class="headerCovTableEntry">99</td>
+            <td class="headerCovTableEntryMed">84.8 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2011-2016
+<span class="lineNum">       3 </span>            : //
+<span class="lineNum">       4 </span>            : // Copyright: See COPYING file that comes with this distribution
+<span class="lineNum">       5 </span>            : //
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : #pragma once
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #include &lt;wjrpc/method/aspect/tags.hpp&gt;
+<span class="lineNum">      10 </span>            : #include &lt;wjrpc/logger.hpp&gt;
+<span class="lineNum">      11 </span>            : #include &lt;fas/aop.hpp&gt;
+<span class="lineNum">      12 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      13 </span>            : #include &lt;string&gt;
+<span class="lineNum">      14 </span>            : 
+<span class="lineNum">      15 </span>            : #define FAS_HAS_MEMBER_FUNCTION0P(N, D)\
+<span class="lineNum">      16 </span>            : namespace N##_detail{\
+<span class="lineNum">      17 </span>            : template &lt; typename T, typename R, R(*)() &gt; struct op_mf {}; \
+<span class="lineNum">      18 </span>            : struct N##_helper {\
+<span class="lineNum">      19 </span>            :   typedef char small_type;\
+<span class="lineNum">      20 </span>            :   typedef struct big_tag { char dummy[2];} big_type;\
+<span class="lineNum">      21 </span>            :   template&lt;typename P, typename R&gt;\
+<span class="lineNum">      22 </span>            :   static small_type test(op_mf&lt;P, R, &amp;P::D&gt;*);\
+<span class="lineNum">      23 </span>            :   template&lt;typename P, typename R&gt;\
+<span class="lineNum">      24 </span>            :   static big_type test(...);\
+<span class="lineNum">      25 </span>            : }; \
+<span class="lineNum">      26 </span>            : } \
+<span class="lineNum">      27 </span>            : template&lt;typename T, typename R&gt;\
+<span class="lineNum">      28 </span>            : struct N\
+<span class="lineNum">      29 </span>            : {\
+<span class="lineNum">      30 </span>            :   typedef N##_detail::N##_helper helper; \
+<span class="lineNum">      31 </span>            :   enum { value = sizeof( helper::test&lt;T, R&gt;(0) ) == sizeof(helper::small_type) };\
+<span class="lineNum">      32 </span>            : };
+<span class="lineNum">      33 </span>            : 
+<span class="lineNum">      34 </span>            : FAS_HAS_MEMBER_FUNCTION0P(has_schema_creator, create_schema)
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : namespace wjrpc{
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span>            : template&lt; 
+<span class="lineNum">      39 </span>            :   typename A = fas::aspect&lt;&gt;, 
+<a name="40"><span class="lineNum">      40 </span>            :   template&lt;typename&gt; class AspectClass = fas::aspect_class </a>
+<span class="lineNum">      41 </span>            : &gt;
+<span class="lineNum">      42 </span><span class="lineCov">          9 : class method_base</span>
+<span class="lineNum">      43 </span>            :   : public AspectClass&lt;A&gt;
+<span class="lineNum">      44 </span>            : {
+<span class="lineNum">      45 </span>            : public:
+<span class="lineNum">      46 </span>            :   typedef method_base&lt;A&gt; self;
+<span class="lineNum">      47 </span>            :   typedef AspectClass&lt;A&gt; super;
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            :   typedef ::wjrpc::data_type data_type;
+<span class="lineNum">      50 </span>            :   typedef ::wjrpc::data_ptr  data_ptr;
+<span class="lineNum">      51 </span>            :   
+<span class="lineNum">      52 </span>            :   typedef fas::metalist::advice metatype;
+<span class="lineNum">      53 </span>            :   typedef typename super::aspect::template advice_cast&lt;_name_&gt;::type::name_type tag;
+<a name="54"><span class="lineNum">      54 </span>            :   typedef self advice_class;</a>
+<a name="55"><span class="lineNum">      55 </span>            : </a>
+<span class="lineNum">      56 </span><span class="lineCov">         11 :   advice_class&amp; get_advice() { return *this;}</span>
+<span class="lineNum">      57 </span><span class="lineCov">          2 :   const advice_class&amp; get_advice() const { return *this;}</span>
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">      60 </span>            :   /// ///////////////////////////////////////////////////
+<a name="61"><span class="lineNum">      61 </span>            :   /// ///////////////////////////////////////////////////</a>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineCov">          9 :   const char* name() const</span>
+<span class="lineNum">      64 </span>            :   {
+<span class="lineNum">      65 </span><span class="lineCov">          9 :     return this-&gt;get_aspect().template get&lt;_name_&gt;()();</span>
+<span class="lineNum">      66 </span>            :   }
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">      69 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">      70 </span>            :   /// ///////////////////////////////////////////////////
+<a name="71"><span class="lineNum">      71 </span>            : </a>
+<span class="lineNum">      72 </span>            :   template&lt;typename T&gt;
+<span class="lineNum">      73 </span><span class="lineCov">          6 :   void operator()(</span>
+<span class="lineNum">      74 </span>            :     T&amp; t, 
+<span class="lineNum">      75 </span>            :     incoming_holder holder, 
+<span class="lineNum">      76 </span>            :     std::function&lt;void(outgoing_holder)&gt; outgoing_handler
+<span class="lineNum">      77 </span>            :   ) 
+<span class="lineNum">      78 </span>            :   {
+<span class="lineNum">      79 </span><span class="lineCov">          6 :     this-&gt;get_aspect().template get&lt;_invoke_&gt;()(</span>
+<span class="lineNum">      80 </span>            :       t, 
+<span class="lineNum">      81 </span>            :       *this, 
+<span class="lineNum">      82 </span><span class="lineCov">          6 :       std::move(holder), </span>
+<span class="lineNum">      83 </span><span class="lineCov">          6 :       std::move(outgoing_handler) </span>
+<span class="lineNum">      84 </span><span class="lineCov">         18 :     );</span>
+<span class="lineNum">      85 </span><span class="lineCov">          6 :   }</span>
+<span class="lineNum">      86 </span>            :   
+<span class="lineNum">      87 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">      88 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">      89 </span>            :   /// ///////////////////////////////////////////////////
+<a name="90"><span class="lineNum">      90 </span>            :   </a>
+<span class="lineNum">      91 </span>            :   template&lt;typename T, typename ParamsPtr, typename Callback&gt;
+<span class="lineNum">      92 </span><span class="lineCov">          3 :   void call(T&amp; t, ParamsPtr params, Callback callback) const</span>
+<span class="lineNum">      93 </span>            :   {
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span><span class="lineCov">          3 :     this-&gt;get_aspect().template get&lt;_call_&gt;()( </span>
+<span class="lineNum">      96 </span>            :       t, 
+<span class="lineNum">      97 </span>            :       *this, 
+<span class="lineNum">      98 </span><span class="lineCov">          3 :       std::move(params), </span>
+<span class="lineNum">      99 </span><span class="lineCov">          3 :       std::move(callback) </span>
+<span class="lineNum">     100 </span><span class="lineCov">          9 :     );</span>
+<span class="lineNum">     101 </span><span class="lineCov">          3 :   }</span>
+<span class="lineNum">     102 </span>            : 
+<span class="lineNum">     103 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     104 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     105 </span>            :   /// ///////////////////////////////////////////////////
+<a name="106"><span class="lineNum">     106 </span>            :   </a>
+<span class="lineNum">     107 </span>            :   template&lt;typename T, typename ParamsJson&gt;
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 :   static inline auto serialize_request(</span>
+<span class="lineNum">     109 </span>            :     const char* name,
+<span class="lineNum">     110 </span>            :     std::unique_ptr&lt;typename ParamsJson::target&gt; req, 
+<span class="lineNum">     111 </span>            :     typename T::call_id_t id
+<span class="lineNum">     112 </span>            :   ) -&gt; typename T::data_ptr
+<span class="lineNum">     113 </span>            :   {
+<span class="lineNum">     114 </span>            :     return super::aspect::template advice_cast&lt;_request_serializer_&gt;
+<span class="lineNum">     115 </span>            :                 ::type::template serialize&lt;T, ParamsJson&gt;( 
+<span class="lineNum">     116 </span>            :                     name, 
+<span class="lineNum">     117 </span><span class="lineNoCov">          0 :                     std::move(req), </span>
+<span class="lineNum">     118 </span>            :                     id
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :                 );</span>
+<span class="lineNum">     120 </span>            :   }
+<span class="lineNum">     121 </span>            : 
+<span class="lineNum">     122 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     123 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     124 </span>            :   /// ///////////////////////////////////////////////////
+<a name="125"><span class="lineNum">     125 </span>            : </a>
+<span class="lineNum">     126 </span>            :   template&lt;typename T, typename ParamsJson&gt;
+<span class="lineNum">     127 </span><span class="lineCov">          2 :   static inline auto serialize_notify(</span>
+<span class="lineNum">     128 </span>            :     const char* name, 
+<span class="lineNum">     129 </span>            :     std::unique_ptr&lt;typename ParamsJson::target&gt; req
+<span class="lineNum">     130 </span>            :   ) -&gt; typename T::data_ptr
+<span class="lineNum">     131 </span>            :   {
+<span class="lineNum">     132 </span>            :     return super::aspect::template advice_cast&lt;_notify_serializer_&gt;::type
+<span class="lineNum">     133 </span><span class="lineCov">          2 :                 ::template serialize&lt;T, ParamsJson&gt;( name, std::move(req) );</span>
+<span class="lineNum">     134 </span>            :   }
+<span class="lineNum">     135 </span>            : 
+<span class="lineNum">     136 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     137 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     138 </span>            :   /// ///////////////////////////////////////////////////
+<a name="139"><span class="lineNum">     139 </span>            : </a>
+<span class="lineNum">     140 </span>            :   template&lt;typename T, typename ResultJson, typename ErrorJson&gt;
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :   static inline void process_response(</span>
+<span class="lineNum">     142 </span>            :     incoming_holder holder, 
+<span class="lineNum">     143 </span>            :     std::function&lt; void (
+<span class="lineNum">     144 </span>            :       std::unique_ptr&lt;typename ResultJson::target&gt;, 
+<span class="lineNum">     145 </span>            :       std::unique_ptr&lt;typename ErrorJson::target&gt;
+<span class="lineNum">     146 </span>            :     )&gt; callback
+<span class="lineNum">     147 </span>            :   ) 
+<span class="lineNum">     148 </span>            :   {
+<span class="lineNum">     149 </span>            :     return super::aspect::template advice_cast&lt;_process_response_&gt;::type
+<span class="lineNum">     150 </span>            :             ::template process&lt;T, ResultJson, ErrorJson&gt;( 
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :                 std::move(holder), </span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                 std::move(callback) </span>
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :               );</span>
+<span class="lineNum">     154 </span>            :   }
+<span class="lineNum">     155 </span>            :   
+<span class="lineNum">     156 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     157 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     158 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     159 </span>            : 
+<a name="160"><span class="lineNum">     160 </span>            :   </a>
+<span class="lineNum">     161 </span>            :   template&lt;typename T, typename ResultJson&gt;
+<span class="lineNum">     162 </span><span class="lineCov">          4 :   static inline void send_result(</span>
+<span class="lineNum">     163 </span>            :     incoming_holder holder, 
+<span class="lineNum">     164 </span>            :     std::unique_ptr&lt;typename ResultJson::target&gt; result, 
+<span class="lineNum">     165 </span>            :     std::function&lt;void(outgoing_holder)&gt; outgoing_handler
+<span class="lineNum">     166 </span>            :   )
+<span class="lineNum">     167 </span>            :   {
+<span class="lineNum">     168 </span>            :     return super::aspect::template advice_cast&lt;_send_result_&gt;::type
+<span class="lineNum">     169 </span>            :             ::template send&lt;T, ResultJson&gt;( 
+<span class="lineNum">     170 </span><span class="lineCov">          4 :                 std::move(holder), </span>
+<span class="lineNum">     171 </span><span class="lineCov">          4 :                 std::move(result), </span>
+<span class="lineNum">     172 </span><span class="lineCov">          4 :                 std::move(outgoing_handler) </span>
+<span class="lineNum">     173 </span><span class="lineCov">         12 :             );</span>
+<span class="lineNum">     174 </span>            :   }
+<span class="lineNum">     175 </span>            :   
+<span class="lineNum">     176 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     177 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     178 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     179 </span>            : 
+<a name="180"><span class="lineNum">     180 </span>            : </a>
+<span class="lineNum">     181 </span>            :   template&lt;typename T, typename ErrorJson&gt;
+<span class="lineNum">     182 </span><span class="lineCov">          2 :   static inline void send_error(</span>
+<span class="lineNum">     183 </span>            :     incoming_holder holder, 
+<span class="lineNum">     184 </span>            :     std::unique_ptr&lt;typename ErrorJson::target&gt; err, 
+<span class="lineNum">     185 </span>            :     std::function&lt;void(outgoing_holder)&gt; outgoing_handler
+<span class="lineNum">     186 </span>            :   )
+<span class="lineNum">     187 </span>            :   {
+<span class="lineNum">     188 </span>            :     return super::aspect::template advice_cast&lt;_send_error_&gt;::type
+<span class="lineNum">     189 </span>            :             ::template send&lt;T, ErrorJson&gt;( 
+<span class="lineNum">     190 </span><span class="lineCov">          2 :                 std::move(holder), </span>
+<span class="lineNum">     191 </span><span class="lineCov">          2 :                 std::move(err), </span>
+<span class="lineNum">     192 </span><span class="lineCov">          2 :                 std::move(outgoing_handler) </span>
+<span class="lineNum">     193 </span><span class="lineCov">          6 :             );</span>
+<span class="lineNum">     194 </span>            : 
+<span class="lineNum">     195 </span>            :   }
+<span class="lineNum">     196 </span>            : 
+<span class="lineNum">     197 </span>            :   
+<span class="lineNum">     198 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     199 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     200 </span>            :   /// ///////////////////////////////////////////////////
+<span class="lineNum">     201 </span>            : 
+<span class="lineNum">     202 </span>            :   // Сначала проверяем _call_, т.к. на _invoke_ по умолчанию стоит заглушка &quot;method not impl&quot; 
+<span class="lineNum">     203 </span>            :   typedef typename fas::if_c&lt;
+<span class="lineNum">     204 </span>            :     super::aspect::template has_advice&lt;_call_&gt;::value,
+<span class="lineNum">     205 </span>            :     _call_,
+<span class="lineNum">     206 </span>            :     _invoke_
+<span class="lineNum">     207 </span>            :   &gt;::type schema_tag;
+<span class="lineNum">     208 </span>            :   
+<span class="lineNum">     209 </span>            :   typedef typename super::aspect::template advice_cast&lt;schema_tag&gt;::type schema_advice;
+<span class="lineNum">     210 </span>            :   
+<span class="lineNum">     211 </span>            :   template&lt;
+<span class="lineNum">     212 </span>            :     typename Schema, // default_schema
+<span class="lineNum">     213 </span>            :     typename Params, 
+<span class="lineNum">     214 </span>            :     typename Result,  
+<a name="215"><span class="lineNum">     215 </span>            :     typename Error</a>
+<span class="lineNum">     216 </span>            :   &gt;
+<span class="lineNum">     217 </span><span class="lineCov">         11 :   static Schema create_schema_t(const Params&amp; params, const Result&amp; result, const Error&amp; error)</span>
+<span class="lineNum">     218 </span>            :   {
+<span class="lineNum">     219 </span>            :     typedef typename schema_advice::params_json_t::serializer params_serializer;
+<span class="lineNum">     220 </span>            :     typedef typename schema_advice::result_json_t::serializer result_serializer;
+<span class="lineNum">     221 </span>            :     typedef typename schema_advice::error_json_t::serializer  error_serializer; 
+<span class="lineNum">     222 </span>            :     
+<span class="lineNum">     223 </span>            :     typedef typename super::aspect::template advice_cast&lt;_name_&gt;::type name_advice;
+<span class="lineNum">     224 </span>            :      
+<span class="lineNum">     225 </span><span class="lineCov">         11 :     Schema sch;</span>
+<span class="lineNum">     226 </span><span class="lineCov">         11 :     const char* n = name_advice()();</span>
+<span class="lineNum">     227 </span><span class="lineCov">         11 :     std::copy(n, n + std::strlen(n), std::back_inserter(sch.name) );</span>
+<span class="lineNum">     228 </span><span class="lineCov">         11 :     params_serializer()(params, std::back_inserter(sch.params));</span>
+<span class="lineNum">     229 </span><span class="lineCov">         11 :     result_serializer()(result, std::back_inserter(sch.result));</span>
+<span class="lineNum">     230 </span><span class="lineCov">         11 :     error_serializer()(error, std::back_inserter(sch.error));</span>
+<span class="lineNum">     231 </span><span class="lineCov">         11 :     return sch;</span>
+<span class="lineNum">     232 </span>            :   }
+<span class="lineNum">     233 </span>            :   
+<span class="lineNum">     234 </span>            :   template&lt;
+<span class="lineNum">     235 </span>            :     typename Schema,
+<span class="lineNum">     236 </span>            :     typename Params, 
+<a name="237"><span class="lineNum">     237 </span>            :     typename Result</a>
+<span class="lineNum">     238 </span>            :   &gt;
+<span class="lineNum">     239 </span><span class="lineCov">         11 :   static Schema create_schema_t(const Params&amp; params, const Result&amp; result)</span>
+<span class="lineNum">     240 </span>            :   {
+<span class="lineNum">     241 </span>            :     typedef typename schema_advice::error_type error_type_t;
+<span class="lineNum">     242 </span><span class="lineCov">         11 :     error_type_t error = self::template create_value&lt;error_type_t&gt;();</span>
+<span class="lineNum">     243 </span><span class="lineCov">         11 :     return create_schema_t&lt;Schema&gt;(params, result, error);</span>
+<span class="lineNum">     244 </span>            :   }
+<span class="lineNum">     245 </span>            : 
+<span class="lineNum">     246 </span>            :   template&lt;
+<span class="lineNum">     247 </span>            :     typename Schema, 
+<a name="248"><span class="lineNum">     248 </span>            :     typename Params</a>
+<span class="lineNum">     249 </span>            :   &gt;
+<span class="lineNum">     250 </span><span class="lineCov">         11 :   static Schema create_schema_t(const Params&amp; params)</span>
+<span class="lineNum">     251 </span>            :   {
+<span class="lineNum">     252 </span>            :     typedef typename schema_advice::result_type result_type_t;
+<span class="lineNum">     253 </span><span class="lineCov">         11 :     result_type_t result = self::template create_value&lt;result_type_t&gt;();</span>
+<span class="lineNum">     254 </span><span class="lineCov">         11 :     return create_schema_t&lt;Schema&gt;(params, result);</span>
+<span class="lineNum">     255 </span>            :   }
+<a name="256"><span class="lineNum">     256 </span>            : </a>
+<span class="lineNum">     257 </span>            :   template&lt;typename Schema&gt;
+<span class="lineNum">     258 </span><span class="lineCov">         11 :   static Schema create_schema_t()</span>
+<span class="lineNum">     259 </span>            :   {
+<span class="lineNum">     260 </span>            :     typedef typename schema_advice::params_type params_type_t;
+<span class="lineNum">     261 </span><span class="lineCov">         11 :     params_type_t params = self::template create_value&lt;params_type_t&gt;();</span>
+<span class="lineNum">     262 </span><span class="lineCov">         11 :     return create_schema_t&lt;Schema&gt;(params);</span>
+<span class="lineNum">     263 </span>            :   }
+<a name="264"><span class="lineNum">     264 </span>            :   </a>
+<span class="lineNum">     265 </span>            :   template&lt;typename V&gt;
+<span class="lineNum">     266 </span><span class="lineCov">         33 :   static V create_value()</span>
+<span class="lineNum">     267 </span>            :   {
+<span class="lineNum">     268 </span><span class="lineCov">         33 :     V value = V();</span>
+<span class="lineNum">     269 </span><span class="lineCov">         33 :     generate_value_(&amp;value, fas::bool_&lt;has_schema_creator&lt;V, V&gt;::value&gt;() );</span>
+<span class="lineNum">     270 </span><span class="lineCov">         33 :     return value;</span>
+<span class="lineNum">     271 </span>            :   }
+<span class="lineNum">     272 </span>            : 
+<a name="273"><span class="lineNum">     273 </span>            : private:</a>
+<span class="lineNum">     274 </span>            :   template&lt;typename V&gt;
+<span class="lineNum">     275 </span><span class="lineCov">         32 :   static void generate_value_(V*, fas::false_) { }</span>
+<a name="276"><span class="lineNum">     276 </span>            : </a>
+<span class="lineNum">     277 </span>            :   template&lt;typename V&gt;
+<span class="lineNum">     278 </span><span class="lineCov">          1 :   static void generate_value_(V* value, fas::true_){ *value = V().create_schema(); }</span>
+<span class="lineNum">     279 </span>            : };
+<span class="lineNum">     280 </span>            : 
+<span class="lineNum">     281 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

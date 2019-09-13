@@ -1,0 +1,568 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - wjrpc/engine/engine.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">wjrpc/engine</a> - engine.hpp<span style="font-size: 80%;"> (source / <a href="engine.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">66</td>
+            <td class="headerCovTableEntry">189</td>
+            <td class="headerCovTableEntryLo">34.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">71</td>
+            <td class="headerCovTableEntryLo">38.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #pragma once</a>
+<span class="lineNum">       2 </span>            : #include &lt;wjrpc/logger.hpp&gt;
+<span class="lineNum">       3 </span>            : #include &lt;wjrpc/engine/call_map.hpp&gt;
+<span class="lineNum">       4 </span>            : #include &lt;wjrpc/engine/handler_map.hpp&gt;
+<span class="lineNum">       5 </span>            : #include &lt;wjrpc/engine/engine_options.hpp&gt;
+<span class="lineNum">       6 </span>            : #include &lt;wjrpc/incoming/incoming_holder.hpp&gt;
+<span class="lineNum">       7 </span>            : #include &lt;wjrpc/outgoing/outgoing_holder.hpp&gt;
+<span class="lineNum">       8 </span>            : #include &lt;wjrpc/outgoing/outgoing_error.hpp&gt;
+<span class="lineNum">       9 </span>            : #include &lt;wjrpc/outgoing/outgoing_error_json.hpp&gt;
+<span class="lineNum">      10 </span>            : #include &lt;wjrpc/method/default_schema.hpp&gt;
+<span class="lineNum">      11 </span>            : #include &lt;wjrpc/errors/error_json.hpp&gt;
+<span class="lineNum">      12 </span>            : #include &lt;wjrpc/types.hpp&gt;
+<span class="lineNum">      13 </span>            : #include &lt;wjrpc/incoming/send_error.hpp&gt;
+<span class="lineNum">      14 </span>            : #include &lt;wjson/strerror.hpp&gt;
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span>            : #include &lt;type_traits&gt;
+<span class="lineNum">      17 </span>            : #include &lt;atomic&gt;
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : namespace wjrpc{
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span>            : /**
+<span class="lineNum">      22 </span>            :  * @brief JSONRPC движок. По сути, реестр jsonrpc-обработчиков, который позволяет вынести их в отдельный модуль и управлять временем жизни
+<span class="lineNum">      23 </span>            :  * @tparam JsonrpcHandler - JSONRPC обработчик, может быть реализован с помощью `wjrpc::handler`
+<span class="lineNum">      24 </span>            :  * @details 
+<span class="lineNum">      25 </span>            :   */
+<span class="lineNum">      26 </span>            : template&lt;typename JsonrpcHandler&gt;
+<span class="lineNum">      27 </span>            : class engine
+<span class="lineNum">      28 </span>            :   : public std::enable_shared_from_this&lt; engine&lt;JsonrpcHandler&gt; &gt;
+<span class="lineNum">      29 </span>            : {
+<span class="lineNum">      30 </span>            : public:
+<span class="lineNum">      31 </span>            :   typedef engine&lt;JsonrpcHandler&gt; self;
+<span class="lineNum">      32 </span>            :   typedef JsonrpcHandler handler_type;
+<span class="lineNum">      33 </span>            :   typedef typename handler_type::target_type target_type;
+<span class="lineNum">      34 </span>            :   typedef typename handler_type::ptr handler_ptr;
+<span class="lineNum">      35 </span>            :   typedef typename handler_type::options_type handler_options_type;
+<span class="lineNum">      36 </span>            :   typedef typename handler_type::result_handler_t result_handler_t;
+<span class="lineNum">      37 </span>            :   typedef typename handler_type::request_serializer_t request_serializer_t;
+<span class="lineNum">      38 </span>            :   typedef typename handler_type::notify_serializer_t notify_serializer_t;
+<span class="lineNum">      39 </span>            :   
+<span class="lineNum">      40 </span>            :   typedef engine_options&lt;handler_options_type&gt; options_type;
+<span class="lineNum">      41 </span>            :   
+<span class="lineNum">      42 </span>            :   typedef typename handler_type::io_id_t io_id_t;
+<span class="lineNum">      43 </span>            :   typedef typename handler_type::outgoing_handler_t outgoing_handler_t;
+<span class="lineNum">      44 </span>            :   typedef typename handler_type::data_ptr data_ptr;
+<span class="lineNum">      45 </span>            :   typedef typename handler_type::call_id_t call_id_t;
+<a name="46"><span class="lineNum">      46 </span>            :   </a>
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span><span class="lineCov">          1 :   ~engine()</span>
+<span class="lineNum">      49 </span>            :   {
+<span class="lineNum">      50 </span><span class="lineCov">          1 :     this-&gt;stop();</span>
+<a name="51"><span class="lineNum">      51 </span><span class="lineCov">          1 :   }</span></a>
+<span class="lineNum">      52 </span>            :   
+<span class="lineNum">      53 </span><span class="lineCov">          1 :   engine()</span>
+<span class="lineNum">      54 </span>            :     : _call_counter(1)
+<span class="lineNum">      55 </span>            :     , _log_time1(time(nullptr))
+<span class="lineNum">      56 </span><span class="lineCov">          1 :     , _lost_results(0)</span>
+<span class="lineNum">      57 </span>            :   {
+<span class="lineNum">      58 </span><span class="lineCov">          1 :   }</span>
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span>            :   /***************************************************************/
+<span class="lineNum">      61 </span>            :   /* Управляющие методы                                          */
+<span class="lineNum">      62 </span>            :   /***************************************************************/
+<a name="63"><span class="lineNum">      63 </span>            : </a>
+<span class="lineNum">      64 </span>            :   template&lt;typename O&gt;
+<span class="lineNum">      65 </span><span class="lineCov">          1 :   void start(O&amp;&amp; opt, io_id_t io_id)</span>
+<span class="lineNum">      66 </span>            :   {
+<span class="lineNum">      67 </span><span class="lineCov">          1 :     _io_id = io_id;</span>
+<span class="lineNum">      68 </span><span class="lineCov">          1 :     this-&gt;reconfigure( std::forward&lt;O&gt;(opt) );</span>
+<span class="lineNum">      69 </span><span class="lineCov">          1 :   }</span>
+<a name="70"><span class="lineNum">      70 </span>            : </a>
+<span class="lineNum">      71 </span>            :   template&lt;typename O&gt;
+<span class="lineNum">      72 </span><span class="lineCov">          1 :   void reconfigure(O&amp;&amp; opt1)</span>
+<span class="lineNum">      73 </span>            :   {
+<span class="lineNum">      74 </span><span class="lineCov">          1 :     typename std::decay&lt;O&gt;::type opt = opt1;</span>
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span><span class="lineCov">          1 :     if ( opt.disable_handler_map )</span>
+<span class="lineNum">      77 </span>            :     {
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :       auto handler = std::make_shared&lt;handler_type&gt;();</span>
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :       handler-&gt;initialize(opt1);</span>
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :       _handler_map.disable(handler);</span>
+<span class="lineNum">      81 </span>            :     }
+<span class="lineNum">      82 </span>            :     else
+<span class="lineNum">      83 </span><span class="lineCov">          1 :       _handler_map.disable(nullptr);</span>
+<span class="lineNum">      84 </span>            : 
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">          1 :     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );</span></a>
+<a name="86"><span class="lineNum">      86 </span><span class="lineCov">          1 :     _outgoing_factory = </span></a>
+<span class="lineNum">      87 </span><span class="lineCov">          5 :       [opt, this](io_id_t io_id, outgoing_handler_t handler, bool reg_io_flag) </span>
+<span class="lineNum">      88 </span><span class="lineCov">          1 :         -&gt; handler_ptr</span>
+<span class="lineNum">      89 </span>            :     {
+<span class="lineNum">      90 </span><span class="lineCov">          1 :       return this-&gt;create_handler_(io_id, opt, std::move(handler), reg_io_flag);</span>
+<span class="lineNum">      91 </span>            :     };
+<a name="92"><span class="lineNum">      92 </span>            : </a>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">          1 :     _input_factory = </span></a>
+<span class="lineNum">      94 </span><span class="lineCov">          5 :       [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io_flag) </span>
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :         -&gt; handler_ptr</span>
+<span class="lineNum">      96 </span>            :     {
+<span class="lineNum">      97 </span><span class="lineNoCov">          0 :       return this-&gt;create_handler_(io_id, opt, std::move(handler), reg_io_flag);</span>
+<a name="98"><span class="lineNum">      98 </span>            :     };</a>
+<span class="lineNum">      99 </span>            :  
+<span class="lineNum">     100 </span><span class="lineCov">          6 :     _output_factory = [opt, this](io_id_t io_id, output_handler_t handler, bool reg_io_flag) -&gt; handler_ptr</span>
+<span class="lineNum">     101 </span>            :     {
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 :       return this-&gt;create_handler_(io_id, opt, std::move(handler), reg_io_flag);</span>
+<span class="lineNum">     103 </span><span class="lineCov">          1 :     };</span>
+<a name="104"><span class="lineNum">     104 </span><span class="lineCov">          1 :   }</span></a>
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span><span class="lineCov">          1 :   void stop()</span>
+<span class="lineNum">     107 </span>            :   {
+<span class="lineNum">     108 </span><span class="lineCov">          1 :     _handler_map.stop();</span>
+<span class="lineNum">     109 </span><span class="lineCov">          1 :     _call_map.clear();</span>
+<span class="lineNum">     110 </span><span class="lineCov">          1 :   }</span>
+<span class="lineNum">     111 </span>            : 
+<span class="lineNum">     112 </span>            :   template&lt;typename Tg, typename Req, typename ...Args&gt;
+<span class="lineNum">     113 </span>            :   void call(Req req, io_id_t io_id, Args&amp;&amp;... args)
+<span class="lineNum">     114 </span>            :   {
+<span class="lineNum">     115 </span>            :     if ( handler_ptr h = _handler_map.find(io_id) )
+<span class="lineNum">     116 </span>            :     {
+<span class="lineNum">     117 </span>            :       h-&gt;template call&lt;Tg&gt;(std::move(req), std::forward&lt;Args&gt;(args)...);
+<span class="lineNum">     118 </span>            :     }
+<span class="lineNum">     119 </span>            :   }
+<span class="lineNum">     120 </span>            : 
+<span class="lineNum">     121 </span>            :   /***************************************************************/
+<span class="lineNum">     122 </span>            :   /* jsonrpc                                                     */
+<span class="lineNum">     123 </span>            :   /***************************************************************/
+<span class="lineNum">     124 </span>            : 
+<span class="lineNum">     125 </span>            :   void reg_jsonrpc( io_id_t io_id, outgoing_handler_t handler )
+<span class="lineNum">     126 </span>            :   {
+<span class="lineNum">     127 </span>            :     _outgoing_factory(io_id, std::move(handler), true);
+<a name="128"><span class="lineNum">     128 </span>            :   }</a>
+<span class="lineNum">     129 </span>            : 
+<span class="lineNum">     130 </span><span class="lineNoCov">          0 :   void perform_jsonrpc(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) </span>
+<span class="lineNum">     131 </span>            :   {
+<span class="lineNum">     132 </span><span class="lineNoCov">          0 :     this-&gt;perform_incoming_( std::move(holder), io_id, std::move(handler) );</span>
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 :   }</span>
+<span class="lineNum">     134 </span>            : 
+<span class="lineNum">     135 </span>            :   /***************************************************************/
+<span class="lineNum">     136 </span>            :   /* data_ptr                                                    */
+<span class="lineNum">     137 </span>            :   /***************************************************************/
+<span class="lineNum">     138 </span>            :   
+<span class="lineNum">     139 </span>            :   outgoing_handler_t io2rpc( output_handler_t handler )
+<span class="lineNum">     140 </span>            :   {
+<span class="lineNum">     141 </span>            :     if ( handler == nullptr )
+<span class="lineNum">     142 </span>            :       return nullptr;
+<span class="lineNum">     143 </span>            : 
+<span class="lineNum">     144 </span>            :     return [handler](outgoing_holder holder)
+<span class="lineNum">     145 </span>            :     {
+<span class="lineNum">     146 </span>            :       auto d = holder.detach();
+<span class="lineNum">     147 </span>            :       handler( std::move( d ) );
+<span class="lineNum">     148 </span>            :     };
+<span class="lineNum">     149 </span>            :   }
+<span class="lineNum">     150 </span>            : 
+<span class="lineNum">     151 </span>            :   void reg_io( io_id_t io_id, input_handler_t handler )
+<span class="lineNum">     152 </span>            :   {
+<span class="lineNum">     153 </span>            :     this-&gt;_input_factory(io_id, std::move(handler), true);
+<span class="lineNum">     154 </span>            :   }
+<span class="lineNum">     155 </span>            : 
+<span class="lineNum">     156 </span>            :   void unreg_io( io_id_t io_id )
+<span class="lineNum">     157 </span>            :   {
+<span class="lineNum">     158 </span>            :     _handler_map.erase(io_id);
+<span class="lineNum">     159 </span>            :   }
+<a name="160"><span class="lineNum">     160 </span>            : </a>
+<span class="lineNum">     161 </span>            :   
+<span class="lineNum">     162 </span><span class="lineCov">          1 :   void perform_io(data_ptr d, io_id_t io_id, output_handler_t handler) </span>
+<span class="lineNum">     163 </span>            :   {
+<span class="lineNum">     164 </span>            :     using namespace std::placeholders;
+<span class="lineNum">     165 </span><span class="lineCov">          2 :     while ( d != nullptr )</span>
+<span class="lineNum">     166 </span>            :     {
+<span class="lineNum">     167 </span><span class="lineCov">          1 :       incoming_holder holder(std::move(d));</span>
+<span class="lineNum">     168 </span><span class="lineCov">          1 :       ::wjson::json_error e;</span>
+<span class="lineNum">     169 </span><span class="lineCov">          1 :       d = holder.parse(&amp;e);</span>
+<span class="lineNum">     170 </span><span class="lineCov">          1 :       if ( !e &amp;&amp; holder )</span>
+<span class="lineNum">     171 </span>            :       {
+<span class="lineNum">     172 </span><span class="lineCov">          1 :         this-&gt;perform_io_once_( std::move(holder), io_id, handler );</span>
+<span class="lineNum">     173 </span>            :       }
+<span class="lineNum">     174 </span>            :       else
+<a name="175"><span class="lineNum">     175 </span>            :       {</a>
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :         WJRPC_LOG_ERROR( &quot;jsonrpc::engine: Parse error: &quot; &lt;&lt; holder.str() )</span>
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :         aux::send_error_raw( std::move(holder), std::make_unique&lt;parse_error&gt;(), [handler](data_ptr err)</span>
+<span class="lineNum">     178 </span>            :         {
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :           if ( err != nullptr)</span>
+<span class="lineNum">     180 </span><span class="lineNoCov">          0 :             { WJRPC_LOG_ERROR( std::string(err-&gt;begin(), err-&gt;end()) ) }</span>
+<span class="lineNum">     181 </span><span class="lineNoCov">          0 :           handler( std::move(err) );</span>
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :         });</span>
+<span class="lineNum">     183 </span>            :       }
+<span class="lineNum">     184 </span>            :     }
+<span class="lineNum">     185 </span><span class="lineCov">          1 :   }</span>
+<span class="lineNum">     186 </span>            : 
+<span class="lineNum">     187 </span>            :   io_id_t get_id() const
+<span class="lineNum">     188 </span>            :   {
+<span class="lineNum">     189 </span>            :     return _io_id;
+<span class="lineNum">     190 </span>            :   }
+<span class="lineNum">     191 </span>            :   
+<span class="lineNum">     192 </span>            :   size_t remove_outdated()
+<span class="lineNum">     193 </span>            :   {
+<span class="lineNum">     194 </span>            :     return _call_map.remove_outdated();
+<span class="lineNum">     195 </span>            :   }
+<span class="lineNum">     196 </span>            : 
+<span class="lineNum">     197 </span>            :   handler_ptr find(io_id_t io_id) const
+<span class="lineNum">     198 </span>            :   {
+<span class="lineNum">     199 </span>            :     return _handler_map.find(io_id);
+<span class="lineNum">     200 </span>            :   }
+<span class="lineNum">     201 </span>            : 
+<span class="lineNum">     202 </span>            :   struct sizes_info
+<span class="lineNum">     203 </span>            :   {
+<span class="lineNum">     204 </span>            :     size_t handler_map = 0;
+<span class="lineNum">     205 </span>            :     size_t result_map = 0;
+<span class="lineNum">     206 </span>            :     size_t result_queue = 0;
+<span class="lineNum">     207 </span>            :   };
+<span class="lineNum">     208 </span>            :   
+<span class="lineNum">     209 </span>            :   sizes_info sizes() const
+<span class="lineNum">     210 </span>            :   {
+<span class="lineNum">     211 </span>            :     sizes_info si;
+<span class="lineNum">     212 </span>            :     auto cmi = _call_map.sizes();
+<span class="lineNum">     213 </span>            :     si.result_map = cmi.first;
+<span class="lineNum">     214 </span>            :     si.result_queue = cmi.second;
+<span class="lineNum">     215 </span>            :     si.handler_map = _handler_map.size();
+<span class="lineNum">     216 </span>            :     return si;
+<span class="lineNum">     217 </span>            :   }
+<a name="218"><span class="lineNum">     218 </span>            :   </a>
+<span class="lineNum">     219 </span>            :   template&lt;typename Schema&gt;
+<span class="lineNum">     220 </span><span class="lineCov">          1 :   static std::vector&lt;Schema&gt; create_schema_t()</span>
+<span class="lineNum">     221 </span>            :   {
+<span class="lineNum">     222 </span><span class="lineCov">          1 :     return handler_type::template create_schema_t&lt;Schema&gt;();</span>
+<a name="223"><span class="lineNum">     223 </span>            :   }</a>
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span><span class="lineCov">          1 :   static std::vector&lt;default_schema&gt; create_schema()</span>
+<span class="lineNum">     226 </span>            :   {
+<span class="lineNum">     227 </span><span class="lineCov">          1 :     return create_schema_t&lt;default_schema&gt;();</span>
+<span class="lineNum">     228 </span>            :   }
+<span class="lineNum">     229 </span>            : 
+<a name="230"><span class="lineNum">     230 </span>            : private:</a>
+<span class="lineNum">     231 </span>            :   
+<a name="232"><span class="lineNum">     232 </span><span class="lineCov">          1 :   void perform_io_once_(incoming_holder holder, io_id_t io_id, output_handler_t handler)</span></a>
+<span class="lineNum">     233 </span>            :   {
+<span class="lineNum">     234 </span><span class="lineCov">         19 :     this-&gt;perform_incoming_( std::move(holder), io_id, [handler](outgoing_holder oholder)</span>
+<span class="lineNum">     235 </span>            :     {
+<span class="lineNum">     236 </span><span class="lineCov">          1 :       handler(oholder.detach());</span>
+<span class="lineNum">     237 </span><span class="lineCov">          1 :     });</span>
+<a name="238"><span class="lineNum">     238 </span><span class="lineCov">          1 :   }</span></a>
+<span class="lineNum">     239 </span>            : 
+<span class="lineNum">     240 </span><span class="lineCov">          1 :   void perform_incoming_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) </span>
+<span class="lineNum">     241 </span>            :   {
+<span class="lineNum">     242 </span><span class="lineCov">          1 :     if ( holder.is_notify() || holder.is_request() )</span>
+<span class="lineNum">     243 </span>            :     {
+<span class="lineNum">     244 </span><span class="lineCov">          1 :       this-&gt;perform_request_( std::move(holder), io_id, std::move(handler) );</span>
+<span class="lineNum">     245 </span>            :     }
+<span class="lineNum">     246 </span><span class="lineNoCov">          0 :     else if (holder.is_response() || holder.is_error() )</span>
+<span class="lineNum">     247 </span>            :     {
+<span class="lineNum">     248 </span><span class="lineNoCov">          0 :       this-&gt;perform_response_( std::move(holder), io_id, std::move(handler) );</span>
+<span class="lineNum">     249 </span>            :     }
+<span class="lineNum">     250 </span>            :     else
+<a name="251"><span class="lineNum">     251 </span>            :     {</a>
+<span class="lineNum">     252 </span><span class="lineNoCov">          0 :       WJRPC_LOG_ERROR(&quot;jsonrpc::engine: Invalid Request: &quot; &lt;&lt; holder.str() )</span>
+<span class="lineNum">     253 </span><span class="lineNoCov">          0 :       aux::send_error( std::move(holder), std::make_unique&lt;invalid_request&gt;(), [handler](outgoing_holder oholder)</span>
+<span class="lineNum">     254 </span>            :       {
+<span class="lineNum">     255 </span><span class="lineNoCov">          0 :         auto h2 = oholder.clone( oholder.call_id() );</span>
+<span class="lineNum">     256 </span><span class="lineNoCov">          0 :         if ( auto d = h2.detach() )</span>
+<span class="lineNum">     257 </span>            :         {
+<span class="lineNum">     258 </span><span class="lineNoCov">          0 :           WJRPC_LOG_ERROR(std::string(d-&gt;begin(), d-&gt;end()) )</span>
+<span class="lineNum">     259 </span>            :         }
+<span class="lineNum">     260 </span><span class="lineNoCov">          0 :         handler( std::move(oholder) );</span>
+<span class="lineNum">     261 </span><span class="lineNoCov">          0 :       });</span>
+<span class="lineNum">     262 </span>            :     }
+<a name="263"><span class="lineNum">     263 </span><span class="lineCov">          1 :   }</span></a>
+<span class="lineNum">     264 </span>            : 
+<span class="lineNum">     265 </span><span class="lineCov">          1 :   void perform_request_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) </span>
+<span class="lineNum">     266 </span>            :   {
+<span class="lineNum">     267 </span><span class="lineCov">          2 :     if ( auto h = _outgoing_factory(io_id, std::cref(handler), false) )</span>
+<span class="lineNum">     268 </span>            :     {
+<span class="lineNum">     269 </span><span class="lineCov">          1 :       h-&gt;invoke( std::move(holder), std::move(handler) );</span>
+<span class="lineNum">     270 </span>            :     }
+<span class="lineNum">     271 </span>            :     else
+<span class="lineNum">     272 </span>            :     {
+<span class="lineNum">     273 </span><span class="lineNoCov">          0 :       WJRPC_LOG_FATAL( &quot;_outgoing_factory==nullptr engine.hpp:267&quot; )</span>
+<span class="lineNum">     274 </span>            :     }
+<a name="275"><span class="lineNum">     275 </span><span class="lineCov">          1 :   }</span></a>
+<span class="lineNum">     276 </span>            : 
+<span class="lineNum">     277 </span><span class="lineNoCov">          0 :   void perform_response_(incoming_holder holder, io_id_t /*io_id*/, outgoing_handler_t handler) </span>
+<span class="lineNum">     278 </span>            :   {
+<span class="lineNum">     279 </span><span class="lineNoCov">          0 :     ::wjson::json_error e;</span>
+<span class="lineNum">     280 </span><span class="lineNoCov">          0 :     call_id_t call_id = holder.template get_id&lt;call_id_t&gt;(&amp;e);</span>
+<span class="lineNum">     281 </span>            : 
+<span class="lineNum">     282 </span><span class="lineNoCov">          0 :     if ( auto result_handler = _call_map.detach(call_id) )</span>
+<span class="lineNum">     283 </span>            :     {
+<span class="lineNum">     284 </span><span class="lineNoCov">          0 :       result_handler(std::move(holder));</span>
+<span class="lineNum">     285 </span>            :     }
+<span class="lineNum">     286 </span><span class="lineNoCov">          0 :     else if ( handler!=nullptr )</span>
+<span class="lineNum">     287 </span>            :     {
+<span class="lineNum">     288 </span><span class="lineNoCov">          0 :       if ( !e )</span>
+<span class="lineNum">     289 </span>            :       {  
+<span class="lineNum">     290 </span><span class="lineNoCov">          0 :         ++_lost_results;</span>
+<span class="lineNum">     291 </span><span class="lineNoCov">          0 :         time_t now = time(nullptr);</span>
+<span class="lineNum">     292 </span><span class="lineNoCov">          0 :         if ( now &gt; _log_time1 )</span>
+<span class="lineNum">     293 </span>            :         {
+<span class="lineNum">     294 </span><span class="lineNoCov">          0 :           WJRPC_LOG_ERROR( &quot;jsonrpc::engin incoming response with call_id=&quot; &lt;&lt; call_id &lt;&lt; &quot; not found. Total lost results &quot; &lt;&lt; _lost_results)</span>
+<span class="lineNum">     295 </span><span class="lineNoCov">          0 :           _log_time1 = now;</span>
+<span class="lineNum">     296 </span>            :         }
+<span class="lineNum">     297 </span>            :       }
+<span class="lineNum">     298 </span>            :       else
+<span class="lineNum">     299 </span>            :       {
+<span class="lineNum">     300 </span><span class="lineNoCov">          0 :         WJRPC_LOG_ERROR( &quot;jsonrpc::engin incoming response with call_id=&quot; &lt;&lt; call_id &lt;&lt; &quot; id error. &quot; &lt;&lt; ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )</span>
+<span class="lineNum">     301 </span>            :       }
+<span class="lineNum">     302 </span><span class="lineNoCov">          0 :       handler( outgoing_holder() );</span>
+<span class="lineNum">     303 </span>            :     }
+<span class="lineNum">     304 </span><span class="lineNoCov">          0 :   }</span>
+<a name="305"><span class="lineNum">     305 </span>            : </a>
+<span class="lineNum">     306 </span>            :   template&lt;typename O&gt;
+<span class="lineNum">     307 </span><span class="lineNoCov">          0 :   void upgrate_options_(O&amp; opt, output_handler_t handler)</span>
+<a name="308"><span class="lineNum">     308 </span>            :   {</a>
+<span class="lineNum">     309 </span><span class="lineNoCov">          0 :     std::weak_ptr&lt;self&gt; wthis = this-&gt;shared_from_this();</span>
+<span class="lineNum">     310 </span><span class="lineNoCov">          0 :     opt.sender_handler = [handler, wthis](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)</span>
+<span class="lineNum">     311 </span>            :     {
+<span class="lineNum">     312 </span><span class="lineNoCov">          0 :       auto pthis = wthis.lock();</span>
+<span class="lineNum">     313 </span><span class="lineNoCov">          0 :       if ( pthis==nullptr )</span>
+<span class="lineNum">     314 </span><span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">     315 </span>            :       
+<span class="lineNum">     316 </span><span class="lineNoCov">          0 :       if ( rs1!=nullptr )</span>
+<span class="lineNum">     317 </span>            :       {
+<span class="lineNum">     318 </span><span class="lineNoCov">          0 :         auto call_id = pthis-&gt;_call_counter.fetch_add(1);</span>
+<span class="lineNum">     319 </span><span class="lineNoCov">          0 :         pthis-&gt;_call_map.set(call_id, std::move(rh1));</span>
+<span class="lineNum">     320 </span><span class="lineNoCov">          0 :         auto d = std::move(rs1(name, call_id));</span>
+<span class="lineNum">     321 </span><span class="lineNoCov">          0 :         handler(std::move(d));</span>
+<span class="lineNum">     322 </span>            :       }
+<span class="lineNum">     323 </span><span class="lineNoCov">          0 :       else if (ns1!=nullptr)</span>
+<span class="lineNum">     324 </span>            :       {
+<span class="lineNum">     325 </span><span class="lineNoCov">          0 :         auto d = std::move(ns1(name));</span>
+<span class="lineNum">     326 </span><span class="lineNoCov">          0 :         handler( std::move(d));</span>
+<span class="lineNum">     327 </span>            :       }
+<span class="lineNum">     328 </span>            :       else
+<span class="lineNum">     329 </span>            :       {
+<span class="lineNum">     330 </span><span class="lineNoCov">          0 :         handler(nullptr);</span>
+<span class="lineNum">     331 </span>            :       }
+<span class="lineNum">     332 </span><span class="lineNoCov">          0 :     };</span>
+<span class="lineNum">     333 </span><span class="lineNoCov">          0 :   }</span>
+<a name="334"><span class="lineNum">     334 </span>            :   </a>
+<span class="lineNum">     335 </span>            :   template&lt;typename O&gt;
+<span class="lineNum">     336 </span><span class="lineNoCov">          0 :   void upgrate_options_(O&amp; opt, input_handler_t handler)</span>
+<span class="lineNum">     337 </span>            :   {
+<a name="338"><span class="lineNum">     338 </span><span class="lineNoCov">          0 :     io_id_t io_id = this-&gt;_io_id;</span></a>
+<span class="lineNum">     339 </span><span class="lineNoCov">          0 :     std::weak_ptr&lt;self&gt; wthis = this-&gt;shared_from_this();</span>
+<span class="lineNum">     340 </span><span class="lineNoCov">          0 :     opt.sender_handler = [handler, wthis, io_id](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)</span>
+<span class="lineNum">     341 </span>            :     {
+<span class="lineNum">     342 </span><span class="lineNoCov">          0 :       auto pthis = wthis.lock();</span>
+<span class="lineNum">     343 </span><span class="lineNoCov">          0 :       if ( pthis == nullptr )</span>
+<span class="lineNum">     344 </span><span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">     345 </span><span class="lineNoCov">          0 :       if ( rs1!=nullptr &amp;&amp; rh1!=nullptr )</span>
+<span class="lineNum">     346 </span>            :       {
+<span class="lineNum">     347 </span><span class="lineNoCov">          0 :         auto cid = pthis-&gt;_call_counter.fetch_add(1);</span>
+<span class="lineNum">     348 </span>            :         
+<span class="lineNum">     349 </span><span class="lineNoCov">          0 :         pthis-&gt;_call_map.set(cid, std::move(rh1));</span>
+<a name="350"><span class="lineNum">     350 </span><span class="lineNoCov">          0 :         auto d = std::move( rs1(name, cid) );</span></a>
+<span class="lineNum">     351 </span>            :         
+<span class="lineNum">     352 </span><span class="lineNoCov">          0 :         handler( std::move(d), io_id, [wthis, handler, io_id, cid](data_ptr d2)</span>
+<span class="lineNum">     353 </span>            :         {
+<span class="lineNum">     354 </span><span class="lineNoCov">          0 :           auto pthis2 = wthis.lock();</span>
+<span class="lineNum">     355 </span><span class="lineNoCov">          0 :           if ( pthis2 == nullptr )</span>
+<span class="lineNum">     356 </span><span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     357 </span>            : 
+<span class="lineNum">     358 </span>            :           // если данные не могут быть отправленны
+<span class="lineNum">     359 </span><span class="lineNoCov">          0 :           if ( d2==nullptr )</span>
+<span class="lineNum">     360 </span>            :           {
+<span class="lineNum">     361 </span><span class="lineNoCov">          0 :             auto rh = pthis2-&gt;_call_map.detach(cid);</span>
+<span class="lineNum">     362 </span><span class="lineNoCov">          0 :             if ( rh == nullptr )</span>
+<span class="lineNum">     363 </span><span class="lineNoCov">          0 :               return;</span>
+<span class="lineNum">     364 </span>            :             
+<span class="lineNum">     365 </span><span class="lineNoCov">          0 :             data_ptr ed = std::make_unique&lt;data_type&gt;();</span>
+<span class="lineNum">     366 </span><span class="lineNoCov">          0 :             ed-&gt;reserve(50);</span>
+<span class="lineNum">     367 </span><span class="lineNoCov">          0 :             outgoing_error&lt;error&gt; err;</span>
+<span class="lineNum">     368 </span>            :             
+<span class="lineNum">     369 </span><span class="lineNoCov">          0 :             data_ptr pid = std::make_unique&lt;data_type&gt;();</span>
+<span class="lineNum">     370 </span><span class="lineNoCov">          0 :             ::wjson::value&lt;int&gt;::serializer()( cid, std::back_inserter(*pid));</span>
+<span class="lineNum">     371 </span><span class="lineNoCov">          0 :             err.error = std::make_unique&lt;service_unavailable&gt;();</span>
+<span class="lineNum">     372 </span><span class="lineNoCov">          0 :             err.id = std::move(pid);</span>
+<span class="lineNum">     373 </span>            :             
+<span class="lineNum">     374 </span><span class="lineNoCov">          0 :             outgoing_error_json&lt;error_json&gt;::serializer()(err, std::back_inserter(*ed));</span>
+<span class="lineNum">     375 </span><span class="lineNoCov">          0 :             incoming_holder empty_holder(std::move(ed));</span>
+<span class="lineNum">     376 </span><span class="lineNoCov">          0 :             rh( std::move(empty_holder) );</span>
+<span class="lineNum">     377 </span><span class="lineNoCov">          0 :             return;</span>
+<a name="378"><span class="lineNum">     378 </span>            :           }</a>
+<span class="lineNum">     379 </span>            : 
+<span class="lineNum">     380 </span><span class="lineNoCov">          0 :           pthis2-&gt;perform_io( std::move(d2), io_id, [io_id, handler](data_ptr d3)</span>
+<span class="lineNum">     381 </span>            :           {
+<span class="lineNum">     382 </span><span class="lineNoCov">          0 :             handler( std::move(d3), io_id, nullptr);</span>
+<span class="lineNum">     383 </span><span class="lineNoCov">          0 :           });</span>
+<span class="lineNum">     384 </span><span class="lineNoCov">          0 :         });</span>
+<span class="lineNum">     385 </span>            :       }
+<span class="lineNum">     386 </span><span class="lineNoCov">          0 :       else if ( ns1!=nullptr)</span>
+<span class="lineNum">     387 </span>            :       {
+<span class="lineNum">     388 </span><span class="lineNoCov">          0 :         auto d = std::move(ns1(name));</span>
+<span class="lineNum">     389 </span><span class="lineNoCov">          0 :         handler( std::move(d), io_id, nullptr);</span>
+<span class="lineNum">     390 </span>            :       }
+<span class="lineNum">     391 </span><span class="lineNoCov">          0 :     };</span>
+<span class="lineNum">     392 </span><span class="lineNoCov">          0 :   }</span>
+<a name="393"><span class="lineNum">     393 </span>            : </a>
+<span class="lineNum">     394 </span>            :   template&lt;typename O&gt;
+<span class="lineNum">     395 </span><span class="lineCov">          1 :   void upgrate_options_(O&amp; opt, outgoing_handler_t handler)</span>
+<span class="lineNum">     396 </span>            :   {
+<span class="lineNum">     397 </span>            :     
+<span class="lineNum">     398 </span><span class="lineCov">          1 :     if ( handler == nullptr )</span>
+<span class="lineNum">     399 </span>            :     {
+<span class="lineNum">     400 </span><span class="lineNoCov">          0 :       opt.sender_handler = nullptr;</span>
+<span class="lineNum">     401 </span><span class="lineCov">          1 :       return;</span>
+<span class="lineNum">     402 </span>            :     }
+<a name="403"><span class="lineNum">     403 </span>            :     </a>
+<span class="lineNum">     404 </span><span class="lineCov">          1 :     std::weak_ptr&lt;self&gt; wthis = this-&gt;shared_from_this();</span>
+<span class="lineNum">     405 </span><span class="lineCov">          8 :     opt.sender_handler = [handler, wthis](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)</span>
+<span class="lineNum">     406 </span>            :     {
+<span class="lineNum">     407 </span><span class="lineNoCov">          0 :       auto pthis = wthis.lock();</span>
+<span class="lineNum">     408 </span><span class="lineNoCov">          0 :       if ( pthis==nullptr )</span>
+<span class="lineNum">     409 </span><span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">     410 </span>            : 
+<span class="lineNum">     411 </span><span class="lineNoCov">          0 :       call_id_t call_id = 0;</span>
+<span class="lineNum">     412 </span><span class="lineNoCov">          0 :       outgoing_holder::result_handler_t rhw = nullptr;</span>
+<span class="lineNum">     413 </span>            : 
+<span class="lineNum">     414 </span><span class="lineNoCov">          0 :       if ( rs1!=nullptr &amp;&amp; rh1!=nullptr )</span>
+<a name="415"><span class="lineNum">     415 </span>            :       {</a>
+<span class="lineNum">     416 </span><span class="lineNoCov">          0 :         io_id_t io_id = pthis-&gt;_io_id;</span>
+<span class="lineNum">     417 </span><span class="lineNoCov">          0 :         rhw = [wthis,  handler, io_id](incoming_holder holder)</span>
+<span class="lineNum">     418 </span>            :         {
+<span class="lineNum">     419 </span><span class="lineNoCov">          0 :           auto pthis2 = wthis.lock();</span>
+<span class="lineNum">     420 </span><span class="lineNoCov">          0 :           if ( pthis2==nullptr )</span>
+<span class="lineNum">     421 </span><span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     422 </span>            : 
+<span class="lineNum">     423 </span><span class="lineNoCov">          0 :           if ( holder.is_response() || holder.is_error() )</span>
+<span class="lineNum">     424 </span>            :           {
+<span class="lineNum">     425 </span><span class="lineNoCov">          0 :             if ( auto h = pthis2-&gt;_call_map.detach( holder.get_id&lt;call_id_t&gt;(nullptr) ) )</span>
+<span class="lineNum">     426 </span>            :             {
+<span class="lineNum">     427 </span><span class="lineNoCov">          0 :               h(std::move(holder) );</span>
+<span class="lineNum">     428 </span>            :             }
+<span class="lineNum">     429 </span>            :           }
+<a name="430"><span class="lineNum">     430 </span>            :           else</a>
+<span class="lineNum">     431 </span>            :           {
+<span class="lineNum">     432 </span><span class="lineNoCov">          0 :             pthis2-&gt;perform_jsonrpc( std::move(holder), io_id, [handler](outgoing_holder oholder)</span>
+<span class="lineNum">     433 </span>            :             {
+<span class="lineNum">     434 </span><span class="lineNoCov">          0 :               handler( std::move(oholder) ) ;</span>
+<span class="lineNum">     435 </span><span class="lineNoCov">          0 :             });</span>
+<span class="lineNum">     436 </span>            :           }
+<span class="lineNum">     437 </span><span class="lineNoCov">          0 :         }; // rh=[](){}</span>
+<span class="lineNum">     438 </span><span class="lineNoCov">          0 :         call_id = pthis-&gt;_call_counter.fetch_add(1);</span>
+<span class="lineNum">     439 </span><span class="lineNoCov">          0 :         pthis-&gt;_call_map.set(call_id, std::move(rh1) );</span>
+<span class="lineNum">     440 </span>            :       }
+<span class="lineNum">     441 </span>            :       
+<span class="lineNum">     442 </span><span class="lineNoCov">          0 :       if ( ns1!=nullptr )</span>
+<span class="lineNum">     443 </span>            :       {
+<span class="lineNum">     444 </span><span class="lineNoCov">          0 :         outgoing_holder holder(name, std::move(ns1), std::move(rs1), std::move(rhw), call_id );</span>
+<span class="lineNum">     445 </span><span class="lineNoCov">          0 :         handler( std::move(holder) );</span>
+<span class="lineNum">     446 </span>            :       }
+<span class="lineNum">     447 </span>            :       else
+<span class="lineNum">     448 </span>            :       {
+<span class="lineNum">     449 </span><span class="lineNoCov">          0 :         handler( std::move(outgoing_holder()) );</span>
+<span class="lineNum">     450 </span>            :       }
+<span class="lineNum">     451 </span><span class="lineCov">          1 :     }; // opt.sender_handler</span>
+<span class="lineNum">     452 </span>            :   }
+<a name="453"><span class="lineNum">     453 </span>            : </a>
+<span class="lineNum">     454 </span>            :   template&lt;typename Opt, typename OutgoingHandler&gt;
+<span class="lineNum">     455 </span><span class="lineCov">          1 :   handler_ptr create_handler_(io_id_t io_id, Opt opt, OutgoingHandler handler, bool reg_io_flag)</span>
+<span class="lineNum">     456 </span>            :   {
+<span class="lineNum">     457 </span>            :     bool reinit;
+<span class="lineNum">     458 </span><span class="lineCov">          1 :     auto ph = _handler_map.findocre(io_id, reg_io_flag, reinit);</span>
+<span class="lineNum">     459 </span><span class="lineCov">          1 :     if ( reinit )</span>
+<span class="lineNum">     460 </span>            :     {
+<span class="lineNum">     461 </span>            :       // ph-&gt;initialize(opt);
+<span class="lineNum">     462 </span>            :       // специализация в зависимости от типа OutgoingHandler
+<span class="lineNum">     463 </span><span class="lineCov">          1 :       this-&gt;upgrate_options_(opt, std::move(handler));</span>
+<span class="lineNum">     464 </span><span class="lineCov">          1 :       if ( !ph-&gt;status() )</span>
+<span class="lineNum">     465 </span>            :       {
+<span class="lineNum">     466 </span><span class="lineCov">          1 :         ph-&gt;start(opt, io_id);</span>
+<span class="lineNum">     467 </span>            :       }
+<span class="lineNum">     468 </span><span class="lineNoCov">          0 :       else if ( reinit )</span>
+<span class="lineNum">     469 </span>            :       {
+<span class="lineNum">     470 </span><span class="lineNoCov">          0 :         ph-&gt;initialize(opt);</span>
+<span class="lineNum">     471 </span>            :       }
+<span class="lineNum">     472 </span>            :     }
+<span class="lineNum">     473 </span><span class="lineCov">          1 :     return ph;</span>
+<span class="lineNum">     474 </span>            :   }
+<span class="lineNum">     475 </span>            : 
+<span class="lineNum">     476 </span>            : private:
+<span class="lineNum">     477 </span>            : 
+<span class="lineNum">     478 </span>            :   std::function&lt;handler_ptr(io_id_t, outgoing_handler_t, bool)&gt; _outgoing_factory;
+<span class="lineNum">     479 </span>            :   std::function&lt;handler_ptr(io_id_t, output_handler_t, bool)&gt; _output_factory;
+<span class="lineNum">     480 </span>            :   std::function&lt;handler_ptr(io_id_t, input_handler_t, bool)&gt; _input_factory;
+<span class="lineNum">     481 </span>            : 
+<span class="lineNum">     482 </span>            :   typedef handler_map&lt;handler_type&gt; handler_map_t;
+<span class="lineNum">     483 </span>            :   handler_map_t _handler_map;
+<span class="lineNum">     484 </span>            :   call_map _call_map;
+<span class="lineNum">     485 </span>            :   std::atomic&lt;int&gt; _call_counter;
+<span class="lineNum">     486 </span>            :   io_id_t _io_id = 0;
+<span class="lineNum">     487 </span>            :   handler_ptr _default_handler;
+<span class="lineNum">     488 </span>            :   std::atomic&lt;time_t&gt; _log_time1;
+<span class="lineNum">     489 </span>            :   std::atomic&lt;time_t&gt; _lost_results;
+<span class="lineNum">     490 </span>            : };
+<span class="lineNum">     491 </span>            : 
+<span class="lineNum">     492 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

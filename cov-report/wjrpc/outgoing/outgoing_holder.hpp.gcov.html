@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - wjrpc/outgoing/outgoing_holder.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">wjrpc/outgoing</a> - outgoing_holder.hpp<span style="font-size: 80%;"> (source / <a href="outgoing_holder.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">66.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2013-2016
+<span class="lineNum">       3 </span>            : //
+<span class="lineNum">       4 </span>            : // Copyright: See COPYING file that comes with this distribution
+<span class="lineNum">       5 </span>            : //
+<span class="lineNum">       6 </span>            : #pragma once
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : #include &lt;wjrpc/outgoing/outgoing_request.hpp&gt;
+<span class="lineNum">       9 </span>            : #include &lt;wjrpc/outgoing/outgoing_request_json.hpp&gt;
+<span class="lineNum">      10 </span>            : #include &lt;wjrpc/incoming/incoming_holder.hpp&gt;
+<span class="lineNum">      11 </span>            : #include &lt;wjrpc/basic_types.hpp&gt;
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : #include &lt;chrono&gt;
+<span class="lineNum">      14 </span>            : #include &lt;cstring&gt;
+<span class="lineNum">      15 </span>            : 
+<a name="16"><span class="lineNum">      16 </span>            : namespace wjrpc{</a>
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span><span class="lineCov">         60 : class outgoing_holder</span>
+<span class="lineNum">      19 </span>            : {
+<span class="lineNum">      20 </span>            : public:
+<span class="lineNum">      21 </span>            :   typedef std::function&lt; void(incoming_holder) &gt; result_handler_t;
+<span class="lineNum">      22 </span>            :   typedef std::function&lt; data_ptr() &gt; basic_serializer_t;
+<span class="lineNum">      23 </span>            :   typedef std::function&lt; data_ptr(const char* name, call_id_t id) &gt; request_serializer_t;
+<span class="lineNum">      24 </span>            :   typedef std::function&lt; data_ptr(const char* name) &gt; notify_serializer_t;
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            :   outgoing_holder();
+<span class="lineNum">      27 </span>            :   
+<span class="lineNum">      28 </span>            :   // полностью сериализованный result, error
+<span class="lineNum">      29 </span>            :   explicit outgoing_holder(data_ptr d);
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span>            :   // полностью сериализованный notify
+<span class="lineNum">      32 </span>            :   outgoing_holder(const char* n, data_ptr d);
+<span class="lineNum">      33 </span>            : 
+<span class="lineNum">      34 </span>            :   // полностью сериализованный request
+<span class="lineNum">      35 </span>            :   outgoing_holder(const char* n, data_ptr d, result_handler_t result_handler, call_id_t cid);
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            :   // отложенная сериализация result или error
+<span class="lineNum">      38 </span>            :   explicit outgoing_holder(basic_serializer_t serializer);
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            :   // отложенная сериализация исходящих запросов
+<span class="lineNum">      41 </span>            :   outgoing_holder(const char* n, notify_serializer_t ns, request_serializer_t rs, result_handler_t rh, call_id_t cid);
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            :   data_ptr detach();
+<span class="lineNum">      44 </span>            :   outgoing_holder clone() const;
+<span class="lineNum">      45 </span>            :   outgoing_holder clone(call_id_t cid) const;
+<a name="46"><span class="lineNum">      46 </span>            : </a>
+<span class="lineNum">      47 </span>            :   bool is_result() const  { return _result_handler==nullptr &amp;&amp; _name==nullptr;}
+<span class="lineNum">      48 </span><span class="lineCov">         12 :   bool is_request() const { return _result_handler!=nullptr &amp;&amp; _name!=nullptr;}</span>
+<span class="lineNum">      49 </span>            :   bool is_notify() const  { return _result_handler==nullptr &amp;&amp; _name!=nullptr;}
+<a name="50"><span class="lineNum">      50 </span>            :  </a>
+<span class="lineNum">      51 </span>            :   const char* name() const;
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :   call_id_t call_id() const { return _call_id;}</span>
+<span class="lineNum">      53 </span>            :   result_handler_t result_handler() const;
+<span class="lineNum">      54 </span>            :   void result_handler(result_handler_t handler);
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span>            : private:
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            :   const char* _name;
+<span class="lineNum">      59 </span>            :   data_ptr _data;
+<span class="lineNum">      60 </span>            :   basic_serializer_t _basic_serializer;
+<span class="lineNum">      61 </span>            :   notify_serializer_t _notify_serializer;
+<span class="lineNum">      62 </span>            :   request_serializer_t _request_serializer;
+<span class="lineNum">      63 </span>            :   result_handler_t _result_handler;
+<span class="lineNum">      64 </span>            :   call_id_t _call_id;
+<span class="lineNum">      65 </span>            : };
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

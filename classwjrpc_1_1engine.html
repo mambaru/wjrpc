@@ -1,0 +1,959 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.15"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wjrpc: Шаблон класса wjrpc::engine&lt; JsonrpcHandler &gt;</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wjrpc
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.15 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Поиск');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewjrpc.html">wjrpc</a></li><li class="navelem"><a class="el" href="classwjrpc_1_1engine.html">engine</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
+<a href="#pub-types">Открытые типы</a> &#124;
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="#pub-static-methods">Открытые статические члены</a> &#124;
+<a href="classwjrpc_1_1engine-members.html">Полный список членов класса</a>  </div>
+  <div class="headertitle">
+<div class="title">Шаблон класса wjrpc::engine&lt; JsonrpcHandler &gt;</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>JSONRPC движок. По сути, реестр jsonrpc-обработчиков, который позволяет вынести их в отдельный модуль и управлять временем жизни  
+ <a href="classwjrpc_1_1engine.html#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="engine_8hpp_source.html">engine.hpp</a>&gt;</code></p>
+
+<p>Базовые классы:enable_shared_from_this&lt; engine&lt; JsonrpcHandler &gt; &gt;.</p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwjrpc_1_1engine_1_1sizes__info.html">sizes_info</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Открытые типы</h2></td></tr>
+<tr class="memitem:a7bec22fb7c7f57f109f5f921d3fcd8bc"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classwjrpc_1_1engine.html">engine</a>&lt; JsonrpcHandler &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a7bec22fb7c7f57f109f5f921d3fcd8bc">self</a></td></tr>
+<tr class="separator:a7bec22fb7c7f57f109f5f921d3fcd8bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6222795223c23baea10091bd04ed7d0"><td class="memItemLeft" align="right" valign="top">typedef JsonrpcHandler&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#aa6222795223c23baea10091bd04ed7d0">handler_type</a></td></tr>
+<tr class="separator:aa6222795223c23baea10091bd04ed7d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f76194cc2b68b04b8bd089f4b94ec46"><td class="memItemLeft" align="right" valign="top">typedef handler_type::target_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a4f76194cc2b68b04b8bd089f4b94ec46">target_type</a></td></tr>
+<tr class="separator:a4f76194cc2b68b04b8bd089f4b94ec46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefc08516eb92dea530c7e7350069e817"><td class="memItemLeft" align="right" valign="top">typedef handler_type::ptr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#aefc08516eb92dea530c7e7350069e817">handler_ptr</a></td></tr>
+<tr class="separator:aefc08516eb92dea530c7e7350069e817"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c18f9ff4e9ac9eb2a4ca5ef387aecf7"><td class="memItemLeft" align="right" valign="top">typedef handler_type::options_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a9c18f9ff4e9ac9eb2a4ca5ef387aecf7">handler_options_type</a></td></tr>
+<tr class="separator:a9c18f9ff4e9ac9eb2a4ca5ef387aecf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8b0ceb8e4ce7b3732433fd8f97d67e"><td class="memItemLeft" align="right" valign="top">typedef handler_type::result_handler_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a6d8b0ceb8e4ce7b3732433fd8f97d67e">result_handler_t</a></td></tr>
+<tr class="separator:a6d8b0ceb8e4ce7b3732433fd8f97d67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2614e26b35c054a111dc50c92154d800"><td class="memItemLeft" align="right" valign="top">typedef handler_type::request_serializer_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a2614e26b35c054a111dc50c92154d800">request_serializer_t</a></td></tr>
+<tr class="separator:a2614e26b35c054a111dc50c92154d800"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc15d097d7d9ec265dc58743d96a8ab7"><td class="memItemLeft" align="right" valign="top">typedef handler_type::notify_serializer_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#acc15d097d7d9ec265dc58743d96a8ab7">notify_serializer_t</a></td></tr>
+<tr class="separator:acc15d097d7d9ec265dc58743d96a8ab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc85f35e46c706ea7aa483a4486fc4c9"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structwjrpc_1_1engine__options.html">engine_options</a>&lt; <a class="el" href="classwjrpc_1_1engine.html#a9c18f9ff4e9ac9eb2a4ca5ef387aecf7">handler_options_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#adc85f35e46c706ea7aa483a4486fc4c9">options_type</a></td></tr>
+<tr class="separator:adc85f35e46c706ea7aa483a4486fc4c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a674b940e1c833e078226630e7ab0dd3d"><td class="memItemLeft" align="right" valign="top">typedef handler_type::io_id_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a></td></tr>
+<tr class="separator:a674b940e1c833e078226630e7ab0dd3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accaf5e58a6c468fe5c96adb6ef514824"><td class="memItemLeft" align="right" valign="top">typedef handler_type::outgoing_handler_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a></td></tr>
+<tr class="separator:accaf5e58a6c468fe5c96adb6ef514824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03514e4bc0658d8bc7e00980e9a3f667"><td class="memItemLeft" align="right" valign="top">typedef handler_type::data_ptr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a03514e4bc0658d8bc7e00980e9a3f667">data_ptr</a></td></tr>
+<tr class="separator:a03514e4bc0658d8bc7e00980e9a3f667"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a853c382e8a07182843ae2e64914d4410"><td class="memItemLeft" align="right" valign="top">typedef handler_type::call_id_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a853c382e8a07182843ae2e64914d4410">call_id_t</a></td></tr>
+<tr class="separator:a853c382e8a07182843ae2e64914d4410"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:acc185d4d016ad8af0a848c46bb39372b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#acc185d4d016ad8af0a848c46bb39372b">~engine</a> ()</td></tr>
+<tr class="separator:acc185d4d016ad8af0a848c46bb39372b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb82919f52b3e6f4a4491de2380aa521"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#afb82919f52b3e6f4a4491de2380aa521">engine</a> ()</td></tr>
+<tr class="separator:afb82919f52b3e6f4a4491de2380aa521"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5bfeea4f11eb266d8d5c34c15661258"><td class="memTemplParams" colspan="2">template&lt;typename O &gt; </td></tr>
+<tr class="memitem:aa5bfeea4f11eb266d8d5c34c15661258"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#aa5bfeea4f11eb266d8d5c34c15661258">start</a> (O &amp;&amp;opt, <a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id)</td></tr>
+<tr class="separator:aa5bfeea4f11eb266d8d5c34c15661258"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8de1b90804b1753e3d78bb1a2148b26"><td class="memTemplParams" colspan="2">template&lt;typename O &gt; </td></tr>
+<tr class="memitem:aa8de1b90804b1753e3d78bb1a2148b26"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#aa8de1b90804b1753e3d78bb1a2148b26">reconfigure</a> (O &amp;&amp;opt1)</td></tr>
+<tr class="separator:aa8de1b90804b1753e3d78bb1a2148b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaf21ec80757d46ae53f0498f82ca6b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#aeaf21ec80757d46ae53f0498f82ca6b0">stop</a> ()</td></tr>
+<tr class="separator:aeaf21ec80757d46ae53f0498f82ca6b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06daba28742eb19987e78442be04e97f"><td class="memTemplParams" colspan="2">template&lt;typename Tg , typename Req , typename ... Args&gt; </td></tr>
+<tr class="memitem:a06daba28742eb19987e78442be04e97f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a06daba28742eb19987e78442be04e97f">call</a> (Req req, <a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id, Args &amp;&amp;... args)</td></tr>
+<tr class="separator:a06daba28742eb19987e78442be04e97f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e25d9fc5e32810bf95cb072f7e33991"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a9e25d9fc5e32810bf95cb072f7e33991">reg_jsonrpc</a> (<a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id, <a class="el" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a> <a class="el" href="classwjrpc_1_1handler.html">handler</a>)</td></tr>
+<tr class="separator:a9e25d9fc5e32810bf95cb072f7e33991"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cea857088560f53ab1dc62c11962e1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a0cea857088560f53ab1dc62c11962e1a">perform_jsonrpc</a> (<a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> holder, <a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id, <a class="el" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a> <a class="el" href="classwjrpc_1_1handler.html">handler</a>)</td></tr>
+<tr class="separator:a0cea857088560f53ab1dc62c11962e1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f8cb33539f4a5d6b6c541c3fda3d96b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a0f8cb33539f4a5d6b6c541c3fda3d96b">io2rpc</a> (<a class="el" href="namespacewjrpc.html#a743adeb08a0fa4f7c974a409f9c13c1c">output_handler_t</a> <a class="el" href="classwjrpc_1_1handler.html">handler</a>)</td></tr>
+<tr class="separator:a0f8cb33539f4a5d6b6c541c3fda3d96b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa58555ccfd360e7bc2317c65a7769c73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#aa58555ccfd360e7bc2317c65a7769c73">reg_io</a> (<a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id, <a class="el" href="namespacewjrpc.html#af48c76949eadc7bd166dfbcf831a22ee">input_handler_t</a> <a class="el" href="classwjrpc_1_1handler.html">handler</a>)</td></tr>
+<tr class="separator:aa58555ccfd360e7bc2317c65a7769c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fca390a45dd8fa7befefe2873bc3655"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a3fca390a45dd8fa7befefe2873bc3655">unreg_io</a> (<a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id)</td></tr>
+<tr class="separator:a3fca390a45dd8fa7befefe2873bc3655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a50c5fb0187cc57934f638de707f8ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a0a50c5fb0187cc57934f638de707f8ee">perform_io</a> (<a class="el" href="classwjrpc_1_1engine.html#a03514e4bc0658d8bc7e00980e9a3f667">data_ptr</a> d, <a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id, <a class="el" href="namespacewjrpc.html#a743adeb08a0fa4f7c974a409f9c13c1c">output_handler_t</a> <a class="el" href="classwjrpc_1_1handler.html">handler</a>)</td></tr>
+<tr class="separator:a0a50c5fb0187cc57934f638de707f8ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb48ee4d9b29d09bebb665e9375b1c04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#afb48ee4d9b29d09bebb665e9375b1c04">get_id</a> () const</td></tr>
+<tr class="separator:afb48ee4d9b29d09bebb665e9375b1c04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8f2492d802ff0620be90ff23aa935cd"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#ae8f2492d802ff0620be90ff23aa935cd">remove_outdated</a> ()</td></tr>
+<tr class="separator:ae8f2492d802ff0620be90ff23aa935cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7827ed1a9a540f16b188e99f5e2fcea4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1engine.html#aefc08516eb92dea530c7e7350069e817">handler_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a7827ed1a9a540f16b188e99f5e2fcea4">find</a> (<a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id) const</td></tr>
+<tr class="separator:a7827ed1a9a540f16b188e99f5e2fcea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2e07b251b9edfdb969b174ec8c34340"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structwjrpc_1_1engine_1_1sizes__info.html">sizes_info</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#ac2e07b251b9edfdb969b174ec8c34340">sizes</a> () const</td></tr>
+<tr class="separator:ac2e07b251b9edfdb969b174ec8c34340"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Открытые статические члены</h2></td></tr>
+<tr class="memitem:a2a47c4abf3ad7ea78ba97fce80658e5d"><td class="memTemplParams" colspan="2">template&lt;typename Schema &gt; </td></tr>
+<tr class="memitem:a2a47c4abf3ad7ea78ba97fce80658e5d"><td class="memTemplItemLeft" align="right" valign="top">static std::vector&lt; Schema &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a2a47c4abf3ad7ea78ba97fce80658e5d">create_schema_t</a> ()</td></tr>
+<tr class="separator:a2a47c4abf3ad7ea78ba97fce80658e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea2531a782a4c0fb2e98f555c15f84e5"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; default_schema &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#aea2531a782a4c0fb2e98f555c15f84e5">create_schema</a> ()</td></tr>
+<tr class="separator:aea2531a782a4c0fb2e98f555c15f84e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><h3>template&lt;typename JsonrpcHandler&gt;<br />
+class wjrpc::engine&lt; JsonrpcHandler &gt;</h3>
+
+<p class="">JSONRPC движок. По сути, реестр jsonrpc-обработчиков, который позволяет вынести их в отдельный модуль и управлять временем жизни </p>
+<dl class="tparams"><dt>Параметры шаблона</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">JsonrpcHandler</td><td>- JSONRPC обработчик, может быть реализован с помощью <code><a class="el" href="classwjrpc_1_1handler.html" title="JSONRPC обработчик. ">wjrpc::handler</a></code> </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Определения типов</h2>
+<a id="a853c382e8a07182843ae2e64914d4410"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a853c382e8a07182843ae2e64914d4410">&#9670;&nbsp;</a></span>call_id_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::call_id_t <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#a853c382e8a07182843ae2e64914d4410">call_id_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a03514e4bc0658d8bc7e00980e9a3f667"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03514e4bc0658d8bc7e00980e9a3f667">&#9670;&nbsp;</a></span>data_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::data_ptr <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#a03514e4bc0658d8bc7e00980e9a3f667">data_ptr</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9c18f9ff4e9ac9eb2a4ca5ef387aecf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c18f9ff4e9ac9eb2a4ca5ef387aecf7">&#9670;&nbsp;</a></span>handler_options_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::options_type <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#a9c18f9ff4e9ac9eb2a4ca5ef387aecf7">handler_options_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefc08516eb92dea530c7e7350069e817"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefc08516eb92dea530c7e7350069e817">&#9670;&nbsp;</a></span>handler_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::ptr <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#aefc08516eb92dea530c7e7350069e817">handler_ptr</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa6222795223c23baea10091bd04ed7d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6222795223c23baea10091bd04ed7d0">&#9670;&nbsp;</a></span>handler_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef JsonrpcHandler <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#aa6222795223c23baea10091bd04ed7d0">handler_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a674b940e1c833e078226630e7ab0dd3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a674b940e1c833e078226630e7ab0dd3d">&#9670;&nbsp;</a></span>io_id_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::io_id_t <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc15d097d7d9ec265dc58743d96a8ab7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc15d097d7d9ec265dc58743d96a8ab7">&#9670;&nbsp;</a></span>notify_serializer_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::notify_serializer_t <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#acc15d097d7d9ec265dc58743d96a8ab7">notify_serializer_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adc85f35e46c706ea7aa483a4486fc4c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc85f35e46c706ea7aa483a4486fc4c9">&#9670;&nbsp;</a></span>options_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structwjrpc_1_1engine__options.html">engine_options</a>&lt;<a class="el" href="classwjrpc_1_1engine.html#a9c18f9ff4e9ac9eb2a4ca5ef387aecf7">handler_options_type</a>&gt; <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#adc85f35e46c706ea7aa483a4486fc4c9">options_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="accaf5e58a6c468fe5c96adb6ef514824"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accaf5e58a6c468fe5c96adb6ef514824">&#9670;&nbsp;</a></span>outgoing_handler_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::outgoing_handler_t <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2614e26b35c054a111dc50c92154d800"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2614e26b35c054a111dc50c92154d800">&#9670;&nbsp;</a></span>request_serializer_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::request_serializer_t <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#a2614e26b35c054a111dc50c92154d800">request_serializer_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6d8b0ceb8e4ce7b3732433fd8f97d67e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d8b0ceb8e4ce7b3732433fd8f97d67e">&#9670;&nbsp;</a></span>result_handler_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::result_handler_t <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#a6d8b0ceb8e4ce7b3732433fd8f97d67e">result_handler_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7bec22fb7c7f57f109f5f921d3fcd8bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bec22fb7c7f57f109f5f921d3fcd8bc">&#9670;&nbsp;</a></span>self</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classwjrpc_1_1engine.html">engine</a>&lt;JsonrpcHandler&gt; <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#a7bec22fb7c7f57f109f5f921d3fcd8bc">self</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f76194cc2b68b04b8bd089f4b94ec46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f76194cc2b68b04b8bd089f4b94ec46">&#9670;&nbsp;</a></span>target_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef handler_type::target_type <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html#a4f76194cc2b68b04b8bd089f4b94ec46">target_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Конструктор(ы)</h2>
+<a id="acc185d4d016ad8af0a848c46bb39372b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc185d4d016ad8af0a848c46bb39372b">&#9670;&nbsp;</a></span>~engine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::~<a class="el" href="classwjrpc_1_1engine.html">engine</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb82919f52b3e6f4a4491de2380aa521"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb82919f52b3e6f4a4491de2380aa521">&#9670;&nbsp;</a></span>engine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::<a class="el" href="classwjrpc_1_1engine.html">engine</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Методы</h2>
+<a id="a06daba28742eb19987e78442be04e97f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06daba28742eb19987e78442be04e97f">&#9670;&nbsp;</a></span>call()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<div class="memtemplate">
+template&lt;typename Tg , typename Req , typename ... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::call </td>
+          <td>(</td>
+          <td class="paramtype">Req&#160;</td>
+          <td class="paramname"><em>req</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td>
+          <td class="paramname"><em>io_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aea2531a782a4c0fb2e98f555c15f84e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea2531a782a4c0fb2e98f555c15f84e5">&#9670;&nbsp;</a></span>create_schema()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt;default_schema&gt; <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::create_schema </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2a47c4abf3ad7ea78ba97fce80658e5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a47c4abf3ad7ea78ba97fce80658e5d">&#9670;&nbsp;</a></span>create_schema_t()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<div class="memtemplate">
+template&lt;typename Schema &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt;Schema&gt; <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::create_schema_t </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7827ed1a9a540f16b188e99f5e2fcea4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7827ed1a9a540f16b188e99f5e2fcea4">&#9670;&nbsp;</a></span>find()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwjrpc_1_1engine.html#aefc08516eb92dea530c7e7350069e817">handler_ptr</a> <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::find </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td>
+          <td class="paramname"><em>io_id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb48ee4d9b29d09bebb665e9375b1c04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb48ee4d9b29d09bebb665e9375b1c04">&#9670;&nbsp;</a></span>get_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::get_id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0f8cb33539f4a5d6b6c541c3fda3d96b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f8cb33539f4a5d6b6c541c3fda3d96b">&#9670;&nbsp;</a></span>io2rpc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a> <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::io2rpc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacewjrpc.html#a743adeb08a0fa4f7c974a409f9c13c1c">output_handler_t</a>&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a50c5fb0187cc57934f638de707f8ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a50c5fb0187cc57934f638de707f8ee">&#9670;&nbsp;</a></span>perform_io()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::perform_io </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a03514e4bc0658d8bc7e00980e9a3f667">data_ptr</a>&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td>
+          <td class="paramname"><em>io_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacewjrpc.html#a743adeb08a0fa4f7c974a409f9c13c1c">output_handler_t</a>&#160;</td>
+          <td class="paramname"><em>handler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0cea857088560f53ab1dc62c11962e1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cea857088560f53ab1dc62c11962e1a">&#9670;&nbsp;</a></span>perform_jsonrpc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::perform_jsonrpc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a>&#160;</td>
+          <td class="paramname"><em>holder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td>
+          <td class="paramname"><em>io_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a>&#160;</td>
+          <td class="paramname"><em>handler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa8de1b90804b1753e3d78bb1a2148b26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8de1b90804b1753e3d78bb1a2148b26">&#9670;&nbsp;</a></span>reconfigure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<div class="memtemplate">
+template&lt;typename O &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::reconfigure </td>
+          <td>(</td>
+          <td class="paramtype">O &amp;&amp;&#160;</td>
+          <td class="paramname"><em>opt1</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa58555ccfd360e7bc2317c65a7769c73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa58555ccfd360e7bc2317c65a7769c73">&#9670;&nbsp;</a></span>reg_io()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::reg_io </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td>
+          <td class="paramname"><em>io_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacewjrpc.html#af48c76949eadc7bd166dfbcf831a22ee">input_handler_t</a>&#160;</td>
+          <td class="paramname"><em>handler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9e25d9fc5e32810bf95cb072f7e33991"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e25d9fc5e32810bf95cb072f7e33991">&#9670;&nbsp;</a></span>reg_jsonrpc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::reg_jsonrpc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td>
+          <td class="paramname"><em>io_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a>&#160;</td>
+          <td class="paramname"><em>handler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae8f2492d802ff0620be90ff23aa935cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8f2492d802ff0620be90ff23aa935cd">&#9670;&nbsp;</a></span>remove_outdated()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::remove_outdated </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac2e07b251b9edfdb969b174ec8c34340"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2e07b251b9edfdb969b174ec8c34340">&#9670;&nbsp;</a></span>sizes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structwjrpc_1_1engine_1_1sizes__info.html">sizes_info</a> <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::sizes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5bfeea4f11eb266d8d5c34c15661258"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5bfeea4f11eb266d8d5c34c15661258">&#9670;&nbsp;</a></span>start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<div class="memtemplate">
+template&lt;typename O &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::start </td>
+          <td>(</td>
+          <td class="paramtype">O &amp;&amp;&#160;</td>
+          <td class="paramname"><em>opt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td>
+          <td class="paramname"><em>io_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeaf21ec80757d46ae53f0498f82ca6b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaf21ec80757d46ae53f0498f82ca6b0">&#9670;&nbsp;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3fca390a45dd8fa7befefe2873bc3655"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fca390a45dd8fa7befefe2873bc3655">&#9670;&nbsp;</a></span>unreg_io()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename JsonrpcHandler &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::unreg_io </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a>&#160;</td>
+          <td class="paramname"><em>io_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>Объявления и описания членов класса находятся в файле:<ul>
+<li>wjrpc/engine/<a class="el" href="engine_8hpp_source.html">engine.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.15
+</small></address>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - tests/handler_suite.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">tests</a> - handler_suite.cpp<span style="font-size: 80%;"> (source / <a href="handler_suite.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">150</td>
+            <td class="headerCovTableEntry">154</td>
+            <td class="headerCovTableEntryHi">97.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">51</td>
+            <td class="headerCovTableEntry">54</td>
+            <td class="headerCovTableEntryHi">94.4 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &lt;wjrpc/handler.hpp&gt;</a>
+<span class="lineNum">       2 </span>            : #include &lt;wjrpc/method.hpp&gt;
+<span class="lineNum">       3 </span>            : #include &lt;wjrpc/method/default_schema.hpp&gt;
+<span class="lineNum">       4 </span>            : 
+<span class="lineNum">       5 </span>            : #include &lt;fas/testing.hpp&gt;
+<span class="lineNum">       6 </span>            : #include &quot;req.hpp&quot;
+<span class="lineNum">       7 </span>            : #include &lt;algorithm&gt;
+<a name="8"><span class="lineNum">       8 </span>            : #include &lt;memory&gt;</a>
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span><span class="lineCov">          2 : struct nomethod:</span>
+<span class="lineNum">      11 </span>            :   ::wjrpc::method_list&lt;&gt;
+<span class="lineNum">      12 </span>            : {
+<span class="lineNum">      13 </span>            : };
+<span class="lineNum">      14 </span>            : 
+<span class="lineNum">      15 </span>            : typedef wjrpc::handler&lt;nomethod&gt; nohandler;
+<span class="lineNum">      16 </span>            : 
+<a name="17"><span class="lineNum">      17 </span>            : int test_count = 0;</a>
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span><span class="lineCov">          3 : UNIT(nohandler_unit, &quot;&quot;)</span>
+<span class="lineNum">      20 </span>            : {
+<span class="lineNum">      21 </span>            :   using namespace fas::testing;
+<span class="lineNum">      22 </span>            :   using namespace ::wjrpc;
+<span class="lineNum">      23 </span>            : 
+<span class="lineNum">      24 </span><span class="lineCov">          1 :   nohandler h;</span>
+<span class="lineNum">      25 </span><span class="lineCov">          7 :   for (auto r: bad_request)</span>
+<span class="lineNum">      26 </span>            :   {
+<span class="lineNum">      27 </span><span class="lineCov">          6 :     auto req = std::make_unique&lt;data_type&gt;( r[0].begin(), r[0].end() );</span>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">         12 :     incoming_holder hold( std::move(req) );</span></a>
+<span class="lineNum">      29 </span><span class="lineCov">          6 :     hold.parse(nullptr);</span>
+<span class="lineNum">      30 </span><span class="lineCov">         12 :     h.invoke(std::move(hold), [&amp;t, r](outgoing_holder holder)</span>
+<span class="lineNum">      31 </span>            :     {
+<span class="lineNum">      32 </span><span class="lineCov">          6 :       data_ptr res = holder.detach();</span>
+<span class="lineNum">      33 </span><span class="lineCov">          6 :       t &lt;&lt; message(&quot;request: &quot;) &lt;&lt; r[0];</span>
+<span class="lineNum">      34 </span><span class="lineCov">          6 :       t &lt;&lt; message(&quot;response: &quot;) &lt;&lt; std::string(res-&gt;begin(), res-&gt;end());</span>
+<span class="lineNum">      35 </span><span class="lineCov">          6 :       if ( std::string(res-&gt;begin(), res-&gt;end()) != r[1] )</span>
+<span class="lineNum">      36 </span>            :       {
+<span class="lineNum">      37 </span><span class="lineNoCov">          0 :         t &lt;&lt; ::fas::testing::error(&quot;should be:&quot;) &lt;&lt; r[1];</span>
+<span class="lineNum">      38 </span>            :       }
+<span class="lineNum">      39 </span><span class="lineCov">          6 :       ++test_count;</span>
+<span class="lineNum">      40 </span><span class="lineCov">          6 :     });</span>
+<span class="lineNum">      41 </span>            :   }
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;expect&gt;(test_count, 6) &lt;&lt; FAS_TESTING_FILE_LINE;</span>
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            : // ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      49 </span>            : // ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      50 </span>            : // ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      51 </span>            : 
+<span class="lineNum">      52 </span>            : typedef std::vector&lt;int&gt; test1_params;
+<span class="lineNum">      53 </span>            : typedef wjson::array&lt; std::vector&lt; wjson::value&lt;int&gt; &gt; &gt; test1_json;
+<a name="54"><span class="lineNum">      54 </span>            : </a>
+<span class="lineNum">      55 </span>            : 
+<a name="56"><span class="lineNum">      56 </span><span class="lineCov">          2 : struct itest1</span></a>
+<span class="lineNum">      57 </span>            : {
+<span class="lineNum">      58 </span><span class="lineCov">          2 :   virtual ~itest1() {}</span>
+<span class="lineNum">      59 </span>            :   virtual void method1(std::unique_ptr&lt;test1_params&gt; req, std::function&lt; void(std::unique_ptr&lt;test1_params&gt;) &gt; callback) = 0;
+<span class="lineNum">      60 </span>            :   virtual void method2(std::unique_ptr&lt;test1_params&gt; req, std::function&lt; void(std::unique_ptr&lt;test1_params&gt;) &gt; callback) = 0;
+<a name="61"><span class="lineNum">      61 </span>            : };</a>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineCov">          2 : class test1 final: public itest1</span>
+<a name="64"><span class="lineNum">      64 </span>            : {</a>
+<a name="65"><span class="lineNum">      65 </span>            : public:</a>
+<span class="lineNum">      66 </span><span class="lineCov">          2 :   virtual ~test1() = default;</span>
+<span class="lineNum">      67 </span><span class="lineCov">          2 :   virtual void method1(std::unique_ptr&lt;test1_params&gt; req, std::function&lt; void(std::unique_ptr&lt;test1_params&gt;) &gt; callback) override</span>
+<span class="lineNum">      68 </span>            :   {
+<span class="lineNum">      69 </span><span class="lineCov">          2 :     if ( req==nullptr  )</span>
+<span class="lineNum">      70 </span>            :     {
+<span class="lineNum">      71 </span><span class="lineCov">          1 :       if (callback!=nullptr)</span>
+<span class="lineNum">      72 </span><span class="lineCov">          1 :         return callback( std::make_unique&lt;test1_params&gt;() );</span>
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">      74 </span>            :     }
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span><span class="lineCov">          1 :     std::reverse(req-&gt;begin(), req-&gt;end());</span>
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span><span class="lineCov">          1 :     if ( callback )</span>
+<span class="lineNum">      79 </span><span class="lineCov">          1 :       callback(std::move(req));</span>
+<a name="80"><span class="lineNum">      80 </span>            :   }</a>
+<span class="lineNum">      81 </span>            : 
+<span class="lineNum">      82 </span><span class="lineCov">          1 :   virtual void method2(std::unique_ptr&lt;test1_params&gt; , std::function&lt; void(std::unique_ptr&lt;test1_params&gt;) &gt; callback) override</span>
+<span class="lineNum">      83 </span>            :   {
+<span class="lineNum">      84 </span><span class="lineCov">          1 :     if ( callback )</span>
+<span class="lineNum">      85 </span><span class="lineCov">          1 :       callback(nullptr);</span>
+<span class="lineNum">      86 </span><span class="lineCov">          1 :   }</span>
+<span class="lineNum">      87 </span>            : };
+<a name="88"><span class="lineNum">      88 </span>            : </a>
+<a name="89"><span class="lineNum">      89 </span>            : </a>
+<span class="lineNum">      90 </span><span class="lineCov">         11 : JSONRPC_TAG(method1)</span>
+<span class="lineNum">      91 </span><span class="lineCov">          5 : JSONRPC_TAG(method2)</span>
+<a name="92"><span class="lineNum">      92 </span>            : </a>
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span><span class="lineCov">          4 : struct method_list: wjrpc::method_list</span>
+<span class="lineNum">      95 </span>            : &lt;
+<span class="lineNum">      96 </span>            :   wjrpc::target&lt;itest1&gt;,
+<span class="lineNum">      97 </span>            :   wjrpc::invoke_method&lt; _method1_, test1_json,      test1_json,      itest1, &amp;itest1::method1&gt;,
+<span class="lineNum">      98 </span>            :   wjrpc::invoke_method&lt; _method2_, test1_json,      test1_json,      itest1, &amp;itest1::method2&gt;
+<span class="lineNum">      99 </span>            : &gt;
+<span class="lineNum">     100 </span>            : {};
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span>            : typedef wjrpc::handler&lt;method_list&gt; handler1;
+<a name="103"><span class="lineNum">     103 </span>            : </a>
+<span class="lineNum">     104 </span>            : 
+<span class="lineNum">     105 </span><span class="lineCov">          3 : UNIT(handler1_unit, &quot;&quot;)</span>
+<span class="lineNum">     106 </span>            : {
+<span class="lineNum">     107 </span>            :   using namespace fas::testing;
+<span class="lineNum">     108 </span>            :   using namespace ::wjrpc;
+<span class="lineNum">     109 </span>            : 
+<span class="lineNum">     110 </span><span class="lineCov">          1 :    std::string unavailable = &quot;{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;error\&quot;:{\&quot;code\&quot;:-32003,\&quot;message\&quot;:\&quot;Service unavailable\&quot;},\&quot;id\&quot;:1}&quot;;</span>
+<span class="lineNum">     111 </span>            : 
+<span class="lineNum">     112 </span><span class="lineCov">          1 :   test_count = 0;</span>
+<span class="lineNum">     113 </span><span class="lineCov">          2 :   handler1 h;</span>
+<span class="lineNum">     114 </span><span class="lineCov">          1 :   auto r = good_request[0];</span>
+<span class="lineNum">     115 </span>            :   {
+<span class="lineNum">     116 </span><span class="lineCov">          1 :     auto req = std::make_unique&lt; data_type&gt;( r[0].begin(), r[0].end() );</span>
+<span class="lineNum">     117 </span><span class="lineCov">          2 :     incoming_holder hold( std::move(req) );</span>
+<a name="118"><span class="lineNum">     118 </span><span class="lineCov">          1 :     hold.parse(nullptr);</span></a>
+<span class="lineNum">     119 </span>            : 
+<span class="lineNum">     120 </span><span class="lineCov">         11 :     h.invoke(std::move(hold), [&amp;t, unavailable, r](outgoing_holder holder)</span>
+<span class="lineNum">     121 </span>            :     {
+<span class="lineNum">     122 </span><span class="lineCov">          1 :       data_ptr res = holder.detach();</span>
+<span class="lineNum">     123 </span><span class="lineCov">          1 :       t &lt;&lt; message(&quot;request: &quot;) &lt;&lt; r[0];</span>
+<span class="lineNum">     124 </span><span class="lineCov">          1 :       t &lt;&lt; message(&quot;response: &quot;) &lt;&lt; std::string(res-&gt;begin(), res-&gt;end());</span>
+<span class="lineNum">     125 </span><span class="lineCov">          1 :       if ( std::string(res-&gt;begin(), res-&gt;end()) != unavailable )</span>
+<span class="lineNum">     126 </span>            :       {
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :         t &lt;&lt; ::fas::testing::error(&quot;should be:&quot;) &lt;&lt; unavailable;</span>
+<span class="lineNum">     128 </span>            :       }
+<span class="lineNum">     129 </span><span class="lineCov">          1 :       ++test_count;</span>
+<span class="lineNum">     130 </span><span class="lineCov">          2 :     });</span>
+<span class="lineNum">     131 </span><span class="lineCov">          1 :   }</span>
+<a name="132"><span class="lineNum">     132 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     133 </span>            : 
+<span class="lineNum">     134 </span><span class="lineCov">          3 : UNIT(gen1, &quot;&quot;)</span>
+<span class="lineNum">     135 </span>            : {
+<span class="lineNum">     136 </span>            :   using namespace fas::testing;
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span>            :   typedef method_list::aspect::template advice_cast&lt;_method1_&gt;::type method1_t;
+<span class="lineNum">     139 </span>            :   typedef method1_t::aspect::template advice_cast&lt; wjrpc::_invoke_&gt;::type::params_json_t request1_json;
+<span class="lineNum">     140 </span>            : 
+<span class="lineNum">     141 </span>            :   typedef request1_json::target value_type;
+<span class="lineNum">     142 </span><span class="lineCov">          1 :   value_type val;</span>
+<span class="lineNum">     143 </span><span class="lineCov">          1 :   val.push_back(1);</span>
+<span class="lineNum">     144 </span><span class="lineCov">          1 :   val.push_back(2);</span>
+<span class="lineNum">     145 </span><span class="lineCov">          2 :   std::string json;</span>
+<span class="lineNum">     146 </span><span class="lineCov">          1 :   request1_json::serializer()(val, std::back_inserter(json) );</span>
+<span class="lineNum">     147 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;expect, std::string&gt;(json, &quot;[1,2]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     148 </span>            : 
+<span class="lineNum">     149 </span><span class="lineCov">          2 :   auto sch = method1_t::create_schema_t&lt;wjrpc::default_schema&gt;();</span>
+<span class="lineNum">     150 </span><span class="lineCov">          1 :   fas::ignore_arg(sch);</span>
+<span class="lineNum">     151 </span>            : 
+<span class="lineNum">     152 </span>            :   typedef std::vector&lt;wjrpc::default_schema&gt; schema_list_t;
+<span class="lineNum">     153 </span><span class="lineCov">          2 :   schema_list_t schl = method_list::create_schema_t&lt;wjrpc::default_schema&gt;();</span>
+<span class="lineNum">     154 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, size_t&gt;(schl.size(), 2) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     155 </span><span class="lineCov">          1 :   t &lt;&lt; flush;</span>
+<span class="lineNum">     156 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].name, &quot;method1&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     157 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].params, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     158 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].result, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     159 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].name, &quot;method2&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     160 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].params, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     161 </span><span class="lineCov">          2 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].result, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<a name="162"><span class="lineNum">     162 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     163 </span>            : 
+<span class="lineNum">     164 </span><span class="lineCov">          3 : UNIT(handler2_unit, &quot;&quot;)</span>
+<span class="lineNum">     165 </span>            : {
+<span class="lineNum">     166 </span>            :   using namespace fas::testing;
+<span class="lineNum">     167 </span>            :   using namespace wjrpc;
+<span class="lineNum">     168 </span>            : 
+<span class="lineNum">     169 </span><span class="lineCov">          1 :   std::shared_ptr&lt;itest1&gt; t1 = std::make_shared&lt;test1&gt;();</span>
+<span class="lineNum">     170 </span><span class="lineCov">          1 :   test_count = 0;</span>
+<span class="lineNum">     171 </span><span class="lineCov">          2 :   handler1::options_type opt;</span>
+<span class="lineNum">     172 </span><span class="lineCov">          1 :   opt.target = t1;</span>
+<span class="lineNum">     173 </span><span class="lineCov">          2 :   handler1 h;</span>
+<span class="lineNum">     174 </span><span class="lineCov">          1 :   h.start(opt, 1);</span>
+<span class="lineNum">     175 </span><span class="lineCov">          1 :   h.target() = t1;</span>
+<span class="lineNum">     176 </span><span class="lineCov">          4 :   for (auto r: good_request)</span>
+<span class="lineNum">     177 </span>            :   {
+<span class="lineNum">     178 </span><span class="lineCov">          3 :     auto req = std::make_unique&lt; data_type&gt;( r[0].begin(), r[0].end() );</span>
+<span class="lineNum">     179 </span><span class="lineCov">          6 :     incoming_holder hold( std::move(req) );</span>
+<a name="180"><span class="lineNum">     180 </span><span class="lineCov">          3 :     hold.parse(nullptr);</span></a>
+<span class="lineNum">     181 </span>            : 
+<span class="lineNum">     182 </span><span class="lineCov">          6 :     h.invoke( std::move(hold), [&amp;t,r](outgoing_holder holder)</span>
+<span class="lineNum">     183 </span>            :     {
+<span class="lineNum">     184 </span><span class="lineCov">          3 :       data_ptr res = holder.detach();</span>
+<span class="lineNum">     185 </span><span class="lineCov">          3 :       t &lt;&lt; message(&quot;request: &quot;) &lt;&lt; r[0];</span>
+<span class="lineNum">     186 </span><span class="lineCov">          3 :       t &lt;&lt; message(&quot;response: &quot;) &lt;&lt; std::string(res-&gt;begin(), res-&gt;end());</span>
+<span class="lineNum">     187 </span><span class="lineCov">          3 :       if ( std::string(res-&gt;begin(), res-&gt;end()) != r[1] )</span>
+<span class="lineNum">     188 </span>            :       {
+<span class="lineNum">     189 </span><span class="lineNoCov">          0 :         t &lt;&lt; ::fas::testing::error(&quot;should be:&quot;) &lt;&lt; r[1];</span>
+<span class="lineNum">     190 </span>            :       }
+<span class="lineNum">     191 </span><span class="lineCov">          3 :       ++test_count;</span>
+<span class="lineNum">     192 </span><span class="lineCov">          3 :     });</span>
+<span class="lineNum">     193 </span><span class="lineCov">          1 :   }</span>
+<span class="lineNum">     194 </span>            : 
+<a name="195"><span class="lineNum">     195 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     196 </span>            : 
+<span class="lineNum">     197 </span><span class="lineCov">          1 : struct method_list2: wjrpc::method_list</span>
+<span class="lineNum">     198 </span>            : &lt;
+<span class="lineNum">     199 </span>            :   wjrpc::target&lt;itest1&gt;,
+<span class="lineNum">     200 </span>            :   wjrpc::interface_&lt;itest1&gt;,
+<span class="lineNum">     201 </span>            :   wjrpc::peeper&lt; itest1 &gt;,
+<span class="lineNum">     202 </span>            :   wjrpc::dual_method&lt; _method1_, test1_json,      test1_json,      itest1, &amp;itest1::method1&gt;,
+<span class="lineNum">     203 </span>            :   wjrpc::dual_method&lt; _method2_, test1_json,      test1_json,      itest1, &amp;itest1::method2&gt;
+<a name="204"><span class="lineNum">     204 </span>            : &gt;</a>
+<a name="205"><span class="lineNum">     205 </span>            : {</a>
+<span class="lineNum">     206 </span><span class="lineCov">          1 :   virtual ~method_list2() = default;</span>
+<span class="lineNum">     207 </span><span class="lineCov">          1 :   virtual void method1(std::unique_ptr&lt;test1_params&gt; req, std::function&lt; void(std::unique_ptr&lt;test1_params&gt;) &gt; callback) final</span>
+<span class="lineNum">     208 </span>            :   {
+<span class="lineNum">     209 </span><span class="lineCov">          1 :     this-&gt;call&lt;_method1_&gt;(std::move(req), std::move(callback), nullptr);</span>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          1 :   }</span></a>
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span><span class="lineCov">          1 :   virtual void method2(std::unique_ptr&lt;test1_params&gt; req, std::function&lt; void(std::unique_ptr&lt;test1_params&gt;) &gt; callback) final</span>
+<span class="lineNum">     213 </span>            :   {
+<span class="lineNum">     214 </span><span class="lineCov">          1 :     this-&gt;call&lt;_method2_&gt;(std::move(req), std::move(callback), nullptr);</span>
+<span class="lineNum">     215 </span><span class="lineCov">          1 :   }</span>
+<span class="lineNum">     216 </span>            : };
+<span class="lineNum">     217 </span>            : 
+<a name="218"><span class="lineNum">     218 </span>            : typedef wjrpc::handler&lt;method_list2&gt; handler2;</a>
+<span class="lineNum">     219 </span>            : 
+<span class="lineNum">     220 </span><span class="lineCov">          3 : UNIT(handler4_unit, &quot;&quot;)</span>
+<span class="lineNum">     221 </span>            : {
+<span class="lineNum">     222 </span>            :   using namespace fas::testing;
+<span class="lineNum">     223 </span>            :   using namespace wjrpc;
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span><span class="lineCov">          1 :   auto t1 = std::make_shared&lt;test1&gt;();</span>
+<span class="lineNum">     226 </span><span class="lineCov">          2 :   handler2::options_type opt;</span>
+<span class="lineNum">     227 </span><span class="lineCov">          1 :   opt.peeper = t1;</span>
+<span class="lineNum">     228 </span>            : 
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          2 :   std::string str_notify;</span></a>
+<span class="lineNum">     230 </span>            : 
+<span class="lineNum">     231 </span><span class="lineCov">          3 :   opt.sender_handler = [&amp;t, &amp;str_notify]( const char* name, handler2::notify_serializer_t ser, handler2::request_serializer_t, handler2::result_handler_t ) -&gt; void</span>
+<span class="lineNum">     232 </span>            :   {
+<span class="lineNum">     233 </span><span class="lineCov">          2 :     auto d = ser(name);</span>
+<span class="lineNum">     234 </span><span class="lineCov">          2 :     str_notify = std::string(d-&gt;begin(), d-&gt;end() );</span>
+<span class="lineNum">     235 </span><span class="lineCov">          2 :     t &lt;&lt; message(&quot;send: &quot;) &lt;&lt; str_notify;</span>
+<span class="lineNum">     236 </span><span class="lineCov">          2 :   };</span>
+<span class="lineNum">     237 </span>            : 
+<span class="lineNum">     238 </span>            : 
+<span class="lineNum">     239 </span><span class="lineCov">          2 :   auto h2 = std::make_shared&lt;handler2&gt;();</span>
+<span class="lineNum">     240 </span><span class="lineCov">          1 :   h2-&gt;start(opt, 1);</span>
+<span class="lineNum">     241 </span>            :   //auto h2 = std::make_shared&lt;handler2&gt;(nullptr, t1);
+<span class="lineNum">     242 </span><span class="lineCov">          2 :   auto p1 = std::make_unique&lt;test1_params&gt;(test1_params{1,2,3,4,5});</span>
+<span class="lineNum">     243 </span>            : 
+<span class="lineNum">     244 </span>            : 
+<span class="lineNum">     245 </span><span class="lineCov">          1 :   h2-&gt;method1( std::make_unique&lt;test1_params&gt;(*p1), nullptr);</span>
+<span class="lineNum">     246 </span><span class="lineCov">          1 :   h2-&gt;method2( std::move(p1), nullptr);</span>
+<span class="lineNum">     247 </span>            : 
+<span class="lineNum">     248 </span><span class="lineCov">          2 :   t &lt;&lt; nothing;</span>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     250 </span>            : 
+<span class="lineNum">     251 </span><span class="lineCov">          3 : UNIT(gen2, &quot;&quot;)</span>
+<span class="lineNum">     252 </span>            : {
+<span class="lineNum">     253 </span>            :   using namespace fas::testing;
+<span class="lineNum">     254 </span>            : 
+<span class="lineNum">     255 </span>            :   typedef method_list2::aspect::template advice_cast&lt;_method1_&gt;::type method1_t;
+<span class="lineNum">     256 </span>            :   typedef method1_t::aspect::template advice_cast&lt; wjrpc::_invoke_&gt;::type::params_json_t request1_json;
+<span class="lineNum">     257 </span>            : 
+<span class="lineNum">     258 </span>            :   typedef request1_json::target value_type;
+<span class="lineNum">     259 </span><span class="lineCov">          1 :   value_type val;</span>
+<span class="lineNum">     260 </span><span class="lineCov">          1 :   val.push_back(1);</span>
+<span class="lineNum">     261 </span><span class="lineCov">          1 :   val.push_back(2);</span>
+<span class="lineNum">     262 </span><span class="lineCov">          2 :   std::string json;</span>
+<span class="lineNum">     263 </span><span class="lineCov">          1 :   request1_json::serializer()(val, std::back_inserter(json) );</span>
+<span class="lineNum">     264 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;expect, std::string&gt;(json, &quot;[1,2]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     265 </span>            : 
+<span class="lineNum">     266 </span><span class="lineCov">          2 :   auto sch = method1_t::create_schema_t&lt;wjrpc::default_schema&gt;();</span>
+<span class="lineNum">     267 </span><span class="lineCov">          1 :   fas::ignore_arg(sch);</span>
+<span class="lineNum">     268 </span>            : 
+<span class="lineNum">     269 </span>            :   typedef std::vector&lt;wjrpc::default_schema&gt; schema_list_t;
+<span class="lineNum">     270 </span><span class="lineCov">          2 :   schema_list_t schl = method_list::create_schema_t&lt;wjrpc::default_schema&gt;();</span>
+<span class="lineNum">     271 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, size_t&gt;(schl.size(), 2) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     272 </span><span class="lineCov">          1 :   t &lt;&lt; flush;</span>
+<span class="lineNum">     273 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].name, &quot;method1&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     274 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].params, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     275 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].result, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     276 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].name, &quot;method2&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     277 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].params, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     278 </span><span class="lineCov">          2 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].result, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     279 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">     280 </span>            : 
+<span class="lineNum">     281 </span>            : struct method_list3: wjrpc::method_list
+<span class="lineNum">     282 </span>            : &lt;
+<span class="lineNum">     283 </span>            :   wjrpc::interface_&lt;itest1&gt;,
+<span class="lineNum">     284 </span>            :   wjrpc::call_method&lt; _method1_, test1_json,      test1_json&gt;,
+<span class="lineNum">     285 </span>            :   wjrpc::call_method&lt; _method2_, test1_json,      test1_json&gt;
+<span class="lineNum">     286 </span>            : &gt;
+<span class="lineNum">     287 </span>            : {
+<span class="lineNum">     288 </span>            :   virtual ~method_list3() = default;
+<span class="lineNum">     289 </span>            :   virtual void method1(std::unique_ptr&lt;test1_params&gt; req, std::function&lt; void(std::unique_ptr&lt;test1_params&gt;) &gt; callback)
+<span class="lineNum">     290 </span>            :   {
+<span class="lineNum">     291 </span>            :     this-&gt;call&lt;_method1_&gt;(std::move(req), std::move(callback), nullptr);
+<span class="lineNum">     292 </span>            :   }
+<span class="lineNum">     293 </span>            : 
+<span class="lineNum">     294 </span>            :   virtual void method2(std::unique_ptr&lt;test1_params&gt; req, std::function&lt; void(std::unique_ptr&lt;test1_params&gt;) &gt; callback)
+<span class="lineNum">     295 </span>            :   {
+<span class="lineNum">     296 </span>            :     this-&gt;call&lt;_method2_&gt;(std::move(req), std::move(callback), nullptr);
+<span class="lineNum">     297 </span>            :   }
+<span class="lineNum">     298 </span>            : };
+<span class="lineNum">     299 </span>            : 
+<a name="300"><span class="lineNum">     300 </span>            : typedef wjrpc::handler&lt;method_list3&gt; handler3;</a>
+<span class="lineNum">     301 </span>            : 
+<span class="lineNum">     302 </span><span class="lineCov">          3 : UNIT(gen3, &quot;&quot;)</span>
+<span class="lineNum">     303 </span>            : {
+<span class="lineNum">     304 </span>            :   using namespace fas::testing;
+<span class="lineNum">     305 </span>            : 
+<span class="lineNum">     306 </span>            :   typedef method_list3::aspect::template advice_cast&lt;_method1_&gt;::type method1_t;
+<span class="lineNum">     307 </span><span class="lineCov">          1 :   auto sch = method1_t::create_schema_t&lt;wjrpc::default_schema&gt;();</span>
+<span class="lineNum">     308 </span><span class="lineCov">          1 :   fas::ignore_arg(sch);</span>
+<span class="lineNum">     309 </span>            : 
+<span class="lineNum">     310 </span>            :   typedef std::vector&lt;wjrpc::default_schema&gt; schema_list_t;
+<span class="lineNum">     311 </span><span class="lineCov">          2 :   schema_list_t schl = method_list::create_schema_t&lt;wjrpc::default_schema&gt;();</span>
+<span class="lineNum">     312 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, size_t&gt;(schl.size(), 2) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     313 </span><span class="lineCov">          1 :   t &lt;&lt; flush;</span>
+<span class="lineNum">     314 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].name, &quot;method1&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     315 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].params, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     316 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[0].result, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     317 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].name, &quot;method2&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     318 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].params, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<span class="lineNum">     319 </span><span class="lineCov">          2 :   t &lt;&lt; equal&lt;assert, std::string&gt;(schl[1].result, &quot;[]&quot;) &lt;&lt; FAS_FL;</span>
+<a name="320"><span class="lineNum">     320 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     321 </span>            : 
+<span class="lineNum">     322 </span><span class="lineCov">          1 : BEGIN_SUITE(handler_suite, &quot;&quot;)</span>
+<span class="lineNum">     323 </span>            :   ADD_UNIT(nohandler_unit)
+<span class="lineNum">     324 </span>            :   ADD_UNIT(handler1_unit)
+<span class="lineNum">     325 </span>            :   ADD_UNIT(gen1)
+<span class="lineNum">     326 </span>            :   ADD_UNIT(handler2_unit)
+<span class="lineNum">     327 </span>            :   ADD_UNIT(handler4_unit)
+<a name="328"><span class="lineNum">     328 </span>            :   ADD_UNIT(gen2)</a>
+<span class="lineNum">     329 </span>            :   ADD_UNIT(gen3)
+<span class="lineNum">     330 </span><span class="lineCov">          7 : END_SUITE(handler_suite)</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

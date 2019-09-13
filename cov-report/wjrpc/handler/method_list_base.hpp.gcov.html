@@ -1,0 +1,339 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - wjrpc/handler/method_list_base.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">wjrpc/handler</a> - method_list_base.hpp<span style="font-size: 80%;"> (source / <a href="method_list_base.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">37</td>
+            <td class="headerCovTableEntry">48</td>
+            <td class="headerCovTableEntryMed">77.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntryMed">88.9 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2011-2016
+<span class="lineNum">       3 </span>            : //
+<span class="lineNum">       4 </span>            : // Copyright: See COPYING file that comes with this distribution
+<span class="lineNum">       5 </span>            : //
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : #pragma once
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #include &lt;wjrpc/handler/aspect/tags.hpp&gt;
+<span class="lineNum">      10 </span>            : #include &lt;wjrpc/handler/handler_options.hpp&gt;
+<span class="lineNum">      11 </span>            : #include &lt;wjrpc/method/default_schema.hpp&gt;
+<span class="lineNum">      12 </span>            : #include &lt;wjrpc/outgoing/outgoing_holder.hpp&gt;
+<span class="lineNum">      13 </span>            : #include &lt;wjrpc/logger.hpp&gt;
+<span class="lineNum">      14 </span>            : #include &lt;fas/aop.hpp&gt;
+<span class="lineNum">      15 </span>            : #include &lt;functional&gt;
+<span class="lineNum">      16 </span>            : 
+<span class="lineNum">      17 </span>            : namespace wjrpc{
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : /**
+<span class="lineNum">      20 </span>            :  * @brief базовый класс для `wjrpc::method_list`
+<span class="lineNum">      21 </span>            :  * @tparam A - аспект частично определяеться в `wjrpc::method_list`, а сам список методов и цели пользователем
+<a name="22"><span class="lineNum">      22 </span>            :  */</a>
+<span class="lineNum">      23 </span>            : template&lt; typename A = fas::aspect&lt;&gt; &gt;
+<span class="lineNum">      24 </span><span class="lineNoCov">          0 : class method_list_base</span>
+<span class="lineNum">      25 </span>            :   : public ::fas::aspect_class&lt; A &gt;
+<span class="lineNum">      26 </span>            : {
+<span class="lineNum">      27 </span>            :   typedef ::fas::aspect_class&lt; A &gt; super;
+<span class="lineNum">      28 </span>            :   typedef method_list_base&lt;A&gt; self;
+<span class="lineNum">      29 </span>            :   typedef typename super::aspect::template advice_cast&lt;_handler_types_&gt;
+<span class="lineNum">      30 </span>            :                         ::type  handler_types;
+<span class="lineNum">      31 </span>            : public:
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            :   /** Тип целевого объекта, который задан `wjrpc::target` */
+<span class="lineNum">      34 </span>            :   typedef typename super::aspect::template advice_cast&lt;_target_&gt;
+<span class="lineNum">      35 </span>            :                         ::type  target_type;
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            :   /** Тип целевого объекта, который задан `wjrpc::peeper` */
+<span class="lineNum">      38 </span>            :   typedef typename super::aspect::template advice_cast&lt;_peeper_&gt;
+<span class="lineNum">      39 </span>            :                         ::type  peeper_type;
+<span class="lineNum">      40 </span>            : 
+<span class="lineNum">      41 </span>            :   /** Тип целевого объекта, который задан `wjrpc::interface_` */
+<span class="lineNum">      42 </span>            :   typedef typename super::aspect::template advice_cast&lt;_interface_&gt;
+<span class="lineNum">      43 </span>            :                         ::type  interface_type;
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span>            :   /** Пользовательский набор данных, который может быть задан `wjrpc::context` */
+<span class="lineNum">      46 </span>            :   typedef typename super::aspect::template advice_cast&lt;_context_&gt;
+<span class="lineNum">      47 </span>            :                         ::type  context_type;
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            :   /** Тип мьютекса */
+<span class="lineNum">      50 </span>            :   typedef typename super::aspect::template advice_cast&lt;_mutex_type_&gt;
+<span class="lineNum">      51 </span>            :                         ::type  mutex_type;
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            :   /** Тип идентификатора поля JSONRPC запроса (поле \b id) */
+<span class="lineNum">      54 </span>            :   typedef typename handler_types::call_id_t        call_id_t;
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span>            :   /** Тип идентификатора источника. Определяеться пользователем, по умолчанию `size_t` */
+<span class="lineNum">      57 </span>            :   typedef typename handler_types::io_id_t          io_id_t;
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            :   /** Тип буфера сообщения (по умолчанию `std::vector&lt; char &gt;`) */
+<span class="lineNum">      60 </span>            :   typedef typename handler_types::data_type        data_type;
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span>            :   /** Указатель на буфер сообщения (по умолчанию `std::unique_ptr&lt; data_type &gt;`) */
+<span class="lineNum">      63 </span>            :   typedef typename handler_types::data_ptr         data_ptr;
+<span class="lineNum">      64 </span>            : 
+<span class="lineNum">      65 </span>            :   /** Тип сообщения об ошибке, который будет сериализовыватся в случае ошибки (`wjrpc::error`)  */
+<span class="lineNum">      66 </span>            :   typedef typename handler_types::error_type       error_type;
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span>            :   /** JSON-описание ошибки (`wjrpc::error_json`)  */
+<span class="lineNum">      69 </span>            :   typedef typename handler_types::error_json       error_json;
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            :   /** по умолчанию `std::unique_ptr&lt; error_type &gt;`*/
+<span class="lineNum">      72 </span>            :   typedef typename handler_types::error_ptr        error_ptr;
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            :   /** тип функции обратного вызова, для финальной сериализации ( по умолчанию `wjrpc::incoming_handler_t` ) */
+<span class="lineNum">      75 </span>            :   typedef typename handler_types::outgoing_handler_t    outgoing_handler_t;
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span>            :   /** Функция сериализации запросов ( по умолчанию `wjrpc::handler_types::request_serializer_t` ) */
+<span class="lineNum">      78 </span>            :   typedef typename handler_types::request_serializer_t  request_serializer_t;
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span>            :   /** Функция сериализации уведомлений ( по умолчанию `wjrpc::handler_types::notify_serializer_t` ) */
+<span class="lineNum">      81 </span>            :   typedef typename handler_types::notify_serializer_t   notify_serializer_t;
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span>            :   /** Обработчик ответов для удаленных запросов( по умолчанию `wjrpc::handler_types::result_handler_t` ) */
+<span class="lineNum">      84 </span>            :   typedef typename handler_types::result_handler_t      result_handler_t;
+<a name="85"><span class="lineNum">      85 </span>            : </a>
+<span class="lineNum">      86 </span>            : 
+<span class="lineNum">      87 </span><span class="lineCov">          7 :   ~method_list_base()</span>
+<span class="lineNum">      88 </span>            :   {
+<span class="lineNum">      89 </span><span class="lineCov">          7 :     _sender_handler = nullptr;</span>
+<a name="90"><span class="lineNum">      90 </span><span class="lineCov">          7 :   }</span></a>
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span><span class="lineCov">          7 :   method_list_base()</span>
+<span class="lineNum">      93 </span><span class="lineCov">          7 :   {</span>
+<span class="lineNum">      94 </span><span class="lineCov">          7 :     _sender_handler = nullptr;</span>
+<span class="lineNum">      95 </span><span class="lineCov">          7 :   }</span>
+<span class="lineNum">      96 </span>            : 
+<span class="lineNum">      97 </span>            :   method_list_base(const method_list_base&amp; ) = default;
+<span class="lineNum">      98 </span>            :   method_list_base(method_list_base&amp;&amp; ) = default;
+<span class="lineNum">      99 </span>            :   method_list_base&amp; operator=(const method_list_base&amp; ) = default;
+<span class="lineNum">     100 </span>            :   method_list_base&amp; operator=(method_list_base&amp;&amp; ) = default;
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span>            :   template&lt;typename Tg&gt;
+<span class="lineNum">     103 </span>            :   struct call_params_ptr
+<span class="lineNum">     104 </span>            :   {
+<span class="lineNum">     105 </span>            :     typedef typename super::aspect::template advice_cast&lt;Tg&gt;::type
+<span class="lineNum">     106 </span>            :                           ::aspect::template advice_cast&lt;_call_&gt;::type
+<span class="lineNum">     107 </span>            :                           ::params_ptr type;
+<span class="lineNum">     108 </span>            :   };
+<span class="lineNum">     109 </span>            : 
+<span class="lineNum">     110 </span>            :   template&lt;typename Tg&gt;
+<span class="lineNum">     111 </span>            :   struct call_result_ptr
+<span class="lineNum">     112 </span>            :   {
+<span class="lineNum">     113 </span>            :     typedef typename super::aspect::template advice_cast&lt;Tg&gt;::type
+<span class="lineNum">     114 </span>            :                           ::aspect::template advice_cast&lt;_call_&gt;::type
+<span class="lineNum">     115 </span>            :                           ::result_ptr type;
+<span class="lineNum">     116 </span>            :   };
+<span class="lineNum">     117 </span>            : 
+<span class="lineNum">     118 </span>            :   template&lt;typename Tg&gt;
+<span class="lineNum">     119 </span>            :   struct call_error_ptr
+<span class="lineNum">     120 </span>            :   {
+<span class="lineNum">     121 </span>            :     typedef typename super::aspect::template advice_cast&lt;Tg&gt;::type
+<span class="lineNum">     122 </span>            :                           ::aspect::template advice_cast&lt;_call_&gt;::type
+<span class="lineNum">     123 </span>            :                           ::error_ptr type;
+<span class="lineNum">     124 </span>            :   };
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span>            :   /**
+<span class="lineNum">     127 </span>            :    * @brief вызов &quot;удаленного&quot; метода
+<span class="lineNum">     128 </span>            :    * @tparam Tg тэг и имя метода
+<span class="lineNum">     129 </span>            :    * @tparam ReqPtr тип указателя на запрос
+<span class="lineNum">     130 </span>            :    * @param req параметры запроса, определяеться в `wjrpc::call_method`
+<span class="lineNum">     131 </span>            :    * @param callback обработчик ответа
+<span class="lineNum">     132 </span>            :    * @details Сериализует запрос
+<span class="lineNum">     133 </span>            :    *
+<span class="lineNum">     134 </span>            :    */
+<span class="lineNum">     135 </span>            :   template&lt;typename Tg, typename ReqPtr&gt;
+<span class="lineNum">     136 </span>            :   void call(
+<span class="lineNum">     137 </span>            :     ReqPtr req,
+<span class="lineNum">     138 </span>            :     std::function&lt; void(
+<span class="lineNum">     139 </span>            :       typename call_result_ptr&lt;Tg&gt;::type,
+<span class="lineNum">     140 </span>            :       typename call_error_ptr&lt;Tg&gt;::type
+<span class="lineNum">     141 </span>            :     )&gt; callback
+<span class="lineNum">     142 </span>            :   ) const
+<span class="lineNum">     143 </span>            :   {
+<span class="lineNum">     144 </span>            :     this-&gt;get_aspect().template get&lt;Tg&gt;()
+<span class="lineNum">     145 </span>            :                       .call( *this, std::move(req), std::move(callback) );
+<span class="lineNum">     146 </span>            :   }
+<a name="147"><span class="lineNum">     147 </span>            : </a>
+<span class="lineNum">     148 </span>            :   template&lt;typename Tg, typename ReqPtr&gt;
+<span class="lineNum">     149 </span><span class="lineCov">          2 :   void call(</span>
+<span class="lineNum">     150 </span>            :     ReqPtr req,
+<span class="lineNum">     151 </span>            :     std::function&lt;void(typename call_result_ptr&lt;Tg&gt;::type)&gt; result_callback,
+<span class="lineNum">     152 </span>            :     std::function&lt;void(typename call_error_ptr&lt;Tg&gt;::type)&gt;  error_callback
+<span class="lineNum">     153 </span>            :   ) const
+<span class="lineNum">     154 </span>            :   {
+<span class="lineNum">     155 </span>            :     typedef std::function&lt;void(
+<span class="lineNum">     156 </span>            :       typename call_result_ptr&lt;Tg&gt;::type,
+<span class="lineNum">     157 </span>            :       typename call_error_ptr&lt;Tg&gt;::type
+<span class="lineNum">     158 </span>            :     )&gt; callback_type;
+<span class="lineNum">     159 </span>            : 
+<span class="lineNum">     160 </span>            :     using namespace std::placeholders;
+<span class="lineNum">     161 </span><span class="lineCov">          2 :     callback_type callback = nullptr;</span>
+<span class="lineNum">     162 </span><span class="lineCov">          2 :     if ( result_callback!=nullptr )</span>
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :       callback = std::bind( self::response_handler&lt;Tg&gt;, _1, _2, result_callback, error_callback );</span>
+<span class="lineNum">     164 </span>            : 
+<span class="lineNum">     165 </span><span class="lineCov">          4 :     this-&gt;get_aspect().template get&lt;Tg&gt;().call(</span>
+<span class="lineNum">     166 </span>            :       *this,
+<span class="lineNum">     167 </span><span class="lineCov">          2 :       std::move(req),</span>
+<span class="lineNum">     168 </span><span class="lineCov">          2 :       std::move(callback)</span>
+<span class="lineNum">     169 </span><span class="lineCov">          2 :     );</span>
+<span class="lineNum">     170 </span><span class="lineCov">          2 :   }</span>
+<a name="171"><span class="lineNum">     171 </span>            : </a>
+<span class="lineNum">     172 </span>            :   template&lt;typename Params, typename NotifySerializer, typename RequestSerializer, typename ResultHandler &gt;
+<span class="lineNum">     173 </span><span class="lineCov">          3 :   void perform_send(</span>
+<span class="lineNum">     174 </span>            :     const char* method_name,
+<span class="lineNum">     175 </span>            :     Params params,
+<span class="lineNum">     176 </span>            :     NotifySerializer ns,
+<span class="lineNum">     177 </span>            :     RequestSerializer rs,
+<span class="lineNum">     178 </span>            :     ResultHandler  rh
+<span class="lineNum">     179 </span>            :   ) const
+<span class="lineNum">     180 </span>            :   {
+<span class="lineNum">     181 </span><span class="lineCov">          6 :     super::get_aspect().template get&lt;_perform_send_&gt;()(</span>
+<span class="lineNum">     182 </span>            :       *this,
+<span class="lineNum">     183 </span>            :       method_name,
+<span class="lineNum">     184 </span><span class="lineCov">          3 :       std::move(params),</span>
+<span class="lineNum">     185 </span><span class="lineCov">          3 :       std::move(ns),</span>
+<span class="lineNum">     186 </span><span class="lineCov">          3 :       std::move(rs),</span>
+<span class="lineNum">     187 </span><span class="lineCov">          3 :       std::move(rh)</span>
+<span class="lineNum">     188 </span><span class="lineCov">         18 :     );</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          3 :   }</span></a>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span><span class="lineCov">          3 :   void sender_handler( const char* method_name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1) const</span>
+<span class="lineNum">     192 </span>            :   {
+<span class="lineNum">     193 </span><span class="lineCov">          3 :     if ( this-&gt;_sender_handler != nullptr )</span>
+<span class="lineNum">     194 </span>            :     {
+<span class="lineNum">     195 </span><span class="lineCov">          3 :       this-&gt;_sender_handler( method_name, std::move(ns1), std::move(rs1), std::move(rh1) );</span>
+<span class="lineNum">     196 </span>            :     }
+<span class="lineNum">     197 </span>            :     else
+<span class="lineNum">     198 </span>            :     {
+<span class="lineNum">     199 </span><span class="lineNoCov">          0 :       WJRPC_LOG_FATAL(&quot; (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this-&gt;_sender_handler==nullptr&quot;)</span>
+<span class="lineNum">     200 </span>            :     }
+<span class="lineNum">     201 </span><span class="lineCov">          3 :   }</span>
+<a name="202"><span class="lineNum">     202 </span>            : </a>
+<span class="lineNum">     203 </span>            :   template&lt;typename Schema&gt;
+<span class="lineNum">     204 </span><span class="lineCov">          4 :   static std::vector&lt;Schema&gt; create_schema_t()</span>
+<span class="lineNum">     205 </span>            :   {
+<span class="lineNum">     206 </span>            :     typedef typename super::aspect::template select_group&lt;_method_&gt;::type method_tag_list_t;
+<span class="lineNum">     207 </span><span class="lineCov">          4 :     std::vector&lt;Schema&gt; sch_list;</span>
+<span class="lineNum">     208 </span><span class="lineCov">          4 :     create_schema_(&amp;sch_list, method_tag_list_t());</span>
+<span class="lineNum">     209 </span><span class="lineCov">          4 :     return sch_list;</span>
+<span class="lineNum">     210 </span>            :   }
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span>            :   typedef std::vector&lt;default_schema&gt; schema_list_t;
+<span class="lineNum">     213 </span>            : 
+<span class="lineNum">     214 </span>            :   static schema_list_t create_schema()
+<span class="lineNum">     215 </span>            :   {
+<span class="lineNum">     216 </span>            :     return create_schema_t&lt;default_schema&gt;();
+<span class="lineNum">     217 </span>            :   }
+<span class="lineNum">     218 </span>            : 
+<span class="lineNum">     219 </span>            : private:
+<a name="220"><span class="lineNum">     220 </span>            : </a>
+<span class="lineNum">     221 </span>            :   template&lt;typename Schema, typename L, typename R&gt;
+<span class="lineNum">     222 </span><span class="lineCov">          8 :   static void create_schema_(std::vector&lt;Schema&gt;* sch_list, fas::type_list&lt;L, R&gt;)</span>
+<span class="lineNum">     223 </span>            :   {
+<span class="lineNum">     224 </span>            :     typedef L head_tag;
+<span class="lineNum">     225 </span>            :     typedef R tail_type;
+<span class="lineNum">     226 </span>            :     typedef typename super::aspect::template advice_cast&lt;head_tag&gt;::type method_type;
+<span class="lineNum">     227 </span><span class="lineCov">          8 :     sch_list-&gt;push_back( method_type::template create_schema_t&lt;Schema&gt;() );</span>
+<span class="lineNum">     228 </span><span class="lineCov">          8 :     create_schema_(sch_list, tail_type() );</span>
+<span class="lineNum">     229 </span><span class="lineCov">          8 :   }</span>
+<a name="230"><span class="lineNum">     230 </span>            : </a>
+<span class="lineNum">     231 </span>            :   template&lt;typename Schema&gt;
+<span class="lineNum">     232 </span><span class="lineCov">          4 :   static void create_schema_(std::vector&lt;Schema&gt;*,  fas::empty_list)</span>
+<span class="lineNum">     233 </span>            :   {
+<span class="lineNum">     234 </span><span class="lineCov">          4 :   }</span>
+<span class="lineNum">     235 </span>            : 
+<span class="lineNum">     236 </span>            : 
+<a name="237"><span class="lineNum">     237 </span>            : </a>
+<span class="lineNum">     238 </span>            :   template&lt;typename Tg&gt;
+<span class="lineNum">     239 </span><span class="lineNoCov">          0 :   static inline void response_handler(</span>
+<span class="lineNum">     240 </span>            :     typename call_result_ptr&lt;Tg&gt;::type res,
+<span class="lineNum">     241 </span>            :     typename call_error_ptr&lt;Tg&gt;::type err,
+<span class="lineNum">     242 </span>            :     std::function&lt;void(typename call_result_ptr&lt;Tg&gt;::type)&gt; result_callback,
+<span class="lineNum">     243 </span>            :     std::function&lt;void(typename call_error_ptr&lt;Tg&gt;::type)&gt; error_callback
+<span class="lineNum">     244 </span>            :   )
+<span class="lineNum">     245 </span>            :   {
+<span class="lineNum">     246 </span><span class="lineNoCov">          0 :     self::aspect::template advice_cast&lt;_response_handler_&gt;::type</span>
+<span class="lineNum">     247 </span>            :         ::template process&lt;Tg&gt;(
+<span class="lineNum">     248 </span><span class="lineNoCov">          0 :             std::move(res),</span>
+<span class="lineNum">     249 </span><span class="lineNoCov">          0 :             std::move(err),</span>
+<span class="lineNum">     250 </span><span class="lineNoCov">          0 :             std::move(result_callback),</span>
+<span class="lineNum">     251 </span><span class="lineNoCov">          0 :             std::move(error_callback)</span>
+<span class="lineNum">     252 </span><span class="lineNoCov">          0 :         );</span>
+<span class="lineNum">     253 </span><span class="lineNoCov">          0 :   }</span>
+<span class="lineNum">     254 </span>            : 
+<span class="lineNum">     255 </span>            : private:
+<span class="lineNum">     256 </span>            :   friend typename super::aspect::template advice_cast&lt; _initialize_ &gt;::type;
+<span class="lineNum">     257 </span>            :   typedef typename handler_types::sender_handler_t   sender_handler_t;
+<span class="lineNum">     258 </span>            :   sender_handler_t _sender_handler = sender_handler_t(nullptr);
+<span class="lineNum">     259 </span>            : };
+<span class="lineNum">     260 </span>            : 
+<span class="lineNum">     261 </span>            : } // wjrpc
+<span class="lineNum">     262 </span>            : 
+<span class="lineNum">     263 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

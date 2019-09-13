@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - tests/engine_suite.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">tests</a> - engine_suite.cpp<span style="font-size: 80%;"> (source / <a href="engine_suite.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">47</td>
+            <td class="headerCovTableEntry">53</td>
+            <td class="headerCovTableEntryMed">88.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">37</td>
+            <td class="headerCovTableEntry">40</td>
+            <td class="headerCovTableEntryHi">92.5 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &lt;wjrpc/handler.hpp&gt;</a>
+<span class="lineNum">       2 </span>            : #include &lt;wjrpc/engine.hpp&gt;
+<span class="lineNum">       3 </span>            : #include &lt;wjrpc/method.hpp&gt;
+<span class="lineNum">       4 </span>            : #include &lt;wjson/_json.hpp&gt;
+<span class="lineNum">       5 </span>            : #include &lt;fas/testing.hpp&gt;
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">       8 </span>            : #include &lt;memory&gt;
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : namespace {
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : namespace request{
+<span class="lineNum">      14 </span>            : 
+<a name="15"><span class="lineNum">      15 </span>            : /// -------------------</a>
+<span class="lineNum">      16 </span>            : template&lt;typename T&gt;
+<span class="lineNum">      17 </span><span class="lineCov">          4 : struct base </span>
+<span class="lineNum">      18 </span>            : {
+<span class="lineNum">      19 </span>            :   int first=0; 
+<span class="lineNum">      20 </span>            :   int second=0;
+<span class="lineNum">      21 </span>            :   typedef std::unique_ptr&lt;T&gt; ptr;
+<a name="22"><span class="lineNum">      22 </span>            : };</a>
+<a name="23"><span class="lineNum">      23 </span>            : </a>
+<span class="lineNum">      24 </span><span class="lineCov">          2 : struct plus: base&lt;plus&gt; {};</span>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">          2 : struct minus: base&lt;minus&gt; </span></a>
+<span class="lineNum">      26 </span>            : {
+<span class="lineNum">      27 </span><span class="lineCov">          1 :   static minus create_schema()</span>
+<span class="lineNum">      28 </span>            :   {
+<span class="lineNum">      29 </span><span class="lineCov">          1 :     minus m;</span>
+<span class="lineNum">      30 </span><span class="lineCov">          1 :     m.first = 11;</span>
+<span class="lineNum">      31 </span><span class="lineCov">          1 :     m.second = 22;</span>
+<span class="lineNum">      32 </span><span class="lineCov">          1 :     return m;</span>
+<span class="lineNum">      33 </span>            :   }
+<span class="lineNum">      34 </span>            : };
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : /// -------------------
+<span class="lineNum">      37 </span>            : template&lt;typename T&gt;
+<a name="38"><span class="lineNum">      38 </span>            : struct T_json</a>
+<a name="39"><span class="lineNum">      39 </span>            : {</a>
+<span class="lineNum">      40 </span><span class="lineCov">          3 :   FAS_NAME(first)</span>
+<span class="lineNum">      41 </span><span class="lineCov">          3 :   FAS_NAME(second)</span>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            :   typedef ::wjson::object&lt;
+<span class="lineNum">      44 </span>            :     T,
+<span class="lineNum">      45 </span>            :     ::wjson::member_list&lt;
+<span class="lineNum">      46 </span>            :       ::wjson::member&lt;n_first, base&lt;T&gt;,  int,  &amp;base&lt;T&gt;::first&gt;,
+<span class="lineNum">      47 </span>            :       ::wjson::member&lt;n_second, base&lt;T&gt;, int,  &amp;base&lt;T&gt;::second&gt;
+<span class="lineNum">      48 </span>            :     &gt;
+<span class="lineNum">      49 </span>            :   &gt; type;
+<span class="lineNum">      50 </span>            :   typedef typename type::serializer serializer;
+<span class="lineNum">      51 </span>            :   typedef typename type::target target;
+<span class="lineNum">      52 </span>            : };
+<span class="lineNum">      53 </span>            : 
+<span class="lineNum">      54 </span>            : struct plus_json: T_json&lt;plus&gt; {};
+<span class="lineNum">      55 </span>            : struct minus_json: T_json&lt;minus&gt; {};
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            : }
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            : namespace response{
+<a name="60"><span class="lineNum">      60 </span>            : </a>
+<span class="lineNum">      61 </span>            : template&lt;typename T&gt;
+<span class="lineNum">      62 </span><span class="lineCov">          3 : struct base </span>
+<span class="lineNum">      63 </span>            : {
+<span class="lineNum">      64 </span>            :   int value=0;
+<span class="lineNum">      65 </span>            :   typedef std::unique_ptr&lt;T&gt; ptr;
+<span class="lineNum">      66 </span>            :   typedef std::function&lt;void(ptr)&gt; callback;
+<a name="67"><span class="lineNum">      67 </span>            : };</a>
+<a name="68"><span class="lineNum">      68 </span>            : </a>
+<span class="lineNum">      69 </span><span class="lineCov">          2 : struct plus: base&lt;plus&gt; {};</span>
+<span class="lineNum">      70 </span><span class="lineCov">          1 : struct minus: base&lt;minus&gt; {};</span>
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span>            : /// -------------------
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            : template&lt;typename T&gt;
+<a name="75"><span class="lineNum">      75 </span>            : struct T_json</a>
+<span class="lineNum">      76 </span>            : {
+<span class="lineNum">      77 </span><span class="lineCov">          3 :   FAS_NAME(value)</span>
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            :   typedef ::wjson::object&lt;
+<span class="lineNum">      80 </span>            :     T,
+<span class="lineNum">      81 </span>            :     ::wjson::member_list&lt;
+<span class="lineNum">      82 </span>            :       ::wjson::member&lt;n_value, base&lt;T&gt;, int, &amp;base&lt;T&gt;::value&gt;
+<span class="lineNum">      83 </span>            :     &gt;
+<span class="lineNum">      84 </span>            :   &gt; type;
+<span class="lineNum">      85 </span>            :   typedef typename type::serializer serializer;
+<span class="lineNum">      86 </span>            :   typedef typename type::target target;
+<span class="lineNum">      87 </span>            : };
+<span class="lineNum">      88 </span>            : 
+<span class="lineNum">      89 </span>            : struct plus_json: T_json&lt;plus&gt; {};
+<span class="lineNum">      90 </span>            : struct minus_json: T_json&lt;minus&gt; {};
+<span class="lineNum">      91 </span>            : 
+<a name="92"><span class="lineNum">      92 </span>            : }</a>
+<span class="lineNum">      93 </span>            : 
+<a name="94"><span class="lineNum">      94 </span><span class="lineCov">          1 : struct icalc</span></a>
+<span class="lineNum">      95 </span>            : {
+<span class="lineNum">      96 </span><span class="lineCov">          1 :   virtual ~icalc() {}</span>
+<span class="lineNum">      97 </span>            :   virtual void plus( request::plus::ptr req, response::plus::callback cb) = 0;
+<span class="lineNum">      98 </span>            :   virtual void minus( request::minus::ptr req, response::minus::callback cb) = 0;
+<a name="99"><span class="lineNum">      99 </span>            : };</a>
+<span class="lineNum">     100 </span>            : 
+<span class="lineNum">     101 </span><span class="lineCov">          2 : class calc</span>
+<span class="lineNum">     102 </span>            :   : public icalc
+<a name="103"><span class="lineNum">     103 </span>            : {</a>
+<span class="lineNum">     104 </span>            : public:
+<span class="lineNum">     105 </span><span class="lineCov">          1 :   virtual void plus( request::plus::ptr req, response::plus::callback cb) override</span>
+<span class="lineNum">     106 </span>            :   {
+<span class="lineNum">     107 </span><span class="lineCov">          1 :     if ( cb == nullptr )</span>
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     109 </span>            : 
+<span class="lineNum">     110 </span><span class="lineCov">          1 :     if ( req == nullptr )</span>
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :       return cb(nullptr);</span>
+<span class="lineNum">     112 </span>            : 
+<span class="lineNum">     113 </span><span class="lineCov">          1 :     auto res = std::make_unique&lt;response::plus&gt;();</span>
+<span class="lineNum">     114 </span><span class="lineCov">          1 :     res-&gt;value = req-&gt;first + req-&gt;second;</span>
+<span class="lineNum">     115 </span><span class="lineCov">          1 :     cb( std::move(res) );</span>
+<a name="116"><span class="lineNum">     116 </span>            :   }</a>
+<span class="lineNum">     117 </span>            : 
+<span class="lineNum">     118 </span><span class="lineNoCov">          0 :   virtual void minus( request::minus::ptr , response::minus::callback cb) override</span>
+<span class="lineNum">     119 </span>            :   {
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :     if ( cb == nullptr )</span>
+<span class="lineNum">     121 </span><span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :     return cb(nullptr);</span>
+<span class="lineNum">     123 </span>            :   }
+<a name="124"><span class="lineNum">     124 </span>            : };</a>
+<a name="125"><span class="lineNum">     125 </span>            : </a>
+<span class="lineNum">     126 </span><span class="lineCov">          2 : JSONRPC_TAG(plus)</span>
+<a name="127"><span class="lineNum">     127 </span><span class="lineCov">          1 : JSONRPC_TAG(minus)</span></a>
+<span class="lineNum">     128 </span>            : 
+<span class="lineNum">     129 </span><span class="lineCov">          2 : struct method_list: wjrpc::method_list</span>
+<span class="lineNum">     130 </span>            : &lt;
+<span class="lineNum">     131 </span>            :   wjrpc::target&lt;icalc&gt;,
+<span class="lineNum">     132 </span>            :   wjrpc::invoke_method&lt;_plus_, request::plus_json, response::plus_json, icalc, &amp;icalc::plus&gt;,
+<span class="lineNum">     133 </span>            :   wjrpc::invoke_method&lt;_minus_, request::minus_json, response::minus_json, icalc, &amp;icalc::minus&gt;
+<a name="134"><span class="lineNum">     134 </span>            : &gt;{};</a>
+<span class="lineNum">     135 </span>            : 
+<a name="136"><span class="lineNum">     136 </span><span class="lineCov">          2 : struct handler: ::wjrpc::handler&lt;method_list&gt; {};</span></a>
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span><span class="lineCov">          3 : UNIT(engine1, &quot;&quot;)</span>
+<span class="lineNum">     139 </span>            : {
+<span class="lineNum">     140 </span>            :   using namespace ::fas::testing;
+<span class="lineNum">     141 </span>            :   using namespace ::wjrpc;
+<span class="lineNum">     142 </span>            :   using namespace wjson::literals;
+<span class="lineNum">     143 </span>            :   typedef ::wjrpc::engine&lt; handler &gt; engine_type;
+<span class="lineNum">     144 </span>            :   //typedef std::shared_ptr&lt;engine_type&gt; engine_ptr;
+<span class="lineNum">     145 </span><span class="lineCov">          1 :   engine_type::options_type opt;</span>
+<span class="lineNum">     146 </span><span class="lineCov">          2 :   auto pcalc = std::make_shared&lt;calc&gt;();</span>
+<span class="lineNum">     147 </span><span class="lineCov">          1 :   opt.target = pcalc;</span>
+<span class="lineNum">     148 </span>            :   /*opt.sender_handler = [](const char*, notify_serializer_t, request_serializer_t, result_handler_t )
+<span class="lineNum">     149 </span>            :   {
+<span class="lineNum">     150 </span>            :     
+<span class="lineNum">     151 </span>            :   };*/
+<span class="lineNum">     152 </span><span class="lineCov">          2 :   auto e = std::make_shared&lt;engine_type&gt;();</span>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">          1 :   e-&gt;start(opt, 1);</span></a>
+<span class="lineNum">     154 </span><span class="lineCov">          2 :   std::string sreq = &quot;{\&quot;method\&quot;:\&quot;plus\&quot;,\&quot;params\&quot;:{\&quot;first\&quot;:2, \&quot;second\&quot;:3},\&quot;id\&quot;:1}&quot;;</span>
+<span class="lineNum">     155 </span><span class="lineCov">          2 :   e-&gt;perform_io( std::make_unique&lt;data_type&gt;(sreq.begin(), sreq.end()), 1, [&amp;t](data_ptr d) </span>
+<span class="lineNum">     156 </span>            :   {
+<span class="lineNum">     157 </span>            :     using namespace ::fas::testing;
+<span class="lineNum">     158 </span><span class="lineCov">          1 :     std::string ress( d-&gt;begin(), d-&gt;end() );</span>
+<span class="lineNum">     159 </span><span class="lineCov">          1 :     t &lt;&lt; message(&quot;responce: &quot;) &lt;&lt; ress;</span>
+<span class="lineNum">     160 </span><span class="lineCov">          1 :     t &lt;&lt; equal&lt;expect, std::string&gt;( ress, &quot;{'jsonrpc':'2.0','result':{'value':5},'id':1}&quot;_json);</span>
+<span class="lineNum">     161 </span><span class="lineCov">          1 :   });</span>
+<span class="lineNum">     162 </span>            :   
+<span class="lineNum">     163 </span><span class="lineCov">          2 :   auto schl = e-&gt;create_schema();</span>
+<span class="lineNum">     164 </span><span class="lineCov">          2 :   std::string sch_json;</span>
+<span class="lineNum">     165 </span><span class="lineCov">          1 :   decltype(schl)::value_type::json::list::serializer()(schl, std::back_inserter(sch_json) );</span>
+<span class="lineNum">     166 </span><span class="lineCov">          1 :   t &lt;&lt; equal&lt;expect, std::string&gt;( sch_json, &quot;[{'name':'plus','params':{'first':0,'second':0},'result':{'value':0},'error':{'code':0,'message':'No error'}},{'name':'minus','params':{'first':11,'second':22},'result':{'value':0},'error':{'code':0,'message':'No error'}}]&quot;_json);</span>
+<span class="lineNum">     167 </span><span class="lineCov">          2 :   t &lt;&lt; nothing;</span>
+<span class="lineNum">     168 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">     169 </span>            : 
+<a name="170"><span class="lineNum">     170 </span>            : }</a>
+<span class="lineNum">     171 </span>            : 
+<a name="172"><span class="lineNum">     172 </span><span class="lineCov">          1 : BEGIN_SUITE(engine_suite, &quot;&quot;)</span></a>
+<span class="lineNum">     173 </span>            :   ADD_UNIT(engine1)
+<span class="lineNum">     174 </span><span class="lineCov">          7 : END_SUITE(engine_suite)</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

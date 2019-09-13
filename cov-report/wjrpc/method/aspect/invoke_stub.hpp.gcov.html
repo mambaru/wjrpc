@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - wjrpc/method/aspect/invoke_stub.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">wjrpc/method/aspect</a> - invoke_stub.hpp<span style="font-size: 80%;"> (source / <a href="invoke_stub.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2011-2016
+<span class="lineNum">       3 </span>            : //
+<span class="lineNum">       4 </span>            : // Copyright: See COPYING file that comes with this distribution
+<span class="lineNum">       5 </span>            : //
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : #pragma once
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #include &lt;wjrpc/errors.hpp&gt;
+<span class="lineNum">      10 </span>            : #include &lt;wjrpc/method/aspect/tags.hpp&gt;
+<span class="lineNum">      11 </span>            : #include &lt;wjrpc/memory.hpp&gt;
+<span class="lineNum">      12 </span>            : 
+<a name="13"><span class="lineNum">      13 </span>            : namespace wjrpc{</a>
+<span class="lineNum">      14 </span>            : 
+<span class="lineNum">      15 </span><span class="lineCov">          9 : struct invoke_stub</span>
+<span class="lineNum">      16 </span>            : {
+<span class="lineNum">      17 </span>            :   typedef ::fas::metalist::advice metatype;
+<span class="lineNum">      18 </span>            :   typedef _invoke_ tag;
+<span class="lineNum">      19 </span>            :   typedef invoke_stub advice_class;
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span>            :   advice_class&amp; get_advice() { return *this;}
+<span class="lineNum">      22 </span>            :   const advice_class&amp; get_advice() const { return *this;}
+<span class="lineNum">      23 </span>            :   
+<span class="lineNum">      24 </span>            :   template&lt;typename T, typename TT, typename OutgoingHandler&gt;
+<span class="lineNum">      25 </span>            :   void operator()(
+<span class="lineNum">      26 </span>            :     T&amp;, 
+<span class="lineNum">      27 </span>            :     TT&amp;, 
+<span class="lineNum">      28 </span>            :     incoming_holder holder,
+<span class="lineNum">      29 </span>            :     OutgoingHandler outgoing_handler
+<span class="lineNum">      30 </span>            :   ) const
+<span class="lineNum">      31 </span>            :   {
+<span class="lineNum">      32 </span>            :     TT::template send_error&lt;T, error_json&gt;( 
+<span class="lineNum">      33 </span>            :       std::move(holder), 
+<span class="lineNum">      34 </span>            :       std::make_unique&lt;method_not_impl&gt;(), 
+<span class="lineNum">      35 </span>            :       std::move(outgoing_handler) 
+<span class="lineNum">      36 </span>            :     );
+<span class="lineNum">      37 </span>            :   }
+<span class="lineNum">      38 </span>            : };
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            : } // wjrpc
+<span class="lineNum">      41 </span>            : 
+<span class="lineNum">      42 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

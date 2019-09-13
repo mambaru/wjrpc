@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - wjrpc/engine/call_map.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">wjrpc/engine</a> - call_map.cpp<span style="font-size: 80%;"> (source / <a href="call_map.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">52</td>
+            <td class="headerCovTableEntryLo">25.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntryLo">44.4 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2011-2016
+<span class="lineNum">       3 </span>            : //
+<span class="lineNum">       4 </span>            : // Copyright: See COPYING file that comes with this distribution
+<span class="lineNum">       5 </span>            : //
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : #include &lt;wjrpc/incoming/incoming_holder.hpp&gt;
+<span class="lineNum">       9 </span>            : #include &lt;wjrpc/engine/call_map.hpp&gt;
+<span class="lineNum">      10 </span>            : #include &lt;wjrpc/logger.hpp&gt;
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : #include &lt;queue&gt;
+<span class="lineNum">      13 </span>            : #include &lt;mutex&gt;
+<span class="lineNum">      14 </span>            : #include &lt;chrono&gt;
+<span class="lineNum">      15 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      16 </span>            : 
+<span class="lineNum">      17 </span>            : 
+<a name="18"><span class="lineNum">      18 </span>            : namespace wjrpc{</a>
+<span class="lineNum">      19 </span>            : 
+<span class="lineNum">      20 </span><span class="lineCov">          1 :   void call_map::set_lifetime(time_t lifetime_ms, bool everytime) </span>
+<span class="lineNum">      21 </span>            :   {
+<span class="lineNum">      22 </span><span class="lineCov">          1 :     std::lock_guard&lt;mutex_type&gt; lk(_mutex);</span>
+<span class="lineNum">      23 </span><span class="lineCov">          1 :     _everytime = everytime;</span>
+<span class="lineNum">      24 </span><span class="lineCov">          1 :     _lifetime_ms = lifetime_ms;</span>
+<span class="lineNum">      25 </span>            :     /*if ( _lifetime_ms == 0 )
+<span class="lineNum">      26 </span>            :       time_queue().swap(_time_queue);*/
+<span class="lineNum">      27 </span><span class="lineCov">          1 :   }</span>
+<a name="28"><span class="lineNum">      28 </span>            :   </a>
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span><span class="lineNoCov">          0 :   void call_map::set(call_id_t call_id, result_handler_t result)</span>
+<span class="lineNum">      31 </span>            :   {
+<span class="lineNum">      32 </span><span class="lineNoCov">          0 :     if ( _everytime )</span>
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :       this-&gt;remove_outdated();</span>
+<span class="lineNum">      34 </span><span class="lineNoCov">          0 :     std::lock_guard&lt;mutex_type&gt; lk(_mutex);</span>
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span><span class="lineNoCov">          0 :     auto death_time = std::chrono::system_clock::now() + std::chrono::milliseconds(_lifetime_ms);</span>
+<span class="lineNum">      37 </span>            :     _result_map.insert( 
+<span class="lineNum">      38 </span>            :       std::make_pair(
+<span class="lineNum">      39 </span>            :         call_id, 
+<span class="lineNum">      40 </span>            :         std::make_pair(death_time, result)
+<span class="lineNum">      41 </span>            :       ) 
+<span class="lineNum">      42 </span><span class="lineNoCov">          0 :     );</span>
+<span class="lineNum">      43 </span><span class="lineNoCov">          0 :     _time_set.insert(std::make_pair(death_time, call_id));</span>
+<span class="lineNum">      44 </span>            :     /*
+<span class="lineNum">      45 </span>            :     _result_map[call_id] = result;
+<span class="lineNum">      46 </span>            :     if ( _lifetime_ms != 0 )
+<span class="lineNum">      47 </span>            :     {
+<span class="lineNum">      48 </span>            :       _time_queue.push( std::make_pair( std::chrono::system_clock::now() + std::chrono::milliseconds(_lifetime_ms), call_id) );
+<span class="lineNum">      49 </span>            :     }
+<span class="lineNum">      50 </span>            :     */
+<a name="51"><span class="lineNum">      51 </span><span class="lineNoCov">          0 :   }</span></a>
+<span class="lineNum">      52 </span>            :   
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :   call_map::result_handler_t call_map::detach(call_id_t call_id)</span>
+<span class="lineNum">      54 </span>            :   {
+<span class="lineNum">      55 </span>            :     //if ( _everytime ) this-&gt;remove_outdated();
+<span class="lineNum">      56 </span><span class="lineNoCov">          0 :     std::lock_guard&lt;mutex_type&gt; lk(_mutex);</span>
+<span class="lineNum">      57 </span><span class="lineNoCov">          0 :     result_handler_t result = nullptr;</span>
+<span class="lineNum">      58 </span><span class="lineNoCov">          0 :     auto itr = _result_map.find(call_id);</span>
+<span class="lineNum">      59 </span><span class="lineNoCov">          0 :     if ( itr!=_result_map.end() )</span>
+<span class="lineNum">      60 </span>            :     {
+<span class="lineNum">      61 </span><span class="lineNoCov">          0 :       result = std::move( itr-&gt;second.second );</span>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :       _time_set.erase( std::make_pair( itr-&gt;second.first, itr-&gt;first)  );</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :       _result_map.erase(itr);</span>
+<span class="lineNum">      64 </span>            :     }
+<span class="lineNum">      65 </span><span class="lineNoCov">          0 :     return result;</span>
+<a name="66"><span class="lineNum">      66 </span>            :   }</a>
+<span class="lineNum">      67 </span>            :   
+<span class="lineNum">      68 </span><span class="lineCov">          1 :   void call_map::clear()</span>
+<span class="lineNum">      69 </span>            :   {
+<span class="lineNum">      70 </span><span class="lineCov">          1 :     result_map clear_map;</span>
+<span class="lineNum">      71 </span>            :     {
+<span class="lineNum">      72 </span><span class="lineCov">          1 :       std::lock_guard&lt;mutex_type&gt; lk(_mutex);</span>
+<span class="lineNum">      73 </span><span class="lineCov">          1 :       _result_map.swap(clear_map);</span>
+<span class="lineNum">      74 </span>            :     }
+<span class="lineNum">      75 </span>            :     
+<span class="lineNum">      76 </span><span class="lineCov">          1 :     for (auto&amp; tmp : clear_map)</span>
+<span class="lineNum">      77 </span>            :     {
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :       if ( auto handler = tmp.second.second ) </span>
+<span class="lineNum">      79 </span>            :       {
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :         handler( incoming_holder( data_ptr() ) );</span>
+<span class="lineNum">      81 </span><span class="lineNoCov">          0 :       }</span>
+<span class="lineNum">      82 </span><span class="lineCov">          1 :     }</span>
+<a name="83"><span class="lineNum">      83 </span><span class="lineCov">          1 :   }</span></a>
+<span class="lineNum">      84 </span>            :   
+<span class="lineNum">      85 </span><span class="lineNoCov">          0 :   size_t call_map::remove_outdated()</span>
+<span class="lineNum">      86 </span>            :   {
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :     auto handlers = this-&gt;detach_outdated_();</span>
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :     for ( auto h : handlers ) </span>
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :       h( incoming_holder( data_ptr() ) );</span>
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :     return handlers.size();</span>
+<span class="lineNum">      91 </span>            :     /*
+<span class="lineNum">      92 </span>            :     size_t count = 0;
+<span class="lineNum">      93 </span>            :     auto calls = this-&gt;detach_outdated();
+<span class="lineNum">      94 </span>            :     for ( auto call_id : calls ) 
+<span class="lineNum">      95 </span>            :     {
+<span class="lineNum">      96 </span>            :       
+<span class="lineNum">      97 </span>            :       if ( auto handler = this-&gt;detach(call_id) )
+<span class="lineNum">      98 </span>            :       {
+<span class="lineNum">      99 </span>            :         handler( incoming_holder( data_ptr() ) );
+<span class="lineNum">     100 </span>            :         ++count;
+<span class="lineNum">     101 </span>            :       }
+<span class="lineNum">     102 </span>            :       
+<span class="lineNum">     103 </span>            :     }
+<span class="lineNum">     104 </span>            :     return count;
+<span class="lineNum">     105 </span>            :     */
+<a name="106"><span class="lineNum">     106 </span>            :   }</a>
+<span class="lineNum">     107 </span>            : 
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 :    std::pair&lt;size_t, size_t&gt; call_map::sizes() const</span>
+<span class="lineNum">     109 </span>            :    {
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :      std::lock_guard&lt;mutex_type&gt; lk(_mutex);</span>
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :      return std::make_pair( _result_map.size(), _time_set.size() );</span>
+<a name="112"><span class="lineNum">     112 </span>            :    }</a>
+<span class="lineNum">     113 </span>            : 
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :   call_map::outdated_list call_map::detach_outdated_()</span>
+<span class="lineNum">     115 </span>            :   {
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :     std::lock_guard&lt;mutex_type&gt; lk(_mutex);</span>
+<span class="lineNum">     117 </span><span class="lineNoCov">          0 :     outdated_list odl;</span>
+<span class="lineNum">     118 </span>            :     
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :     auto now = std::chrono::system_clock::now();</span>
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :     while ( !_time_set.empty() &amp;&amp; ( _time_set.begin()-&gt;first &lt; now)  )</span>
+<span class="lineNum">     121 </span>            :     {
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :       auto itr = _result_map.find( _time_set.begin()-&gt;second );</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :       if ( itr!=_result_map.end() &amp;&amp; itr-&gt;second.second != nullptr )</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :         odl.push_back( std::move(itr-&gt;second.second) );</span>
+<span class="lineNum">     125 </span><span class="lineNoCov">          0 :       _time_set.erase( _time_set.begin() );</span>
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :       _result_map.erase(itr);</span>
+<span class="lineNum">     127 </span>            :     }
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :     return odl;</span>
+<span class="lineNum">     129 </span>            :     /*
+<span class="lineNum">     130 </span>            :     auto now = std::chrono::system_clock::now();
+<span class="lineNum">     131 </span>            :     while ( !_time_queue.empty() &amp;&amp; ( _time_queue.front().first &lt; now)  )
+<span class="lineNum">     132 </span>            :     {
+<span class="lineNum">     133 </span>            :       calls.push_back( std::move(_time_queue.front().second) );
+<span class="lineNum">     134 </span>            :       _time_queue.pop();
+<span class="lineNum">     135 </span>            :       
+<span class="lineNum">     136 </span>            :     }
+<span class="lineNum">     137 </span>            :     return std::move( calls );
+<span class="lineNum">     138 </span>            :     */
+<a name="139"><span class="lineNum">     139 </span>            :   }</a>
+<span class="lineNum">     140 </span>            : 
+<span class="lineNum">     141 </span><span class="lineCov">          3 : } // wfc</span>
+<span class="lineNum">     142 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

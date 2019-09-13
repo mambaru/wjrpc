@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - wjrpc-coverage.info - wjrpc/method/aspect/call.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">wjrpc/method/aspect</a> - call.hpp<span style="font-size: 80%;"> (source / <a href="call.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">wjrpc-coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-09-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2011-2016
+<span class="lineNum">       3 </span>            : //
+<span class="lineNum">       4 </span>            : // Copyright: See COPYING file that comes with this distribution
+<span class="lineNum">       5 </span>            : //
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : #pragma once
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #include &lt;wjrpc/incoming/incoming_holder.hpp&gt;
+<span class="lineNum">      10 </span>            : #include &lt;wjrpc/outgoing/outgoing_holder.hpp&gt;
+<span class="lineNum">      11 </span>            : #include &lt;wjrpc/method/aspect/tags.hpp&gt;
+<span class="lineNum">      12 </span>            : #include &lt;wjrpc/errors.hpp&gt;
+<span class="lineNum">      13 </span>            : #include &lt;wjrpc/logger.hpp&gt;
+<span class="lineNum">      14 </span>            : #include &lt;fas/aop/metalist.hpp&gt;
+<span class="lineNum">      15 </span>            : #include &lt;functional&gt;
+<span class="lineNum">      16 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            : namespace wjrpc{
+<a name="19"><span class="lineNum">      19 </span>            :   </a>
+<span class="lineNum">      20 </span>            : template&lt;typename JParams, typename JResult, typename JError = error_json&gt;
+<span class="lineNum">      21 </span><span class="lineCov">          3 : struct remote_call</span>
+<span class="lineNum">      22 </span>            : {
+<span class="lineNum">      23 </span>            :   typedef fas::metalist::advice metatype;
+<span class="lineNum">      24 </span>            :   typedef _call_ tag;
+<span class="lineNum">      25 </span>            :   typedef remote_call&lt;JParams, JResult, JError&gt; advice_class;
+<a name="26"><span class="lineNum">      26 </span>            : </a>
+<span class="lineNum">      27 </span>            :   advice_class&amp; get_advice() { return *this;}
+<span class="lineNum">      28 </span><span class="lineCov">          3 :   const advice_class&amp; get_advice() const { return *this;}</span>
+<span class="lineNum">      29 </span>            :   
+<span class="lineNum">      30 </span>            :   typedef JParams params_json_t;
+<span class="lineNum">      31 </span>            :   typedef JResult result_json_t;
+<span class="lineNum">      32 </span>            :   typedef JError  error_json_t;
+<span class="lineNum">      33 </span>            :   typedef typename params_json_t::target params_type;
+<span class="lineNum">      34 </span>            :   typedef typename result_json_t::target result_type;
+<span class="lineNum">      35 </span>            :   typedef typename error_json_t::target  error_type;
+<span class="lineNum">      36 </span>            :   
+<span class="lineNum">      37 </span>            :   typedef typename std::unique_ptr&lt;params_type&gt; params_ptr;
+<span class="lineNum">      38 </span>            :   typedef typename std::unique_ptr&lt;result_type&gt; result_ptr;
+<span class="lineNum">      39 </span>            :   typedef typename std::unique_ptr&lt;error_type&gt;  error_ptr;
+<a name="40"><span class="lineNum">      40 </span>            :   </a>
+<span class="lineNum">      41 </span>            :   template&lt;typename T, typename TT&gt;
+<span class="lineNum">      42 </span><span class="lineCov">          3 :   void operator()(</span>
+<span class="lineNum">      43 </span>            :     T&amp; t, 
+<span class="lineNum">      44 </span>            :     TT&amp; tt, 
+<span class="lineNum">      45 </span>            :     params_ptr req, 
+<span class="lineNum">      46 </span>            :     std::function&lt; void (result_ptr, error_ptr)&gt; callback
+<span class="lineNum">      47 </span>            :   ) const
+<span class="lineNum">      48 </span>            :   {
+<span class="lineNum">      49 </span>            :     using namespace std::placeholders;
+<span class="lineNum">      50 </span>            :     
+<span class="lineNum">      51 </span>            :     // notify serializer
+<span class="lineNum">      52 </span>            :     std::function&lt;data_ptr(const char* name, params_ptr)&gt; ns
+<span class="lineNum">      53 </span><span class="lineCov">          3 :       = std::bind( TT::template serialize_notify&lt;T, params_json_t&gt;, _1, _2);</span>
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span>            :     // request serializer
+<span class="lineNum">      56 </span><span class="lineCov">          6 :     std::function&lt;data_ptr(const char* name, params_ptr, call_id_t )&gt; rs;</span>
+<span class="lineNum">      57 </span>            :     // response handler
+<span class="lineNum">      58 </span><span class="lineCov">          6 :     std::function&lt;void(incoming_holder holder)&gt; rh;</span>
+<span class="lineNum">      59 </span>            :     
+<span class="lineNum">      60 </span><span class="lineCov">          3 :     if ( callback!=nullptr )</span>
+<span class="lineNum">      61 </span>            :     {
+<span class="lineNum">      62 </span><span class="lineCov">          1 :       rs  = std::bind( TT::template serialize_request&lt;T, params_json_t&gt;, _1, _2, _3);</span>
+<span class="lineNum">      63 </span><span class="lineCov">          1 :       rh = std::bind( TT::template process_response&lt;T, result_json_t, error_json_t&gt;, _1, callback);</span>
+<span class="lineNum">      64 </span>            :     }
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span><span class="lineCov">         12 :     t.perform_send( </span>
+<span class="lineNum">      67 </span>            :       tt.name(), 
+<span class="lineNum">      68 </span><span class="lineCov">          3 :       std::move(req),</span>
+<span class="lineNum">      69 </span><span class="lineCov">          3 :       std::move(ns),</span>
+<span class="lineNum">      70 </span><span class="lineCov">          3 :       std::move(rs),</span>
+<span class="lineNum">      71 </span><span class="lineCov">          3 :       std::move(rh)</span>
+<span class="lineNum">      72 </span><span class="lineCov">          3 :     );</span>
+<span class="lineNum">      73 </span><span class="lineCov">          3 :   }</span>
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span>            : private:
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span>            : };
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            : } // wjrpc
+<span class="lineNum">      80 </span>            : 
+<span class="lineNum">      81 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
