@@ -4,7 +4,10 @@ project(wjrpc)
 
 include(cmake/ci.cmake)
 
-rootlibs(faslib wjson wlog)
+wci_getlib(NAME faslib)
+
+wci_getlib(NAME wjson)
+wci_getlib(NAME wlog)
 
 include_directories(.)
 add_library(
@@ -14,10 +17,13 @@ add_library(
   wjrpc/outgoing/outgoing_holder.cpp
   wjrpc/incoming/send_error.cpp
 )
+wci_targets(wjrpc)
+target_include_directories(wjrpc PUBLIC ${wjrpc_SOURCE_DIR})
+target_link_libraries(wjrpc PUBLIC wlog)
+
 
 if ( BUILD_TESTING )
   enable_testing()
-  target_link_libraries(wjrpc wlog)
   add_subdirectory(tests)
   if ( WITH_SAMPLES )
     add_subdirectory(examples)
@@ -26,8 +32,8 @@ endif()
 
 set(CPACK_PACKAGE_NAME "wjrpc")
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
-set(CPACK_PACKAGE_VERSION_MINOR "8")
-set(CPACK_PACKAGE_VERSION_PATCH "2")
+set(CPACK_PACKAGE_VERSION_MINOR "9")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/Readme.md")
 set(CPACK_PACKAGE_CONTACT "migashko@gmail.com")
