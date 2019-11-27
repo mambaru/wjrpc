@@ -1,3 +1,15 @@
 [submodule "external/cmake-ci"]
 	path = external/cmake-ci
 	url = https://github.com/mambaru/cmake-ci.git
+[submodule "external/faslib"]
+	path = external/faslib
+	url = https://github.com/migashko/faslib.git
+	branch = master
+[submodule "external/wjson"]
+	path = external/wjson
+	url = https://github.com/mambaru/wjson.git
+	branch = master
+[submodule "external/wlog"]
+	path = external/wlog
+	url = https://github.com/mambaru/wlog.git
+	branch = master

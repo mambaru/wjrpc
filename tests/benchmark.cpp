@@ -75,7 +75,7 @@ void test2()
   }
   auto finish = ::std::chrono::high_resolution_clock::now();
   auto span = std::chrono::duration_cast< std::chrono::microseconds >(finish - start).count();
-  float rate = float(count*1000000L) / float(span);
+  float rate = float(count)*float(1000000) / float(span);
   std::cout << std::string( output.begin(), output.end() ) << std::endl;
   std::cout << "test2: "<< span << " microseconds " << rate << " persec" << std::endl;
 }
@@ -102,7 +102,7 @@ void test3()
   }
   auto finish = ::std::chrono::high_resolution_clock::now();
   auto span = std::chrono::duration_cast< std::chrono::microseconds >(finish - start).count();
-  float rate = float(count*1000000) / float(span);
+  float rate = float(count)*float(1000000) / float(span);
   std::cout << std::string( output.begin(), output.end() ) << std::endl;
   std::cout << "test3: " << span << " microseconds " << rate << " persec" << std::endl;
 }
