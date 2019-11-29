@@ -5,11 +5,9 @@ project(wjrpc)
 include(cmake/ci.cmake)
 
 wci_getlib(NAME faslib)
-
 wci_getlib(NAME wjson)
 wci_getlib(NAME wlog)
 
-include_directories(.)
 add_library(
   wjrpc
   wjrpc/engine/call_map.cpp

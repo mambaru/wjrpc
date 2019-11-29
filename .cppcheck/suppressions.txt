@@ -1,4 +1,2 @@
-# Список подавлений для cppcheck относительно корня проекта. Примеры
-syntaxError:./tests/engine_suite.cpp
-syntaxError:./tests/method_suite.cpp
-unusedFunction:./wjrpc/incoming/send_error.cpp
+syntaxError:
+unusedFunction:
