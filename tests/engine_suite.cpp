@@ -14,15 +14,15 @@ namespace request{
 
 /// -------------------
 template<typename T>
-struct base 
+struct base
 {
-  int first=0; 
+  int first=0;
   int second=0;
   typedef std::unique_ptr<T> ptr;
 };
 
 struct plus: base<plus> {};
-struct minus: base<minus> 
+struct minus: base<minus>
 {
   static minus create_schema()
   {
@@ -59,7 +59,7 @@ struct minus_json: T_json<minus> {};
 namespace response{
 
 template<typename T>
-struct base 
+struct base
 {
   int value=0;
   typedef std::unique_ptr<T> ptr;
@@ -147,20 +147,20 @@ UNIT(engine1, "")
   opt.target = pcalc;
   /*opt.sender_handler = [](const char*, notify_serializer_t, request_serializer_t, result_handler_t )
   {
-    
+
   };*/
   auto e = std::make_shared<engine_type>();
   e->start(opt, 1);
   std::string sreq = "{\"method\":\"plus\",\"params\":{\"first\":2, \"second\":3},\"id\":1}";
-  e->perform_io( std::make_unique<data_type>(sreq.begin(), sreq.end()), 1, [&t](data_ptr d) 
+  e->perform_io( std::make_unique<data_type>(sreq.begin(), sreq.end()), 1, [&t](data_ptr d)
   {
     using namespace ::fas::testing;
     std::string ress( d->begin(), d->end() );
     t << message("responce: ") << ress;
     t << equal<expect, std::string>( ress, "{'jsonrpc':'2.0','result':{'value':5},'id':1}"_json);
   });
-  
-  auto schl = e->create_schema();
+
+  auto schl = e->create_schema({});
   std::string sch_json;
   decltype(schl)::value_type::json::list::serializer()(schl, std::back_inserter(sch_json) );
   t << equal<expect, std::string>( sch_json, "[{'name':'plus','params':{'first':0,'second':0},'result':{'value':0},'error':{'code':0,'message':'No error'}},{'name':'minus','params':{'first':11,'second':22},'result':{'value':0},'error':{'code':0,'message':'No error'}}]"_json);

@@ -201,35 +201,35 @@ public:
   }
 
   template<typename Schema>
-  static std::vector<Schema> create_schema_t()
+  static std::vector<Schema> create_schema_t(const std::vector<std::string>& names)
   {
     typedef typename super::aspect::template select_group<_method_>::type method_tag_list_t;
     std::vector<Schema> sch_list;
-    create_schema_(&sch_list, method_tag_list_t());
+    create_schema_(&sch_list, names, method_tag_list_t());
     return sch_list;
   }
 
   typedef std::vector<default_schema> schema_list_t;
 
-  static schema_list_t create_schema()
+  static schema_list_t create_schema(const std::vector<std::string>& names)
   {
-    return create_schema_t<default_schema>();
+    return create_schema_t<default_schema>(names);
   }
 
 private:
 
   template<typename Schema, typename L, typename R>
-  static void create_schema_(std::vector<Schema>* sch_list, fas::type_list<L, R>)
+  static void create_schema_(std::vector<Schema>* sch_list, const std::vector<std::string>& names, fas::type_list<L, R>)
   {
     typedef L head_tag;
     typedef R tail_type;
     typedef typename super::aspect::template advice_cast<head_tag>::type method_type;
-    sch_list->push_back( method_type::template create_schema_t<Schema>() );
-    create_schema_(sch_list, tail_type() );
+    sch_list->push_back( method_type::template create_schema_t<Schema>(names) );
+    create_schema_(sch_list, names, tail_type() );
   }
 
   template<typename Schema>
-  static void create_schema_(std::vector<Schema>*,  fas::empty_list)
+  static void create_schema_(std::vector<Schema>*,  const std::vector<std::string>&, fas::empty_list)
   {
   }
 

@@ -21,7 +21,7 @@ namespace wjrpc{
 /**
  * @brief JSONRPC движок. По сути, реестр jsonrpc-обработчиков, который позволяет вынести их в отдельный модуль и управлять временем жизни
  * @tparam JsonrpcHandler - JSONRPC обработчик, может быть реализован с помощью `wjrpc::handler`
- * @details 
+ * @details
   */
 template<typename JsonrpcHandler>
 class engine
@@ -36,20 +36,20 @@ public:
   typedef typename handler_type::result_handler_t result_handler_t;
   typedef typename handler_type::request_serializer_t request_serializer_t;
   typedef typename handler_type::notify_serializer_t notify_serializer_t;
-  
+
   typedef engine_options<handler_options_type> options_type;
-  
+
   typedef typename handler_type::io_id_t io_id_t;
   typedef typename handler_type::outgoing_handler_t outgoing_handler_t;
   typedef typename handler_type::data_ptr data_ptr;
   typedef typename handler_type::call_id_t call_id_t;
-  
+
 
   ~engine()
   {
     this->stop();
   }
-  
+
   engine()
     : _call_counter(1)
     , _log_time1(time(nullptr))
@@ -83,20 +83,20 @@ public:
       _handler_map.disable(nullptr);
 
     _call_map.set_lifetime( opt.call_lifetime_ms, opt.remove_everytime );
-    _outgoing_factory = 
-      [opt, this](io_id_t io_id, outgoing_handler_t handler, bool reg_io_flag) 
+    _outgoing_factory =
+      [opt, this](io_id_t io_id, outgoing_handler_t handler, bool reg_io_flag)
         -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io_flag);
     };
 
-    _input_factory = 
-      [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io_flag) 
+    _input_factory =
+      [opt, this](io_id_t io_id, input_handler_t handler, bool reg_io_flag)
         -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io_flag);
     };
- 
+
     _output_factory = [opt, this](io_id_t io_id, output_handler_t handler, bool reg_io_flag) -> handler_ptr
     {
       return this->create_handler_(io_id, opt, std::move(handler), reg_io_flag);
@@ -127,7 +127,7 @@ public:
     _outgoing_factory(io_id, std::move(handler), true);
   }
 
-  void perform_jsonrpc(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) 
+  void perform_jsonrpc(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler)
   {
     this->perform_incoming_( std::move(holder), io_id, std::move(handler) );
   }
@@ -135,7 +135,7 @@ public:
   /***************************************************************/
   /* data_ptr                                                    */
   /***************************************************************/
-  
+
   outgoing_handler_t io2rpc( output_handler_t handler )
   {
     if ( handler == nullptr )
@@ -158,8 +158,8 @@ public:
     _handler_map.erase(io_id);
   }
 
-  
-  void perform_io(data_ptr d, io_id_t io_id, output_handler_t handler) 
+
+  void perform_io(data_ptr d, io_id_t io_id, output_handler_t handler)
   {
     using namespace std::placeholders;
     while ( d != nullptr )
@@ -188,7 +188,7 @@ public:
   {
     return _io_id;
   }
-  
+
   size_t remove_outdated()
   {
     return _call_map.remove_outdated();
@@ -205,7 +205,7 @@ public:
     size_t result_map = 0;
     size_t result_queue = 0;
   };
-  
+
   sizes_info sizes() const
   {
     sizes_info si;
@@ -215,20 +215,20 @@ public:
     si.handler_map = _handler_map.size();
     return si;
   }
-  
+
   template<typename Schema>
-  static std::vector<Schema> create_schema_t()
+  static std::vector<Schema> create_schema_t(const std::vector<std::string>& names)
   {
-    return handler_type::template create_schema_t<Schema>();
+    return handler_type::template create_schema_t<Schema>(names);
   }
 
-  static std::vector<default_schema> create_schema()
+  static std::vector<default_schema> create_schema(const std::vector<std::string>& names)
   {
-    return create_schema_t<default_schema>();
+    return create_schema_t<default_schema>(names);
   }
 
 private:
-  
+
   void perform_io_once_(incoming_holder holder, io_id_t io_id, output_handler_t handler)
   {
     this->perform_incoming_( std::move(holder), io_id, [handler](outgoing_holder oholder)
@@ -237,7 +237,7 @@ private:
     });
   }
 
-  void perform_incoming_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) 
+  void perform_incoming_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler)
   {
     if ( holder.is_notify() || holder.is_request() )
     {
@@ -262,7 +262,7 @@ private:
     }
   }
 
-  void perform_request_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler) 
+  void perform_request_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler)
   {
     if ( auto h = _outgoing_factory(io_id, std::cref(handler), false) )
     {
@@ -274,7 +274,7 @@ private:
     }
   }
 
-  void perform_response_(incoming_holder holder, io_id_t /*io_id*/, outgoing_handler_t handler) 
+  void perform_response_(incoming_holder holder, io_id_t /*io_id*/, outgoing_handler_t handler)
   {
     ::wjson::json_error e;
     call_id_t call_id = holder.template get_id<call_id_t>(&e);
@@ -286,7 +286,7 @@ private:
     else if ( handler!=nullptr )
     {
       if ( !e )
-      {  
+      {
         ++_lost_results;
         time_t now = time(nullptr);
         if ( now > _log_time1 )
@@ -312,7 +312,7 @@ private:
       auto pthis = wthis.lock();
       if ( pthis==nullptr )
         return;
-      
+
       if ( rs1!=nullptr )
       {
         auto call_id = pthis->_call_counter.fetch_add(1);
@@ -331,7 +331,7 @@ private:
       }
     };
   }
-  
+
   template<typename O>
   void upgrate_options_(O& opt, input_handler_t handler)
   {
@@ -345,10 +345,10 @@ private:
       if ( rs1!=nullptr && rh1!=nullptr )
       {
         auto cid = pthis->_call_counter.fetch_add(1);
-        
+
         pthis->_call_map.set(cid, std::move(rh1));
         auto d = std::move( rs1(name, cid) );
-        
+
         handler( std::move(d), io_id, [wthis, handler, io_id, cid](data_ptr d2)
         {
           auto pthis2 = wthis.lock();
@@ -361,16 +361,16 @@ private:
             auto rh = pthis2->_call_map.detach(cid);
             if ( rh == nullptr )
               return;
-            
+
             data_ptr ed = std::make_unique<data_type>();
             ed->reserve(50);
             outgoing_error<error> err;
-            
+
             data_ptr pid = std::make_unique<data_type>();
             ::wjson::value<int>::serializer()( cid, std::back_inserter(*pid));
             err.error = std::make_unique<service_unavailable>();
             err.id = std::move(pid);
-            
+
             outgoing_error_json<error_json>::serializer()(err, std::back_inserter(*ed));
             incoming_holder empty_holder(std::move(ed));
             rh( std::move(empty_holder) );
@@ -394,13 +394,13 @@ private:
   template<typename O>
   void upgrate_options_(O& opt, outgoing_handler_t handler)
   {
-    
+
     if ( handler == nullptr )
     {
       opt.sender_handler = nullptr;
       return;
     }
-    
+
     std::weak_ptr<self> wthis = this->shared_from_this();
     opt.sender_handler = [handler, wthis](const char* name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1)
     {
@@ -438,7 +438,7 @@ private:
         call_id = pthis->_call_counter.fetch_add(1);
         pthis->_call_map.set(call_id, std::move(rh1) );
       }
-      
+
       if ( ns1!=nullptr )
       {
         outgoing_holder holder(name, std::move(ns1), std::move(rs1), std::move(rhw), call_id );
