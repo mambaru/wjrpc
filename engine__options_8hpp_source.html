@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.15"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>wjrpc: Исходный файл wjrpc/engine/engine_options.hpp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -27,7 +27,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- Создано системой Doxygen 1.8.15 -->
+<!-- Создано системой Doxygen 1.8.17 -->
 <script type="text/javascript" src="menudata.js"></script>
 <script type="text/javascript" src="menu.js"></script>
 <script type="text/javascript">
@@ -47,19 +47,37 @@ $(function() {
 <div class="title">engine_options.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="engine__options_8hpp.html">См. документацию.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8hpp.html">wjrpc/types.hpp</a>&gt;</span></div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wjrpc/logger.hpp&gt;</span></div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewjrpc.html">wjrpc</a>{</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;  </div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> HandlerOptions&gt;</div><div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html">    8</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structwjrpc_1_1engine__options.html">engine_options</a></div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  : HandlerOptions</div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div><div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html#a71f0b0296d5cf940456a67a54190f143">   11</a></span>&#160;  <span class="keyword">typedef</span> HandlerOptions <a class="code" href="structwjrpc_1_1engine__options.html#a71f0b0296d5cf940456a67a54190f143">handler_options</a>;</div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="comment">// максимальное время ожидания ответа на вызов (0 - неограничено)</span></div><div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html#a569ec7c6ca09b06ccde3ac1457787fc6">   13</a></span>&#160;  time_t <a class="code" href="structwjrpc_1_1engine__options.html#a569ec7c6ca09b06ccde3ac1457787fc6">call_lifetime_ms</a> = 60000;</div><div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html#a156d1b9afee641ea641e7dfd281efc43">   14</a></span>&#160;  <span class="keywordtype">bool</span>   <a class="code" href="structwjrpc_1_1engine__options.html#a156d1b9afee641ea641e7dfd281efc43">remove_everytime</a> = <span class="keyword">true</span>;</div><div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html#a37bd02ad0e3e3530541d593cd3e1e0df">   15</a></span>&#160;  <span class="keywordtype">bool</span>   <a class="code" href="structwjrpc_1_1engine__options.html#a37bd02ad0e3e3530541d593cd3e1e0df">disable_handler_map</a> = <span class="keyword">false</span>;</div><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;};</div><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;}</div><div class="ttc" id="types_8hpp_html"><div class="ttname"><a href="types_8hpp.html">types.hpp</a></div></div>
-<div class="ttc" id="namespacewjrpc_html"><div class="ttname"><a href="namespacewjrpc.html">wjrpc</a></div><div class="ttdef"><b>Definition:</b> engine.hpp:19</div></div>
-<div class="ttc" id="structwjrpc_1_1engine__options_html_a37bd02ad0e3e3530541d593cd3e1e0df"><div class="ttname"><a href="structwjrpc_1_1engine__options.html#a37bd02ad0e3e3530541d593cd3e1e0df">wjrpc::engine_options::disable_handler_map</a></div><div class="ttdeci">bool disable_handler_map</div><div class="ttdef"><b>Definition:</b> engine_options.hpp:15</div></div>
-<div class="ttc" id="structwjrpc_1_1engine__options_html_a71f0b0296d5cf940456a67a54190f143"><div class="ttname"><a href="structwjrpc_1_1engine__options.html#a71f0b0296d5cf940456a67a54190f143">wjrpc::engine_options::handler_options</a></div><div class="ttdeci">HandlerOptions handler_options</div><div class="ttdef"><b>Definition:</b> engine_options.hpp:11</div></div>
-<div class="ttc" id="structwjrpc_1_1engine__options_html_a156d1b9afee641ea641e7dfd281efc43"><div class="ttname"><a href="structwjrpc_1_1engine__options.html#a156d1b9afee641ea641e7dfd281efc43">wjrpc::engine_options::remove_everytime</a></div><div class="ttdeci">bool remove_everytime</div><div class="ttdef"><b>Definition:</b> engine_options.hpp:14</div></div>
-<div class="ttc" id="structwjrpc_1_1engine__options_html"><div class="ttname"><a href="structwjrpc_1_1engine__options.html">wjrpc::engine_options</a></div><div class="ttdef"><b>Definition:</b> engine_options.hpp:8</div></div>
-<div class="ttc" id="structwjrpc_1_1engine__options_html_a569ec7c6ca09b06ccde3ac1457787fc6"><div class="ttname"><a href="structwjrpc_1_1engine__options.html#a569ec7c6ca09b06ccde3ac1457787fc6">wjrpc::engine_options::call_lifetime_ms</a></div><div class="ttdeci">time_t call_lifetime_ms</div><div class="ttdef"><b>Definition:</b> engine_options.hpp:13</div></div>
+<a href="engine__options_8hpp.html">См. документацию.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="types_8hpp.html">wjrpc/types.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wjrpc/logger.hpp&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewjrpc.html">wjrpc</a>{</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;  </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> HandlerOptions&gt;</div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html">    8</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structwjrpc_1_1engine__options.html">engine_options</a></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  : HandlerOptions</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html#a71f0b0296d5cf940456a67a54190f143">   11</a></span>&#160;  <span class="keyword">typedef</span> HandlerOptions <a class="code" href="structwjrpc_1_1engine__options.html#a71f0b0296d5cf940456a67a54190f143">handler_options</a>;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="comment">// максимальное время ожидания ответа на вызов (0 - неограничено)</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html#a569ec7c6ca09b06ccde3ac1457787fc6">   13</a></span>&#160;  time_t <a class="code" href="structwjrpc_1_1engine__options.html#a569ec7c6ca09b06ccde3ac1457787fc6">call_lifetime_ms</a> = 60000;</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html#a156d1b9afee641ea641e7dfd281efc43">   14</a></span>&#160;  <span class="keywordtype">bool</span>   <a class="code" href="structwjrpc_1_1engine__options.html#a156d1b9afee641ea641e7dfd281efc43">remove_everytime</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="structwjrpc_1_1engine__options.html#a37bd02ad0e3e3530541d593cd3e1e0df">   15</a></span>&#160;  <span class="keywordtype">bool</span>   <a class="code" href="structwjrpc_1_1engine__options.html#a37bd02ad0e3e3530541d593cd3e1e0df">disable_handler_map</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;};</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="atypes_8hpp_html"><div class="ttname"><a href="types_8hpp.html">types.hpp</a></div></div>
+<div class="ttc" id="anamespacewjrpc_html"><div class="ttname"><a href="namespacewjrpc.html">wjrpc</a></div><div class="ttdef"><b>Definition:</b> engine.hpp:19</div></div>
+<div class="ttc" id="astructwjrpc_1_1engine__options_html_a71f0b0296d5cf940456a67a54190f143"><div class="ttname"><a href="structwjrpc_1_1engine__options.html#a71f0b0296d5cf940456a67a54190f143">wjrpc::engine_options::handler_options</a></div><div class="ttdeci">HandlerOptions handler_options</div><div class="ttdef"><b>Definition:</b> engine_options.hpp:11</div></div>
+<div class="ttc" id="astructwjrpc_1_1engine__options_html_a37bd02ad0e3e3530541d593cd3e1e0df"><div class="ttname"><a href="structwjrpc_1_1engine__options.html#a37bd02ad0e3e3530541d593cd3e1e0df">wjrpc::engine_options::disable_handler_map</a></div><div class="ttdeci">bool disable_handler_map</div><div class="ttdef"><b>Definition:</b> engine_options.hpp:15</div></div>
+<div class="ttc" id="astructwjrpc_1_1engine__options_html_a569ec7c6ca09b06ccde3ac1457787fc6"><div class="ttname"><a href="structwjrpc_1_1engine__options.html#a569ec7c6ca09b06ccde3ac1457787fc6">wjrpc::engine_options::call_lifetime_ms</a></div><div class="ttdeci">time_t call_lifetime_ms</div><div class="ttdef"><b>Definition:</b> engine_options.hpp:13</div></div>
+<div class="ttc" id="astructwjrpc_1_1engine__options_html_a156d1b9afee641ea641e7dfd281efc43"><div class="ttname"><a href="structwjrpc_1_1engine__options.html#a156d1b9afee641ea641e7dfd281efc43">wjrpc::engine_options::remove_everytime</a></div><div class="ttdeci">bool remove_everytime</div><div class="ttdef"><b>Definition:</b> engine_options.hpp:14</div></div>
+<div class="ttc" id="astructwjrpc_1_1engine__options_html"><div class="ttname"><a href="structwjrpc_1_1engine__options.html">wjrpc::engine_options</a></div><div class="ttdef"><b>Definition:</b> engine_options.hpp:8</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.15
+</a> 1.8.17
 </small></address>
 </body>
 </html>

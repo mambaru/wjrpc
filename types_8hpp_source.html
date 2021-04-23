@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.15"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>wjrpc: Исходный файл wjrpc/types.hpp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -27,7 +27,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- Создано системой Doxygen 1.8.15 -->
+<!-- Создано системой Doxygen 1.8.17 -->
 <script type="text/javascript" src="menudata.js"></script>
 <script type="text/javascript" src="menu.js"></script>
 <script type="text/javascript">
@@ -47,19 +47,42 @@ $(function() {
 <div class="title">types.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="types_8hpp.html">См. документацию.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//</span></div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2013-2016</span></div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright: See COPYING file that comes with this distribution</span></div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="incoming__holder_8hpp.html">wjrpc/incoming/incoming_holder.hpp</a>&gt;</span></div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;wjrpc/outgoing/outgoing_holder.hpp&gt;</span></div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="basic__types_8hpp.html">wjrpc/basic_types.hpp</a>&gt;</span></div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewjrpc.html">wjrpc</a>{</div><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div><div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">   15</a></span>&#160;<span class="keyword">typedef</span> std::function&lt; void(outgoing_holder) &gt; <a class="code" href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">outgoing_handler_t</a>;</div><div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="namespacewjrpc.html#a8fbde88c8621df2ee4119d43260b0492">   16</a></span>&#160;<span class="keyword">typedef</span> std::function&lt; void(incoming_holder, io_id_t, outgoing_handler_t )&gt; <a class="code" href="namespacewjrpc.html#a8fbde88c8621df2ee4119d43260b0492">incoming_handler_t</a>;</div><div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="namespacewjrpc.html#a00b57abd7ccf54d48d3e7f884b6238bf">   17</a></span>&#160;<span class="keyword">typedef</span> std::function&lt; void(io_id_t, outgoing_handler_t) &gt; <a class="code" href="namespacewjrpc.html#a00b57abd7ccf54d48d3e7f884b6238bf">startup_handler_t</a>;</div><div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="namespacewjrpc.html#a87a4f1c8ca7fa246cec8f021875febb5">   18</a></span>&#160;<span class="keyword">typedef</span> std::function&lt; void(io_id_t) &gt; <a class="code" href="namespacewjrpc.html#a87a4f1c8ca7fa246cec8f021875febb5">shutdown_handler_t</a>;</div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;}</div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div><div class="ttc" id="incoming__holder_8hpp_html"><div class="ttname"><a href="incoming__holder_8hpp.html">incoming_holder.hpp</a></div></div>
-<div class="ttc" id="namespacewjrpc_html_a00b57abd7ccf54d48d3e7f884b6238bf"><div class="ttname"><a href="namespacewjrpc.html#a00b57abd7ccf54d48d3e7f884b6238bf">wjrpc::startup_handler_t</a></div><div class="ttdeci">std::function&lt; void(io_id_t, outgoing_handler_t) &gt; startup_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:17</div></div>
-<div class="ttc" id="namespacewjrpc_html"><div class="ttname"><a href="namespacewjrpc.html">wjrpc</a></div><div class="ttdef"><b>Definition:</b> engine.hpp:19</div></div>
-<div class="ttc" id="namespacewjrpc_html_a87a4f1c8ca7fa246cec8f021875febb5"><div class="ttname"><a href="namespacewjrpc.html#a87a4f1c8ca7fa246cec8f021875febb5">wjrpc::shutdown_handler_t</a></div><div class="ttdeci">std::function&lt; void(io_id_t) &gt; shutdown_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:18</div></div>
-<div class="ttc" id="namespacewjrpc_html_a8fbde88c8621df2ee4119d43260b0492"><div class="ttname"><a href="namespacewjrpc.html#a8fbde88c8621df2ee4119d43260b0492">wjrpc::incoming_handler_t</a></div><div class="ttdeci">std::function&lt; void(incoming_holder, io_id_t, outgoing_handler_t)&gt; incoming_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:16</div></div>
-<div class="ttc" id="basic__types_8hpp_html"><div class="ttname"><a href="basic__types_8hpp.html">basic_types.hpp</a></div></div>
-<div class="ttc" id="namespacewjrpc_html_a6d73d298cd081819906e55cb2b29cca9"><div class="ttname"><a href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">wjrpc::outgoing_handler_t</a></div><div class="ttdeci">std::function&lt; void(outgoing_holder) &gt; outgoing_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:15</div></div>
+<a href="types_8hpp.html">См. документацию.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Author: Vladimir Migashko &lt;migashko@gmail.com&gt;, (C) 2013-2016</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright: See COPYING file that comes with this distribution</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="incoming__holder_8hpp.html">wjrpc/incoming/incoming_holder.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;wjrpc/outgoing/outgoing_holder.hpp&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="basic__types_8hpp.html">wjrpc/basic_types.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewjrpc.html">wjrpc</a>{</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">   15</a></span>&#160;<span class="keyword">typedef</span> std::function&lt; void(outgoing_holder) &gt; <a class="code" href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">outgoing_handler_t</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="namespacewjrpc.html#a8fbde88c8621df2ee4119d43260b0492">   16</a></span>&#160;<span class="keyword">typedef</span> std::function&lt; void(<a class="code" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a>, <a class="code" href="namespacewjrpc.html#afa70994f3457dbea5dc8718ca70972ed">io_id_t</a>, <a class="code" href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">outgoing_handler_t</a> )&gt; <a class="code" href="namespacewjrpc.html#a8fbde88c8621df2ee4119d43260b0492">incoming_handler_t</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="namespacewjrpc.html#a00b57abd7ccf54d48d3e7f884b6238bf">   17</a></span>&#160;<span class="keyword">typedef</span> std::function&lt; void(<a class="code" href="namespacewjrpc.html#afa70994f3457dbea5dc8718ca70972ed">io_id_t</a>, <a class="code" href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">outgoing_handler_t</a>) &gt; <a class="code" href="namespacewjrpc.html#a00b57abd7ccf54d48d3e7f884b6238bf">startup_handler_t</a>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="namespacewjrpc.html#a87a4f1c8ca7fa246cec8f021875febb5">   18</a></span>&#160;<span class="keyword">typedef</span> std::function&lt; void(<a class="code" href="namespacewjrpc.html#afa70994f3457dbea5dc8718ca70972ed">io_id_t</a>) &gt; <a class="code" href="namespacewjrpc.html#a87a4f1c8ca7fa246cec8f021875febb5">shutdown_handler_t</a>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;}</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasswjrpc_1_1incoming__holder_html"><div class="ttname"><a href="classwjrpc_1_1incoming__holder.html">wjrpc::incoming_holder</a></div><div class="ttdoc">Предварительно распарсенное перемещаемое входящее JSONRPC-сообщение</div><div class="ttdef"><b>Definition:</b> incoming_holder.hpp:30</div></div>
+<div class="ttc" id="anamespacewjrpc_html_a87a4f1c8ca7fa246cec8f021875febb5"><div class="ttname"><a href="namespacewjrpc.html#a87a4f1c8ca7fa246cec8f021875febb5">wjrpc::shutdown_handler_t</a></div><div class="ttdeci">std::function&lt; void(io_id_t) &gt; shutdown_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:18</div></div>
+<div class="ttc" id="anamespacewjrpc_html_afa70994f3457dbea5dc8718ca70972ed"><div class="ttname"><a href="namespacewjrpc.html#afa70994f3457dbea5dc8718ca70972ed">wjrpc::io_id_t</a></div><div class="ttdeci">size_t io_id_t</div><div class="ttdef"><b>Definition:</b> basic_types.hpp:15</div></div>
+<div class="ttc" id="anamespacewjrpc_html_a00b57abd7ccf54d48d3e7f884b6238bf"><div class="ttname"><a href="namespacewjrpc.html#a00b57abd7ccf54d48d3e7f884b6238bf">wjrpc::startup_handler_t</a></div><div class="ttdeci">std::function&lt; void(io_id_t, outgoing_handler_t) &gt; startup_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:17</div></div>
+<div class="ttc" id="aincoming__holder_8hpp_html"><div class="ttname"><a href="incoming__holder_8hpp.html">incoming_holder.hpp</a></div></div>
+<div class="ttc" id="anamespacewjrpc_html_a6d73d298cd081819906e55cb2b29cca9"><div class="ttname"><a href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">wjrpc::outgoing_handler_t</a></div><div class="ttdeci">std::function&lt; void(outgoing_holder) &gt; outgoing_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:15</div></div>
+<div class="ttc" id="anamespacewjrpc_html"><div class="ttname"><a href="namespacewjrpc.html">wjrpc</a></div><div class="ttdef"><b>Definition:</b> engine.hpp:19</div></div>
+<div class="ttc" id="abasic__types_8hpp_html"><div class="ttname"><a href="basic__types_8hpp.html">basic_types.hpp</a></div></div>
+<div class="ttc" id="anamespacewjrpc_html_a8fbde88c8621df2ee4119d43260b0492"><div class="ttname"><a href="namespacewjrpc.html#a8fbde88c8621df2ee4119d43260b0492">wjrpc::incoming_handler_t</a></div><div class="ttdeci">std::function&lt; void(incoming_holder, io_id_t, outgoing_handler_t)&gt; incoming_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:16</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.15
+</a> 1.8.17
 </small></address>
 </body>
 </html>

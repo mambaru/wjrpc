@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.15"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>wjrpc: Структура wjrpc::incoming</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -27,7 +27,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- Создано системой Doxygen 1.8.15 -->
+<!-- Создано системой Doxygen 1.8.17 -->
 <script type="text/javascript" src="menudata.js"></script>
 <script type="text/javascript" src="menu.js"></script>
 <script type="text/javascript">
@@ -78,10 +78,11 @@ $(function() {
 <tr class="separator:a655cacfd2ded2cfe4834e5286f72b1eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
-<div class="textblock"><p class="">Результаты предварительного парсинга входящего JSONRPC сообщения. </p>
-<p class="">Содержит пары итераторов, указывающих на начало и окончание элементов сообщения во входном буфере. Если соответствующего элемента нет во входящем запросе, то <code>first==second</code>. По комбинации полей сообщения можно определить его тип: запрос, уведомление, ответ или сообщение об ошибке. Предполагается, что сообщение в текстовом виде хранится в буфере <code><a class="el" href="namespacewjrpc.html#a63130574b0f3a13f115656aec780d55b">wjrpc::data_type</a></code> (<code>std::vector&lt; char&gt;</code>), а во время предварительного парсинга заполняется эта структура, которая может использоваться для выполнения логики, где не требуется полная десериализация сообщения. </p><dl class="section see"><dt>См. также</dt><dd><a class="el" href="classwjrpc_1_1incoming__holder.html" title="Предварительно распарсенное перемещаемое входящее JSONRPC-сообщение ">incoming_holder</a> </dd></dl>
-<dl><dt><b>Примеры: </b></dt><dd><a class="el" href="example01_8cpp-example.html#_a3">example01.cpp</a>.</dd>
-</dl></div><h2 class="groupheader">Определения типов</h2>
+<div class="textblock"><p>Результаты предварительного парсинга входящего JSONRPC сообщения. </p>
+<p>Содержит пары итераторов, указывающих на начало и окончание элементов сообщения во входном буфере. Если соответствующего элемента нет во входящем запросе, то <code>first==second</code>. По комбинации полей сообщения можно определить его тип: запрос, уведомление, ответ или сообщение об ошибке. Предполагается, что сообщение в текстовом виде хранится в буфере <code><a class="el" href="namespacewjrpc.html#a63130574b0f3a13f115656aec780d55b">wjrpc::data_type</a></code> (<code>std::vector&lt; char&gt;</code>), а во время предварительного парсинга заполняется эта структура, которая может использоваться для выполнения логики, где не требуется полная десериализация сообщения. </p><dl class="section see"><dt>См. также</dt><dd><a class="el" href="classwjrpc_1_1incoming__holder.html" title="Предварительно распарсенное перемещаемое входящее JSONRPC-сообщение">incoming_holder</a> </dd></dl>
+<dl class="section examples"><dt>Примеры</dt><dd><a class="el" href="example01_8cpp-example.html#_a3">example01.cpp</a>.</dd>
+</dl>
+</div><h2 class="groupheader">Определения типов</h2>
 <a id="a916fa1035295b1032d2d909f357ff408"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a916fa1035295b1032d2d909f357ff408">&#9670;&nbsp;</a></span>iterator</h2>
 
@@ -93,7 +94,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p class="">Итератор входного буфера сообщения. </p>
+<p>Итератор входного буфера сообщения. </p>
 
 </div>
 </div>
@@ -108,7 +109,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p class="">Пара итераторов входного буфера сообщения. </p>
+<p>Пара итераторов входного буфера сообщения. </p>
 
 </div>
 </div>
@@ -124,9 +125,10 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p class="">Значение поля <b>error</b>. Только в сообщениях об ошибке. </p>
-<dl><dt><b>Примеры: </b></dt><dd><a class="el" href="example01_8cpp-example.html#a9">example01.cpp</a>.</dd>
+<p>Значение поля <b>error</b>. Только в сообщениях об ошибке. </p>
+<dl class="section examples"><dt>Примеры</dt><dd><a class="el" href="example01_8cpp-example.html#a9">example01.cpp</a>.</dd>
 </dl>
+
 </div>
 </div>
 <a id="a655cacfd2ded2cfe4834e5286f72b1eb"></a>
@@ -140,9 +142,10 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p class="">Значение поля <b>id</b>. Только в запросах и ответах на запрос. </p>
-<dl><dt><b>Примеры: </b></dt><dd><a class="el" href="example01_8cpp-example.html#a7">example01.cpp</a>.</dd>
+<p>Значение поля <b>id</b>. Только в запросах и ответах на запрос. </p>
+<dl class="section examples"><dt>Примеры</dt><dd><a class="el" href="example01_8cpp-example.html#a7">example01.cpp</a>.</dd>
 </dl>
+
 </div>
 </div>
 <a id="a18034bee520f5843c7ee697a37a0d1c1"></a>
@@ -156,9 +159,10 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p class="">Значение поля <b>method</b>. Только в запросах и уведомлениях. </p>
-<dl><dt><b>Примеры: </b></dt><dd><a class="el" href="example01_8cpp-example.html#a5">example01.cpp</a>.</dd>
+<p>Значение поля <b>method</b>. Только в запросах и уведомлениях. </p>
+<dl class="section examples"><dt>Примеры</dt><dd><a class="el" href="example01_8cpp-example.html#a5">example01.cpp</a>.</dd>
 </dl>
+
 </div>
 </div>
 <a id="af71b79930df7d9e94808fbac54e3e58d"></a>
@@ -172,9 +176,10 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p class="">Значение поля <b>params</b>. Только в запросах и уведомлениях. </p>
-<dl><dt><b>Примеры: </b></dt><dd><a class="el" href="example01_8cpp-example.html#a6">example01.cpp</a>.</dd>
+<p>Значение поля <b>params</b>. Только в запросах и уведомлениях. </p>
+<dl class="section examples"><dt>Примеры</dt><dd><a class="el" href="example01_8cpp-example.html#a6">example01.cpp</a>.</dd>
 </dl>
+
 </div>
 </div>
 <a id="a7ccc40acade4458202a1eb447d8d8639"></a>
@@ -188,9 +193,10 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p class="">Значение поля <b>result</b>. Только в ответах на запрос. </p>
-<dl><dt><b>Примеры: </b></dt><dd><a class="el" href="example01_8cpp-example.html#a8">example01.cpp</a>.</dd>
+<p>Значение поля <b>result</b>. Только в ответах на запрос. </p>
+<dl class="section examples"><dt>Примеры</dt><dd><a class="el" href="example01_8cpp-example.html#a8">example01.cpp</a>.</dd>
 </dl>
+
 </div>
 </div>
 <hr/>Объявления и описания членов структуры находятся в файле:<ul>
@@ -201,7 +207,7 @@ $(function() {
 <hr class="footer"/><address class="footer"><small>
 Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.15
+</a> 1.8.17
 </small></address>
 </body>
 </html>

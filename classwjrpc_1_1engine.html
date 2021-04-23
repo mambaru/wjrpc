@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.15"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>wjrpc: Шаблон класса wjrpc::engine&lt; JsonrpcHandler &gt;</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -27,7 +27,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- Создано системой Doxygen 1.8.15 -->
+<!-- Создано системой Doxygen 1.8.17 -->
 <script type="text/javascript" src="menudata.js"></script>
 <script type="text/javascript" src="menu.js"></script>
 <script type="text/javascript">
@@ -135,20 +135,20 @@ $(function() {
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Открытые статические члены</h2></td></tr>
-<tr class="memitem:a2a47c4abf3ad7ea78ba97fce80658e5d"><td class="memTemplParams" colspan="2">template&lt;typename Schema &gt; </td></tr>
-<tr class="memitem:a2a47c4abf3ad7ea78ba97fce80658e5d"><td class="memTemplItemLeft" align="right" valign="top">static std::vector&lt; Schema &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a2a47c4abf3ad7ea78ba97fce80658e5d">create_schema_t</a> ()</td></tr>
-<tr class="separator:a2a47c4abf3ad7ea78ba97fce80658e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea2531a782a4c0fb2e98f555c15f84e5"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; default_schema &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#aea2531a782a4c0fb2e98f555c15f84e5">create_schema</a> ()</td></tr>
-<tr class="separator:aea2531a782a4c0fb2e98f555c15f84e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b16247516975b9c169935f9bbaf76ce"><td class="memTemplParams" colspan="2">template&lt;typename Schema &gt; </td></tr>
+<tr class="memitem:a9b16247516975b9c169935f9bbaf76ce"><td class="memTemplItemLeft" align="right" valign="top">static std::vector&lt; Schema &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#a9b16247516975b9c169935f9bbaf76ce">create_schema_t</a> (const std::vector&lt; std::string &gt; &amp;names)</td></tr>
+<tr class="separator:a9b16247516975b9c169935f9bbaf76ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc033c5453f8b4ec6547acf967303502"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; default_schema &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1engine.html#acc033c5453f8b4ec6547acf967303502">create_schema</a> (const std::vector&lt; std::string &gt; &amp;names)</td></tr>
+<tr class="separator:acc033c5453f8b4ec6547acf967303502"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><h3>template&lt;typename JsonrpcHandler&gt;<br />
 class wjrpc::engine&lt; JsonrpcHandler &gt;</h3>
 
-<p class="">JSONRPC движок. По сути, реестр jsonrpc-обработчиков, который позволяет вынести их в отдельный модуль и управлять временем жизни </p>
+<p>JSONRPC движок. По сути, реестр jsonrpc-обработчиков, который позволяет вынести их в отдельный модуль и управлять временем жизни </p>
 <dl class="tparams"><dt>Параметры шаблона</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">JsonrpcHandler</td><td>- JSONRPC обработчик, может быть реализован с помощью <code><a class="el" href="classwjrpc_1_1handler.html" title="JSONRPC обработчик. ">wjrpc::handler</a></code> </td></tr>
+    <tr><td class="paramname">JsonrpcHandler</td><td>- JSONRPC обработчик, может быть реализован с помощью <code><a class="el" href="classwjrpc_1_1handler.html" title="JSONRPC обработчик.">wjrpc::handler</a></code> </td></tr>
   </table>
   </dd>
 </dl>
@@ -463,8 +463,8 @@ template&lt;typename Tg , typename Req , typename ... Args&gt; </div>
 
 </div>
 </div>
-<a id="aea2531a782a4c0fb2e98f555c15f84e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea2531a782a4c0fb2e98f555c15f84e5">&#9670;&nbsp;</a></span>create_schema()</h2>
+<a id="acc033c5453f8b4ec6547acf967303502"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc033c5453f8b4ec6547acf967303502">&#9670;&nbsp;</a></span>create_schema()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -477,7 +477,8 @@ template&lt;typename JsonrpcHandler &gt; </div>
         <tr>
           <td class="memname">static std::vector&lt;default_schema&gt; <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::create_schema </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>names</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -490,8 +491,8 @@ template&lt;typename JsonrpcHandler &gt; </div>
 
 </div>
 </div>
-<a id="a2a47c4abf3ad7ea78ba97fce80658e5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a47c4abf3ad7ea78ba97fce80658e5d">&#9670;&nbsp;</a></span>create_schema_t()</h2>
+<a id="a9b16247516975b9c169935f9bbaf76ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b16247516975b9c169935f9bbaf76ce">&#9670;&nbsp;</a></span>create_schema_t()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -506,7 +507,8 @@ template&lt;typename Schema &gt; </div>
         <tr>
           <td class="memname">static std::vector&lt;Schema&gt; <a class="el" href="classwjrpc_1_1engine.html">wjrpc::engine</a>&lt; JsonrpcHandler &gt;::create_schema_t </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>names</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -953,7 +955,7 @@ template&lt;typename JsonrpcHandler &gt; </div>
 <hr class="footer"/><address class="footer"><small>
 Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.15
+</a> 1.8.17
 </small></address>
 </body>
 </html>
