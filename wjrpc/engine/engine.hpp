@@ -264,7 +264,7 @@ private:
 
   void perform_request_(incoming_holder holder, io_id_t io_id, outgoing_handler_t handler)
   {
-    if ( auto h = _outgoing_factory(io_id, std::cref(handler), false) )
+    if ( auto h = _outgoing_factory(io_id, handler, false) )
     {
       h->invoke( std::move(holder), std::move(handler) );
     }
