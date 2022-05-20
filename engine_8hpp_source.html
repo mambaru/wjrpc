@@ -308,7 +308,7 @@ $(function() {
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;  <span class="keywordtype">void</span> perform_request_(incoming_holder holder, <a class="code" href="classwjrpc_1_1engine.html#a674b940e1c833e078226630e7ab0dd3d">io_id_t</a> io_id, <a class="code" href="classwjrpc_1_1engine.html#accaf5e58a6c468fe5c96adb6ef514824">outgoing_handler_t</a> handler)</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;  {</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keywordflow">if</span> ( <span class="keyword">auto</span> h = _outgoing_factory(io_id, std::cref(handler), <span class="keyword">false</span>) )</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keywordflow">if</span> ( <span class="keyword">auto</span> h = _outgoing_factory(io_id, handler, <span class="keyword">false</span>) )</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    {</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;      h-&gt;invoke( std::move(holder), std::move(handler) );</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    }</div>
