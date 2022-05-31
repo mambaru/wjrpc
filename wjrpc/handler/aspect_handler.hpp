@@ -18,6 +18,7 @@
 #include <wjrpc/handler/aspect/ad_invoke.hpp>
 #include <wjrpc/handler/aspect/ad_invoke_error.hpp>
 #include <wjrpc/handler/aspect/ad_initialize.hpp>
+#include <wjrpc/handler/aspect/ad_callback_stub.hpp>
 #include <wjrpc/handler/handler_base_options.hpp>
 
 #include <wjrpc/method/aspect/request_serializer.hpp>
@@ -48,7 +49,8 @@ struct aspect_handler: fas::aspect<
   fas::advice<_invoke_, ad_invoke>,
   fas::advice<_invoke_error_, ad_invoke_error>,
   fas::advice< _initialize_, ad_initialize>,
-  fas::type< _options_type_, handler_base_options>
+  fas::type< _options_type_, handler_base_options>,
+  fas::advice< _callback_, ad_callback_stub >
 >{};
 
 

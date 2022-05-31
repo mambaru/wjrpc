@@ -26,7 +26,6 @@ public:
   {
   }
   
-  
   void disable(handler_ptr value)
   {
     std::lock_guard< mutex_type > lk(_mutex);
@@ -47,14 +46,6 @@ public:
 
   handler_ptr findocre(io_id_t io_id, bool reg_io, bool& reinit)
   {
-    /*
-    if ( _disable )
-    {
-      reinit = _reinit.exchange(false);
-#warning инит может пройти позже первого вызова (думай млин)
-#warning надо делать на уровне engine
-      return _default;
-    }*/
     std::lock_guard<mutex_type> lk(_mutex);
     
     if ( _default!=nullptr )
@@ -114,19 +105,13 @@ public:
     return _handlers.size();
   }
 
-  /*mutex_type& mutex() const
-  {
-    return _mutex;
-  }*/
 private:
   typedef std::map<io_id_t, data > handler_map_t;
   typedef std::mutex mutex_type;
   handler_map_t _handlers;
   mutable mutex_type _mutex;
   handler_ptr _default;
-  //std::atomic<bool> _disable;
-  //std::atomic<bool> _reinit;
 };
 
-} // wfc
+} // wjrpc
 

@@ -63,7 +63,7 @@ struct mem_fun_handler2
       std::shared_ptr<Itf> pthis = t.shared_from_this();
       (i.get()->*mem_ptr)( 
         std::move(req), 
-        mem_fun_make_callback( std::move(cb)),
+        mem_fun_make_callback( t, std::move(cb)),
         t.get_id(),
         [pthis](request2_ptr req2, std::function< void(responce2_ptr) > callback)
         {

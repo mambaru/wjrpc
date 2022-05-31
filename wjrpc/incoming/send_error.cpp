@@ -17,6 +17,12 @@ namespace wjrpc{ namespace aux{
 
 void send_error( incoming_holder holder, std::unique_ptr<error> err, outgoing_handler_t outgoing_handler)
 {
+  if ( outgoing_handler == nullptr )
+  {
+    WJRPC_LOG_WARNING("send_error ignored: outgoing_handler==nullptr" );
+    return;
+  }
+  
   typedef outgoing_error_json< error_json > message_json;
   outgoing_error<error> error_message;
     
@@ -34,13 +40,18 @@ void send_error( incoming_holder holder, std::unique_ptr<error> err, outgoing_ha
   d->reserve(80);
   typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
 
-  //WJRPC_LOG_ERROR( "jsonrpc-broker: " << d )
   outgoing_holder out(std::move(d));
   outgoing_handler( std::move(out) );
 }
 
 void send_error_raw( incoming_holder holder, std::unique_ptr<error> err, output_handler_t output_handler)
 {
+  if ( output_handler == nullptr )
+  {
+    WJRPC_LOG_WARNING("send_error ignored: output_handler==nullptr" );
+    return;
+  }
+
   typedef outgoing_error_json< error_json > message_json;
   outgoing_error<error> error_message;
     
@@ -58,7 +69,6 @@ void send_error_raw( incoming_holder holder, std::unique_ptr<error> err, output_
   d->reserve(80);
   typename message_json::serializer()(error_message, std::inserter( *d, d->end() ));
 
-  //WJRPC_LOG_ERROR( "jsonrpc-broker: " << d )
   output_handler( std::move(d) );
 }
 

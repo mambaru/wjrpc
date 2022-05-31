@@ -69,6 +69,14 @@ public:
     return this->get_aspect().template get<_context_>();
   }
   
+  template<typename T, typename Result>
+  std::function<void(std::unique_ptr<Result>)>
+    callback(T& t, std::function<void(std::unique_ptr<Result>)> cb)
+  {
+    return this->get_aspect().template get<_callback_>()(t, std::move(cb));
+  }
+  
+  
   std::vector<std::string> get_methods() const
   {
     // TODO: в аспект
@@ -86,7 +94,7 @@ public:
     return _io_id!=0;
   }
   
-  io_id_t get_id() const
+  io_id_t get_io_id() const
   {
     return _io_id;
   }

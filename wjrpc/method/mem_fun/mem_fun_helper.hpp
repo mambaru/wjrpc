@@ -12,14 +12,14 @@
 
 namespace wjrpc{
 
-template<typename Result>
-inline auto mem_fun_make_callback( std::function< void(std::unique_ptr<Result>, std::unique_ptr<error> ) >&& cb)
+template<typename T, typename Result>
+inline auto mem_fun_make_callback( T& t, std::function< void(std::unique_ptr<Result>, std::unique_ptr<error> ) >&& cb)
   -> std::function<void(std::unique_ptr<Result>) >
 {
   if (cb==nullptr)
     return nullptr;
 
-  return [cb]( std::unique_ptr<Result> resp)
+  return t.template callback<T, Result>(t, [cb]( std::unique_ptr<Result> resp)
   {
     if ( resp != nullptr )
     {
@@ -29,7 +29,7 @@ inline auto mem_fun_make_callback( std::function< void(std::unique_ptr<Result>, 
     {
       cb( nullptr, std::make_unique<error>( bad_gateway() ) );
     }
-  };
+  });
 }
 
 template<typename Result>

@@ -19,6 +19,8 @@ struct ad_initialize
     t._sender_handler = opt.sender_handler;
     t.get_aspect().template get<_target_>() = opt.target;
     t.get_aspect().template get<_peeper_>() = opt.peeper;
+    t.get_aspect().template get<_callback_>().initialize(t, opt);
+    
   }
 };
 
