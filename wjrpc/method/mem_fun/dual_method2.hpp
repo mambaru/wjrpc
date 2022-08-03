@@ -10,6 +10,7 @@
 #include <wjrpc/method/aspect/name.hpp>
 #include <wjrpc/method/mem_fun/invoke_mem_fun2.hpp>
 #include <wjrpc/method/method.hpp>
+#include <wjrpc/errors/error_json.hpp>
 #include <memory>
 #include <functional>
 
@@ -50,7 +51,7 @@ struct basic_dual_method2: basic_method<
     Itf, 
     mem_ptr2
   >,
-  remote_call<JParams, JResult>,
+  remote_call<JParams, JResult, error_json>,
   Args...
 >
 {};
@@ -91,7 +92,7 @@ struct dual_method2: method<
     Itf, 
     mem_ptr2
   >,
-  remote_call<JParams, JResult>,
+  remote_call<JParams, JResult, error_json>,
   Args...
 >
 {};

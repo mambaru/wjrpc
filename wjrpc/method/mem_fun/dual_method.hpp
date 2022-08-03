@@ -10,6 +10,7 @@
 #include <wjrpc/method/aspect/name.hpp>
 #include <wjrpc/method/mem_fun/invoke_mem_fun.hpp>
 #include <wjrpc/method/method.hpp>
+#include <wjrpc/errors/error_json.hpp>
 #include <memory>
 #include <functional>
 
@@ -29,7 +30,7 @@ template<
 struct basic_dual_method: basic_method< 
   name<TgName>,
   invoke_mem_fun<JParams,JResult,I,mem_ptr>,
-  remote_call<JParams, JResult>,
+  remote_call<JParams, JResult, error_json>,
   Args...
 >
 {};
@@ -49,7 +50,7 @@ template<
 struct dual_method: method< 
   name<TgName>,
   invoke_mem_fun<JParams, JResult, I, mem_ptr>,
-  remote_call<JParams, JResult>,
+  remote_call<JParams, JResult, error_json>,
   Args...
 >
 {};

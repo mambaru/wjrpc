@@ -40,10 +40,10 @@ struct error_codes_json
       ::wjson::enum_value<ServiceUnavailable, error_code_t, static_cast<error_code_t>(error_codes::ServiceUnavailable) >,
       ::wjson::enum_value<QueueOverflow, error_code_t, static_cast<error_code_t>(error_codes::QueueOverflow) >
     >
-  > type;
-  typedef type::target target; 
-  typedef type::member_list member_list;
-  typedef type::serializer  serializer;
+  > type1;
+  typedef type1::target target;
+  typedef type1::member_list member_list;
+  typedef type1::serializer  serializer;
 
 };
 
@@ -59,11 +59,11 @@ struct error_json
       ::wjson::member<n_code,    error, error_code_t,      &error::code, ::wjson::value<error_code_t> >,
       ::wjson::member<n_message, error, error_code_t,      &error::code, error_codes_json>
     >
-  > type;
+  > type1;
 
   typedef error target; 
-  typedef type::member_list member_list;
-  typedef type::serializer  serializer;
+  typedef type1::member_list member_list;
+  typedef type1::serializer  serializer;
 };
 
 }

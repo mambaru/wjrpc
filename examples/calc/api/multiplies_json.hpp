@@ -16,9 +16,9 @@ namespace request
         wjson::member<n_first, multiplies,  int,  &multiplies::first>,
         wjson::member<n_second, multiplies, int,  &multiplies::second>
       >
-    > type;
-    typedef typename type::serializer serializer;
-    typedef typename type::target target;
+    > type1;
+    typedef typename type1::serializer serializer;
+    typedef typename type1::target target;
   };
 }
 
@@ -32,8 +32,8 @@ namespace response
       wjson::member_list<
         wjson::member<n_value, multiplies, int, &multiplies::value>
       >
-    > type;
-    typedef typename type::serializer serializer;
-    typedef typename type::target target;
+    > type1;
+    typedef typename type1::serializer serializer;
+    typedef typename type1::target target;
   };
 }

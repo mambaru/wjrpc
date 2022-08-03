@@ -110,7 +110,7 @@ struct invoke_method_plus:
 struct call_method_plus:
   ::wjrpc::basic_method<
     ::wjrpc::name<_plus_>,
-    ::wjrpc::remote_call< request::plus_json, response::plus_json>
+    ::wjrpc::remote_call< request::plus_json, response::plus_json, wjrpc::error_json>
   >
   {};
 
@@ -146,7 +146,7 @@ UNIT(method2, "")
     ::wjrpc::handler_types::notify_serializer_t, 
     ::wjrpc::handler_types::request_serializer_t, 
     ::wjrpc::handler_types::result_handler_t
-  )
+  ) noexcept
   {
     
   };

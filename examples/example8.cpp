@@ -73,12 +73,12 @@ int main()
   auto plus = std::make_unique<request::plus>();
   plus->first = 10;
   plus->second = 20;
-  h->plus( std::move(plus), [](response::plus::ptr){});
+  h->plus( std::move(plus), [](response::plus::ptr) noexcept{});
 
   auto minus = std::make_unique<request::minus>();
   minus->first = 30;
   minus->second = 3;
-  h->minus( std::move(minus), [](response::minus::ptr){});
+  h->minus( std::move(minus), [](response::minus::ptr) noexcept{});
 
   for ( size_t i =0; i != req_list.size(); ++i)
   {

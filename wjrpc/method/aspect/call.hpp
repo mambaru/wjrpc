@@ -9,7 +9,7 @@
 #include <wjrpc/incoming/incoming_holder.hpp>
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/method/aspect/tags.hpp>
-#include <wjrpc/errors.hpp>
+//#include <wjrpc/errors.hpp>
 #include <wjrpc/logger.hpp>
 #include <fas/aop/metalist.hpp>
 #include <functional>
@@ -17,7 +17,7 @@
 
 namespace wjrpc{
   
-template<typename JParams, typename JResult, typename JError = error_json>
+template<typename JParams, typename JResult, typename JError /*= error_json*/ >
 struct remote_call
 {
   typedef fas::metalist::advice metatype;

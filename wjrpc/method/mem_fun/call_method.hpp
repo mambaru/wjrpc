@@ -9,6 +9,7 @@
 #include <wjrpc/method/aspect/call.hpp>
 #include <wjrpc/method/aspect/name.hpp>
 #include <wjrpc/method/method.hpp>
+#include <wjrpc/errors/error_json.hpp>
 #include <memory>
 #include <functional>
 
@@ -22,7 +23,7 @@ template<
 >
 struct basic_call_method: basic_method< 
   name<TgName>,
-  remote_call<JParams, JResult>,
+  remote_call<JParams, JResult, error_json>,
   Args...
 >
 {};
@@ -36,7 +37,7 @@ template<
 >
 struct call_method: method< 
   name<TgName>,
-  remote_call<JParams, JResult>,
+  remote_call<JParams, JResult, error_json>,
   Args...
 >
 {};
