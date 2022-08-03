@@ -2,10 +2,17 @@
 
 #include "icalc.hpp"
 
-class calc1 final
+class calc1
   : public icalc
 {
 public:
+  virtual ~calc1() = default;
+  calc1() {};
+  calc1(const calc1&) = default;
+  calc1(calc1&&) = default;
+  calc1& operator=(const calc1&) = default;
+  calc1& operator=(calc1&&) = default;
+
   virtual void plus( request::plus::ptr req, response::plus::callback cb) override;
   virtual void minus( request::minus::ptr req, response::minus::callback cb) override;
   virtual void multiplies( request::multiplies::ptr req, response::multiplies::callback cb) override;

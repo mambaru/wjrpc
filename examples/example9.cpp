@@ -28,8 +28,8 @@ struct method_list: wjrpc::method_list
 
 template<typename Base>
 class calc_interface 
-  : public Base
-  , public icalc
+  : public icalc
+  , public Base
 {
 public:
   virtual void plus( request::plus::ptr req, response::plus::callback cb)  override final
