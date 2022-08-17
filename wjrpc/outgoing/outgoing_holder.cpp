@@ -80,13 +80,13 @@ data_ptr outgoing_holder::detach()
   if ( _data == nullptr )
   {
     // Отложенная сериализация
-    if ( _request_serializer != nullptr )
-    {
-      return _request_serializer(_name, _call_id);
-    }
-    else if ( _notify_serializer != nullptr )
+    if ( _notify_serializer != nullptr && (_call_id==0 || _request_serializer==nullptr) )
     {
       return _notify_serializer(_name);
+    }
+    else if ( _request_serializer != nullptr)
+    {
+      return _request_serializer(_name, _call_id);
     }
     else if ( _basic_serializer != nullptr )
     {

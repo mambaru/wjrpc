@@ -38,7 +38,7 @@ struct mem_fun_handler1
       (i.get()->*mem_ptr)( 
         std::move(req), 
         nullptr,
-        t.get_id(),
+        t.get_io_id(),
         t.shared_from_this() 
       );
     }
@@ -52,7 +52,7 @@ struct mem_fun_handler1
       (i.get()->*mem_ptr)( 
         std::move(req), 
         mem_fun_make_callback( t, std::move(cb) ), 
-        t.get_id(),
+        t.get_io_id(),
         t.shared_from_this() 
       );
     }
