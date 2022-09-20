@@ -74,6 +74,7 @@ public:
     auto itr = _handlers.find(io_id);
     if ( itr == _handlers.end() )
       return false;
+    itr->second.first->stop();
     _handlers.erase(itr);
     return true;
   }
