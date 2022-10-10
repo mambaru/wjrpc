@@ -95,14 +95,17 @@ $(function() {
 <tr class="separator:af79feae0b429c2e07dc6429ea856ff77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2730f8f93b60a5f75ddfe8ab0f2f2303"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classwjrpc_1_1handler.html#a4540447af6b026f1470da29b8438e0a0">context_type</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1handler.html#a2730f8f93b60a5f75ddfe8ab0f2f2303">context</a> () const</td></tr>
 <tr class="separator:a2730f8f93b60a5f75ddfe8ab0f2f2303"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad86b86e3c04200427c9e148dddd352a2"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Result &gt; </td></tr>
+<tr class="memitem:ad86b86e3c04200427c9e148dddd352a2"><td class="memTemplItemLeft" align="right" valign="top">std::function&lt; void(std::unique_ptr&lt; Result &gt;)&gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1handler.html#ad86b86e3c04200427c9e148dddd352a2">callback</a> (T &amp;t, std::function&lt; void(std::unique_ptr&lt; Result &gt;)&gt; cb)</td></tr>
+<tr class="separator:ad86b86e3c04200427c9e148dddd352a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeef80630208913a5e615fc900c7e5531"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1handler.html#aeef80630208913a5e615fc900c7e5531">get_methods</a> () const</td></tr>
 <tr class="separator:aeef80630208913a5e615fc900c7e5531"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0f34ba6fea54a1f78a5fed0c1651159"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">invoke</a> (<a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> holder, <a class="el" href="classwjrpc_1_1handler.html#a686aafb2cedc27f0a981ba15e7809a73">outgoing_handler_t</a> outgoing_handler)</td></tr>
 <tr class="separator:aa0f34ba6fea54a1f78a5fed0c1651159"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2b90d6be4ece84285bca6d675f2fcd8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1handler.html#aa2b90d6be4ece84285bca6d675f2fcd8">status</a> () const</td></tr>
 <tr class="separator:aa2b90d6be4ece84285bca6d675f2fcd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb1fd892f2dbec6982e71380c54349fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1handler.html#adb1fd892f2dbec6982e71380c54349fc">get_id</a> () const</td></tr>
-<tr class="separator:adb1fd892f2dbec6982e71380c54349fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6df2455c7bb57bf3dca678d66e90f4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1handler.html#aa6df2455c7bb57bf3dca678d66e90f4f">get_io_id</a> () const</td></tr>
+<tr class="separator:aa6df2455c7bb57bf3dca678d66e90f4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19010e5bd8827963334c6c85fe6c5efd"><td class="memTemplParams" colspan="2">template&lt;typename O &gt; </td></tr>
 <tr class="memitem:a19010e5bd8827963334c6c85fe6c5efd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1handler.html#a19010e5bd8827963334c6c85fe6c5efd">start</a> (O &amp;&amp;opt, <a class="el" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> io_id)</td></tr>
 <tr class="separator:a19010e5bd8827963334c6c85fe6c5efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -308,6 +311,46 @@ template&lt;typename MethodList &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Методы</h2>
+<a id="ad86b86e3c04200427c9e148dddd352a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad86b86e3c04200427c9e148dddd352a2">&#9670;&nbsp;</a></span>callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MethodList &gt; </div>
+<div class="memtemplate">
+template&lt;typename T , typename Result &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::function&lt;void(std::unique_ptr&lt;Result&gt;)&gt; <a class="el" href="classwjrpc_1_1handler.html">wjrpc::handler</a>&lt; MethodList &gt;::callback </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(std::unique_ptr&lt; Result &gt;)&gt;&#160;</td>
+          <td class="paramname"><em>cb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a45b1843d7decb7bc455c93fbc74233a9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a45b1843d7decb7bc455c93fbc74233a9">&#9670;&nbsp;</a></span>clone()</h2>
 
@@ -389,8 +432,8 @@ template&lt;typename MethodList &gt; </div>
 
 </div>
 </div>
-<a id="adb1fd892f2dbec6982e71380c54349fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb1fd892f2dbec6982e71380c54349fc">&#9670;&nbsp;</a></span>get_id()</h2>
+<a id="aa6df2455c7bb57bf3dca678d66e90f4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6df2455c7bb57bf3dca678d66e90f4f">&#9670;&nbsp;</a></span>get_io_id()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -401,7 +444,7 @@ template&lt;typename MethodList &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> <a class="el" href="classwjrpc_1_1handler.html">wjrpc::handler</a>&lt; MethodList &gt;::get_id </td>
+          <td class="memname"><a class="el" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> <a class="el" href="classwjrpc_1_1handler.html">wjrpc::handler</a>&lt; MethodList &gt;::get_io_id </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
