@@ -252,7 +252,7 @@ private:
       WJRPC_LOG_ERROR("jsonrpc::engine: Invalid Request: " << holder.str() )
       aux::send_error( std::move(holder), std::make_unique<invalid_request>(), [handler](outgoing_holder oholder)
       {
-        auto h2 = oholder.clone( oholder.call_id() );
+        auto h2 = oholder.clone_request( oholder.call_id() );
         if ( auto d = h2.detach() )
         {
           WJRPC_LOG_ERROR(std::string(d->begin(), d->end()) )

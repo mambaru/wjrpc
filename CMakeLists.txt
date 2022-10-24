@@ -15,6 +15,11 @@ add_library(
   wjrpc/outgoing/outgoing_holder.cpp
   wjrpc/incoming/send_error.cpp
 )
+
+if ( CMAKE_CXX_STANDARD EQUAL 20 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  update_ogenc(TARGETS wjrpc WARNINGS -Wzero-as-null-pointer-constant OFF)
+endif()
+
 wci_targets(wjrpc)
 target_include_directories(wjrpc PUBLIC ${wjrpc_SOURCE_DIR})
 target_link_libraries(wjrpc PUBLIC wlog)

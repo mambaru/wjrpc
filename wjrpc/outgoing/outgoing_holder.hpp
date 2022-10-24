@@ -5,8 +5,6 @@
 //
 #pragma once
 
-#include <wjrpc/outgoing/outgoing_request.hpp>
-#include <wjrpc/outgoing/outgoing_request_json.hpp>
 #include <wjrpc/incoming/incoming_holder.hpp>
 #include <wjrpc/basic_types.hpp>
 
@@ -41,8 +39,8 @@ public:
   outgoing_holder(const char* n, notify_serializer_t ns, request_serializer_t rs, result_handler_t rh, call_id_t cid);
 
   data_ptr detach();
-  outgoing_holder clone() const;
-  outgoing_holder clone(call_id_t cid) const;
+  outgoing_holder clone_notify() const;
+  outgoing_holder clone_request(call_id_t cid) const;
 
   bool is_result() const  { return _result_handler==nullptr && _name==nullptr;}
   bool is_request() const { return _result_handler!=nullptr && _name!=nullptr;}

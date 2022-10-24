@@ -57,11 +57,51 @@ UNIT(incoming2, "")
   t << stop;
   auto d = h.acquire_params();
   t << equal<expect, std::string>( "[1,2,3]", std::string(d->begin(), d->end() ) ) << FAS_FL;
-  
-  
+}
+
+UNIT(incoming3, "")
+{
+  using namespace fas::testing;
+  using namespace ::wjrpc;
+  using namespace wjson::literals;
+  std::string json = "{'method':'test','params':[1,2,3],'id':'kukaracha'}"_json;
+  incoming_holder h( std::make_unique<data_type>(json.begin(), json.end()));
+  wjson::json_error e;
+  h.parse(&e);
+  t << is_true<expect>( h.ready() ) << FAS_FL;
+  t << is_true<expect>( h.is_valid() ) << FAS_FL;
+  t << is_true<expect>( h.has_id() ) << FAS_FL;
+  t << equal_str<expect>( h.get_id<std::string>(nullptr), "kukaracha" ) << FAS_FL;
+
+  auto h2 = h.clone_request(1);
+  t << is_false<expect>( h2.is_valid() ) << FAS_FL;
+  t << is_false<expect>( h2.ready() ) << FAS_FL;
+  h2.parse(&e);
+  t << is_true<expect>( h2.ready() ) << FAS_FL;
+  t << is_true<expect>( h2.is_valid() ) << FAS_FL;
+  t << is_true<expect>( h2.has_id() ) << FAS_FL;
+  t << equal<expect, int>( h2.get_id<int>(nullptr), 1 ) << FAS_FL;
+  t << equal_str<expect>( h2.str(), "{'jsonrpc':'2.0','method':'test','params':[1,2,3],'id':1}"_json ) << FAS_FL;
+
+  auto d2 = h2.acquire_params();
+  t << equal<expect, std::string>( "[1,2,3]", std::string(d2->begin(), d2->end() ) ) << FAS_FL;
+
+  auto h3 = h.clone_notify();
+  t << is_false<expect>( h3.is_valid() ) << FAS_FL;
+  t << is_false<expect>( h3.ready() ) << FAS_FL;
+  h3.parse(&e);
+  t << is_true<expect>( h3.ready() ) << FAS_FL;
+  t << is_true<expect>( h3.is_valid() ) << FAS_FL;
+  t << is_false<expect>( h3.has_id() ) << FAS_FL;
+  t << equal_str<expect>( h3.str(), "{'jsonrpc':'2.0','method':'test','params':[1,2,3]}"_json ) << FAS_FL;
+
+  auto d3 = h3.acquire_params();
+  t << equal<expect, std::string>( "[1,2,3]", std::string(d3->begin(), d3->end() ) ) << FAS_FL;
+
 }
 
 BEGIN_SUITE(incoming_suite, "")
   ADD_UNIT(incoming1)
   ADD_UNIT(incoming2)
+  ADD_UNIT(incoming3)
 END_SUITE(incoming_suite)

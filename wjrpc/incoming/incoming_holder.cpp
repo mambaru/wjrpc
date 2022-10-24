@@ -6,6 +6,8 @@
 
 #include <wjrpc/incoming/incoming_holder.hpp>
 #include <wjrpc/outgoing/outgoing_holder.hpp>
+#include <wjrpc/outgoing/outgoing_notify_json.hpp>
+#include <wjrpc/outgoing/outgoing_request_json.hpp>
 #include <wjrpc/method/aspect/send_error.hpp>
 #include <wjrpc/incoming/send_error.hpp>
 #include <wjrpc/errors.hpp>
@@ -182,9 +184,27 @@ data_ptr incoming_holder::detach()
   return std::move(_data);
 }
 
-incoming_holder incoming_holder::clone() const
+incoming_holder incoming_holder::clone_notify() const
 {
-  return incoming_holder(*_data, _time_point);
+  outgoing_notify<std::string> out_req;
+  out_req.method=this->method();
+  if (_incoming.params.first != _incoming.params.second)
+    out_req.params=std::make_unique<std::string>(_incoming.params.first, _incoming.params.second);
+  data_ptr out_data = std::make_unique<data_type>();
+  outgoing_notify_json< wjson::raw_value<std::string> >::serializer()(out_req, std::back_inserter(*out_data) );
+  return incoming_holder( std::move(out_data), _time_point);
+}
+
+incoming_holder incoming_holder::clone_request(call_id_t id) const
+{
+  outgoing_request<std::string> out_req;
+  out_req.method=this->method();
+  out_req.id=id;
+  if (_incoming.params.first != _incoming.params.second)
+    out_req.params=std::make_unique<std::string>(_incoming.params.first, _incoming.params.second);
+  data_ptr out_data = std::make_unique<data_type>();
+  outgoing_request_json< wjson::raw_value<std::string> >::serializer()(out_req, std::back_inserter(*out_data) );
+  return incoming_holder( std::move(out_data), _time_point);
 }
 
 data_ptr incoming_holder::acquire_params()

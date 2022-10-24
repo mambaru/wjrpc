@@ -225,8 +225,11 @@ public:
    */
   data_ptr acquire_params();
 
-  /** @brief сделать дубликат текущего объекта */
-  incoming_holder clone() const;
+  /** @brief сделать дубликат запроса с новым id. Уведомление клонируеться как запрос */
+  incoming_holder clone_request(call_id_t new_id) const;
+
+  /** @brief сделать дубликат уведомления. Запрос клонируеться как уведомление */
+  incoming_holder clone_notify() const;
 
   /** @brief строка с исходным JSONRPC-сообщением */
   std::string str() const;

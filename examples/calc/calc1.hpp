@@ -7,7 +7,7 @@ class calc1
 {
 public:
   virtual ~calc1() = default;
-  calc1() {};
+  calc1() noexcept {};
   calc1(const calc1&) = default;
   calc1(calc1&&) = default;
   calc1& operator=(const calc1&) = default;

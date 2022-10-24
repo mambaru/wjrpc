@@ -8,6 +8,9 @@
 #include <atomic>
 #include <chrono>
 
+namespace
+{
+
 std::shared_ptr<icalc> create_chain(int mode, std::shared_ptr<calc1> calc, int count, const std::shared_ptr<calc_p>& proxy);
 void fork_next(int rd, int wd, std::shared_ptr<calc1> calc, int count, std::shared_ptr<calc_p> proxy);
 void run_iter(std::shared_ptr<icalc> cli);
@@ -175,6 +178,8 @@ void run_client(int mode, const std::shared_ptr<calc1>& calc, int count, std::sh
   if ( mode == 1)
     run_bench( clc );
 }
+
+} //namespace
 
 int main(int argc, char* argv[])
 {

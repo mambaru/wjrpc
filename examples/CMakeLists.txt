@@ -38,11 +38,12 @@ target_link_libraries(example10 PRIVATE wjrpc wlog)
 
 add_executable(example11 example11.cpp calc/calc1.cpp calc/calc_p.cpp)
 target_link_libraries(example11 PRIVATE wjrpc wlog)
+target_link_options(example11 PRIVATE -v)
 
 add_executable(calc_proxy calc_proxy.cpp calc/calc_p.cpp calc/calc1.cpp calc/pserver.cpp calc/pclient.cpp)
 target_link_libraries(calc_proxy PRIVATE wjrpc wlog)
 
-wci_utils(
+wci_examples(
   example01 example02 example03 example2 example3 example4 
   example5  example6  example7  example8 example9 example10 
   example11 calc_proxy)

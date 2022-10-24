@@ -7,6 +7,11 @@
 #include <wjrpc/outgoing/outgoing_holder.hpp>
 #include <wjrpc/outgoing/outgoing_request_json.hpp>
 #include <wjrpc/incoming/incoming_holder.hpp>
+#include <wjrpc/outgoing/outgoing_notify.hpp>
+#include <wjrpc/outgoing/outgoing_notify_json.hpp>
+#include <wjrpc/outgoing/outgoing_result.hpp>
+#include <wjrpc/outgoing/outgoing_result_json.hpp>
+
 #include <wjrpc/logger.hpp>
 #include <wjrpc/basic_types.hpp>
 #include <wjrpc/memory.hpp>
@@ -96,20 +101,32 @@ data_ptr outgoing_holder::detach()
   else 
   {
     // Параметры или результат уже сериализованны
-    if ( this->is_request() )
+    if ( this->is_notify() )
     {
-      auto result = std::make_unique<data_type>();
-      result->reserve(_data->size() + 50);
+      auto json = std::make_unique<data_type>();
+      json->reserve(_data->size() + 50);
+      outgoing_notify<data_type> notify;
+      outgoing_notify_json< ::wjson::raw_value<data_type> >::serializer serializer;
+      notify.method = _name;
+      notify.params = std::move(_data);
+      serializer(notify, std::inserter(*json, json->end()));
+      return json;
+    }
+    else if ( this->is_request() )
+    {
+      auto json = std::make_unique<data_type>();
+      json->reserve(_data->size() + 50);
       outgoing_request<data_type> request;
       outgoing_request_json< ::wjson::raw_value<data_type> >::serializer serializer;
       request.method = _name;
       request.id = _call_id;
       request.params = std::move(_data);
-      serializer(request, std::inserter(*result, result->end()));
-      return result;
+      serializer(request, std::inserter(*json, json->end()));
+      return json;
     }
   }
   // в остальных случаях в _data полностью сериализованый объект или запрос 
+  // (для result или error нам частичная десериализация не нужна)
   return std::move(_data);
 }
 
@@ -123,15 +140,15 @@ void outgoing_holder::result_handler(result_handler_t handler)
   _result_handler=handler;
 }
 
-outgoing_holder outgoing_holder::clone() const
+outgoing_holder outgoing_holder::clone_notify() const
 {
-  outgoing_holder holder = this->clone(0);
+  outgoing_holder holder = this->clone_request(0);
   holder._request_serializer = nullptr;
   holder._result_handler = nullptr;
   return holder;
 }
 
-outgoing_holder outgoing_holder::clone(call_id_t cid) const
+outgoing_holder outgoing_holder::clone_request(call_id_t cid) const
 {
   outgoing_holder holder;
   holder._name = this->_name;
