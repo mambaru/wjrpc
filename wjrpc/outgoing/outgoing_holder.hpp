@@ -42,6 +42,21 @@ public:
   outgoing_holder clone_notify() const;
   outgoing_holder clone_request(call_id_t cid) const;
 
+  template<typename Id>
+  outgoing_holder clone(Id& id) const
+  {
+    if ( this->is_notify() )
+      return this->clone_notify();
+    else if ( this->is_request() )
+    {
+      ++id;
+      return this->clone_request(id);
+    }
+    if ( _data != nullptr )
+      return outgoing_holder( std::make_unique<data_type>(*_data) );
+    return outgoing_holder();
+  }
+
   bool is_result() const  { return _result_handler==nullptr && _name==nullptr;}
   bool is_request() const { return _result_handler!=nullptr && _name!=nullptr;}
   bool is_notify() const  { return _result_handler==nullptr && _name!=nullptr;}

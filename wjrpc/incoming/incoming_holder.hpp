@@ -231,6 +231,21 @@ public:
   /** @brief сделать дубликат уведомления. Запрос клонируеться как уведомление */
   incoming_holder clone_notify() const;
 
+  template<typename Id>
+  incoming_holder clone(Id& id) const
+  {
+    if ( this->is_notify() )
+      return this->clone_notify();
+    else if ( this->is_request() )
+    {
+      ++id;
+      return this->clone_request(id);
+    }
+    if ( _data != nullptr )
+      return incoming_holder( std::make_unique<data_type>(*_data), _time_point);
+    return incoming_holder();
+  }
+
   /** @brief строка с исходным JSONRPC-сообщением */
   std::string str() const;
 
