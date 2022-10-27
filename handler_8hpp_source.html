@@ -111,141 +111,150 @@ $(function() {
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> this-&gt;get_aspect().template get&lt;_context_&gt;();</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  }</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  </div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aeef80630208913a5e615fc900c7e5531">   72</a></span>&#160;  std::vector&lt;std::string&gt; <a class="code" href="classwjrpc_1_1handler.html#aeef80630208913a5e615fc900c7e5531">get_methods</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// TODO: в аспект</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">return</span> fas::for_each_group&lt;_method_&gt;(*<span class="keyword">this</span>, f_get_methods() ).result;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  }</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">   78</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">invoke</a>(<a class="code" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> holder, <a class="code" href="classwjrpc_1_1handler.html#a686aafb2cedc27f0a981ba15e7809a73">outgoing_handler_t</a> outgoing_handler) </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    std::lock_guard&lt; mutex_type &gt; lk( _mutex );</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    super::get_aspect().template get&lt;_invoke_&gt;()(*<span class="keyword">this</span>, std::move(holder), std::move(outgoing_handler) );</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  }</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  </div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aa2b90d6be4ece84285bca6d675f2fcd8">   84</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classwjrpc_1_1handler.html#aa2b90d6be4ece84285bca6d675f2fcd8">status</a>()<span class="keyword"> const </span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">return</span> _io_id!=0;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  }</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  </div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#adb1fd892f2dbec6982e71380c54349fc">   89</a></span>&#160;  <a class="code" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> <a class="code" href="classwjrpc_1_1handler.html#adb1fd892f2dbec6982e71380c54349fc">get_id</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">return</span> _io_id;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> O&gt;</div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a19010e5bd8827963334c6c85fe6c5efd">   95</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#a19010e5bd8827963334c6c85fe6c5efd">start</a>(O&amp;&amp; opt, <a class="code" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> io_id)</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    std::lock_guard&lt; mutex_type &gt; lk( _mutex );</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    _io_id = io_id;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    this-&gt;get_aspect().template get&lt;_initialize_&gt;()(*<span class="keyword">this</span>, std::move(opt) );</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    this-&gt;get_aspect().template get&lt;_connect_&gt;()(*<span class="keyword">this</span>, io_id );</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a73da229fb10d97d4684abad57fc05c62">  103</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#a73da229fb10d97d4684abad57fc05c62">stop</a>()</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Result&gt;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  std::function&lt;void(std::unique_ptr&lt;Result&gt;)&gt;</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#ad86b86e3c04200427c9e148dddd352a2">   74</a></span>&#160;    <a class="code" href="classwjrpc_1_1handler.html#ad86b86e3c04200427c9e148dddd352a2">callback</a>(T&amp; t, std::function&lt;<span class="keywordtype">void</span>(std::unique_ptr&lt;Result&gt;)&gt; cb)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> this-&gt;get_aspect().template get&lt;_callback_&gt;()(t, std::move(cb));</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  </div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aeef80630208913a5e615fc900c7e5531">   80</a></span>&#160;  std::vector&lt;std::string&gt; <a class="code" href="classwjrpc_1_1handler.html#aeef80630208913a5e615fc900c7e5531">get_methods</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// TODO: в аспект</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">return</span> fas::for_each_group&lt;_method_&gt;(*<span class="keyword">this</span>, f_get_methods() ).result;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">   86</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">invoke</a>(<a class="code" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> holder, <a class="code" href="classwjrpc_1_1handler.html#a686aafb2cedc27f0a981ba15e7809a73">outgoing_handler_t</a> outgoing_handler) </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    std::lock_guard&lt; mutex_type &gt; lk( _mutex );</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    super::get_aspect().template get&lt;_invoke_&gt;()(*<span class="keyword">this</span>, std::move(holder), std::move(outgoing_handler) );</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aa2b90d6be4ece84285bca6d675f2fcd8">   92</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classwjrpc_1_1handler.html#aa2b90d6be4ece84285bca6d675f2fcd8">status</a>()<span class="keyword"> const </span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordflow">return</span> _io_id!=0;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  }</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  </div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aa6df2455c7bb57bf3dca678d66e90f4f">   97</a></span>&#160;  <a class="code" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> <a class="code" href="classwjrpc_1_1handler.html#aa6df2455c7bb57bf3dca678d66e90f4f">get_io_id</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordflow">return</span> _io_id;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> O&gt;</div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a19010e5bd8827963334c6c85fe6c5efd">  103</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#a19010e5bd8827963334c6c85fe6c5efd">start</a>(O&amp;&amp; opt, <a class="code" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> io_id)</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  {</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    std::lock_guard&lt; mutex_type &gt; lk( _mutex );</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    this-&gt;get_aspect().template get&lt;_disconnect_&gt;()(*<span class="keyword">this</span>, _io_id );</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="comment">//super::stop_(*this);</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  }</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> O&gt;</div>
-<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a1acbb24ff51d980ba3fd27c784144598">  111</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#a1acbb24ff51d980ba3fd27c784144598">initialize</a>(O&amp;&amp; opt)</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    _io_id = io_id;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    this-&gt;get_aspect().template get&lt;_initialize_&gt;()(*<span class="keyword">this</span>, std::move(opt) );</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    this-&gt;get_aspect().template get&lt;_connect_&gt;()(*<span class="keyword">this</span>, io_id );</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  }</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a73da229fb10d97d4684abad57fc05c62">  111</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#a73da229fb10d97d4684abad57fc05c62">stop</a>()</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  {</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    std::lock_guard&lt; mutex_type &gt; lk( _mutex );</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    this-&gt;get_aspect().template get&lt;_initialize_&gt;()(*<span class="keyword">this</span>, std::move(opt) );</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a5d7ff546482634e9d4a948a2d7fb70f3">  117</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#a5d7ff546482634e9d4a948a2d7fb70f3">perform_data</a>(<a class="code" href="namespacewjrpc.html#ab41235f2f2855017ca69215c09b3cc9c">data_ptr</a> d, <a class="code" href="namespacewjrpc.html#a743adeb08a0fa4f7c974a409f9c13c1c">output_handler_t</a> h) </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  {</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">using namespace </span>std::placeholders;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">while</span> ( d != <span class="keyword">nullptr</span> )</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    {</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      <a class="code" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> iholder(std::move(d));</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      ::wjson::json_error e;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      d = iholder.<a class="code" href="classwjrpc_1_1incoming__holder.html#af94aa95f7bf81780dbc98b7b73a18753">parse</a>(&amp;e);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <span class="keywordflow">if</span> ( !e &amp;&amp; iholder )</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      {</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        this-&gt;<a class="code" href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">invoke</a>( std::move(iholder), [h](outgoing_holder oholder)</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        {</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;          h(oholder.detach());</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        });</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      }</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      {</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        aux::send_error_raw( std::move(iholder), std::make_unique&lt;parse_error&gt;(), h );</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      }</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    }</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;  }</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  </div>
-<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aaa217c212f089e2c66a2d0e636fccf0d">  140</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#aaa217c212f089e2c66a2d0e636fccf0d">perform_string</a>(std::string str, std::function&lt;<span class="keywordtype">void</span>(std::string)&gt; h) </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  {</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    this-&gt;<a class="code" href="classwjrpc_1_1handler.html#a5d7ff546482634e9d4a948a2d7fb70f3">perform_data</a>( std::make_unique&lt;data_type&gt;( str.begin(), str.end() ), [h](<a class="code" href="namespacewjrpc.html#ab41235f2f2855017ca69215c09b3cc9c">data_ptr</a> d)</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    {</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      h( std::string(d-&gt;begin(), d-&gt;end()) );</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    });</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    this-&gt;get_aspect().template get&lt;_disconnect_&gt;()(*<span class="keyword">this</span>, _io_id );</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="comment">//super::stop_(*this);</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> O&gt;</div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a1acbb24ff51d980ba3fd27c784144598">  119</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#a1acbb24ff51d980ba3fd27c784144598">initialize</a>(O&amp;&amp; opt)</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    std::lock_guard&lt; mutex_type &gt; lk( _mutex );</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    this-&gt;get_aspect().template get&lt;_initialize_&gt;()(*<span class="keyword">this</span>, std::move(opt) );</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  }</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a5d7ff546482634e9d4a948a2d7fb70f3">  125</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#a5d7ff546482634e9d4a948a2d7fb70f3">perform_data</a>(<a class="code" href="namespacewjrpc.html#ab41235f2f2855017ca69215c09b3cc9c">data_ptr</a> d, <a class="code" href="namespacewjrpc.html#a743adeb08a0fa4f7c974a409f9c13c1c">output_handler_t</a> h) </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  {</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keyword">using namespace </span>std::placeholders;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordflow">while</span> ( d != <span class="keyword">nullptr</span> )</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      <a class="code" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> iholder(std::move(d));</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      ::wjson::json_error e;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      d = iholder.<a class="code" href="classwjrpc_1_1incoming__holder.html#af94aa95f7bf81780dbc98b7b73a18753">parse</a>(&amp;e);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      <span class="keywordflow">if</span> ( !e &amp;&amp; iholder )</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      {</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        this-&gt;<a class="code" href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">invoke</a>( std::move(iholder), [h](outgoing_holder oholder)</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        {</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;          h(oholder.detach());</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        });</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      }</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;      <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      {</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        aux::send_error_raw( std::move(iholder), std::make_unique&lt;parse_error&gt;(), h );</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      }</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    }</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;  }</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  </div>
-<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a45b1843d7decb7bc455c93fbc74233a9">  148</a></span>&#160;  std::shared_ptr&lt;self&gt; <a class="code" href="classwjrpc_1_1handler.html#a45b1843d7decb7bc455c93fbc74233a9">clone</a>()</div>
+<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#aaa217c212f089e2c66a2d0e636fccf0d">  148</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classwjrpc_1_1handler.html#aaa217c212f089e2c66a2d0e636fccf0d">perform_string</a>(std::string str, std::function&lt;<span class="keywordtype">void</span>(std::string)&gt; h) </div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;  {</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keyword">auto</span> clon = std::make_shared&lt;self&gt;();</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">static_cast&lt;</span><a class="code" href="classwjrpc_1_1handler.html#ab07b0f92d46d02fe89ea63ab6ce4dec0">super</a>&amp;<span class="keyword">&gt;</span>(*clon) = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="code" href="classwjrpc_1_1handler.html#ab07b0f92d46d02fe89ea63ab6ce4dec0">super</a>&amp;<span class="keyword">&gt;</span>(*this);</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    clon-&gt;_io_id = _io_id;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordflow">return</span> clon;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    this-&gt;<a class="code" href="classwjrpc_1_1handler.html#a5d7ff546482634e9d4a948a2d7fb70f3">perform_data</a>( std::make_unique&lt;data_type&gt;( str.begin(), str.end() ), [h](<a class="code" href="namespacewjrpc.html#ab41235f2f2855017ca69215c09b3cc9c">data_ptr</a> d)</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    {</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      h( std::string(d-&gt;begin(), d-&gt;end()) );</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    });</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  }</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  <span class="keyword">struct </span>f_get_methods</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;  {</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    std::vector&lt;std::string&gt; result;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Tg&gt;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordtype">void</span> operator()(T&amp; t, fas::tag&lt;Tg&gt; )</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    {</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      result.push_back( t.get_aspect().template get&lt;Tg&gt;().name() );</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  };</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  <span class="keyword">mutable</span> <a class="code" href="classwjrpc_1_1handler.html#a6f5f99b05b677c333da4e2eae5d50f09">mutex_type</a> _mutex;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  <a class="code" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> _io_id = 0;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;};</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;} <span class="comment">// wjrpc</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  </div>
+<div class="line"><a name="l00156"></a><span class="lineno"><a class="line" href="classwjrpc_1_1handler.html#a45b1843d7decb7bc455c93fbc74233a9">  156</a></span>&#160;  std::shared_ptr&lt;self&gt; <a class="code" href="classwjrpc_1_1handler.html#a45b1843d7decb7bc455c93fbc74233a9">clone</a>()</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  {</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keyword">auto</span> clon = std::make_shared&lt;self&gt;();</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">static_cast&lt;</span><a class="code" href="classwjrpc_1_1handler.html#ab07b0f92d46d02fe89ea63ab6ce4dec0">super</a>&amp;<span class="keyword">&gt;</span>(*clon) = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="code" href="classwjrpc_1_1handler.html#ab07b0f92d46d02fe89ea63ab6ce4dec0">super</a>&amp;<span class="keyword">&gt;</span>(*this);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    clon-&gt;_io_id = _io_id;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordflow">return</span> clon;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;  }</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  <span class="keyword">struct </span>f_get_methods</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  {</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    std::vector&lt;std::string&gt; result;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Tg&gt;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keywordtype">void</span> operator()(T&amp; t, fas::tag&lt;Tg&gt; )</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    {</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      result.push_back( t.get_aspect().template get&lt;Tg&gt;().name() );</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    }</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  };</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  <span class="keyword">mutable</span> <a class="code" href="classwjrpc_1_1handler.html#a6f5f99b05b677c333da4e2eae5d50f09">mutex_type</a> _mutex;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  <a class="code" href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">io_id_t</a> _io_id = 0;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;};</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;} <span class="comment">// wjrpc</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasswjrpc_1_1handler_html_ad68c7423819516d783c705572f0b4b90"><div class="ttname"><a href="classwjrpc_1_1handler.html#ad68c7423819516d783c705572f0b4b90">wjrpc::handler::io_id_t</a></div><div class="ttdeci">super::io_id_t io_id_t</div><div class="ttdef"><b>Definition:</b> handler.hpp:46</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a13017310ab2a79ffe548e2f6b7b979ee"><div class="ttname"><a href="classwjrpc_1_1handler.html#a13017310ab2a79ffe548e2f6b7b979ee">wjrpc::handler::peeper</a></div><div class="ttdeci">peeper_type peeper() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:57</div></div>
 <div class="ttc" id="aclasswjrpc_1_1incoming__holder_html"><div class="ttname"><a href="classwjrpc_1_1incoming__holder.html">wjrpc::incoming_holder</a></div><div class="ttdoc">Предварительно распарсенное перемещаемое входящее JSONRPC-сообщение</div><div class="ttdef"><b>Definition:</b> incoming_holder.hpp:30</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_aaa217c212f089e2c66a2d0e636fccf0d"><div class="ttname"><a href="classwjrpc_1_1handler.html#aaa217c212f089e2c66a2d0e636fccf0d">wjrpc::handler::perform_string</a></div><div class="ttdeci">void perform_string(std::string str, std::function&lt; void(std::string)&gt; h)</div><div class="ttdef"><b>Definition:</b> handler.hpp:140</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_aaa217c212f089e2c66a2d0e636fccf0d"><div class="ttname"><a href="classwjrpc_1_1handler.html#aaa217c212f089e2c66a2d0e636fccf0d">wjrpc::handler::perform_string</a></div><div class="ttdeci">void perform_string(std::string str, std::function&lt; void(std::string)&gt; h)</div><div class="ttdef"><b>Definition:</b> handler.hpp:148</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a47475468d5344fd7139052d81eaf065c"><div class="ttname"><a href="classwjrpc_1_1handler.html#a47475468d5344fd7139052d81eaf065c">wjrpc::handler::target</a></div><div class="ttdeci">target_type target() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:52</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a7a4975c54ec02b5a0471e2a562ae1954"><div class="ttname"><a href="classwjrpc_1_1handler.html#a7a4975c54ec02b5a0471e2a562ae1954">wjrpc::handler::peeper_type</a></div><div class="ttdeci">super::peeper_type peeper_type</div><div class="ttdef"><b>Definition:</b> handler.hpp:40</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a686aafb2cedc27f0a981ba15e7809a73"><div class="ttname"><a href="classwjrpc_1_1handler.html#a686aafb2cedc27f0a981ba15e7809a73">wjrpc::handler::outgoing_handler_t</a></div><div class="ttdeci">super::outgoing_handler_t outgoing_handler_t</div><div class="ttdef"><b>Definition:</b> handler.hpp:47</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_a45b1843d7decb7bc455c93fbc74233a9"><div class="ttname"><a href="classwjrpc_1_1handler.html#a45b1843d7decb7bc455c93fbc74233a9">wjrpc::handler::clone</a></div><div class="ttdeci">std::shared_ptr&lt; self &gt; clone()</div><div class="ttdef"><b>Definition:</b> handler.hpp:148</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_a45b1843d7decb7bc455c93fbc74233a9"><div class="ttname"><a href="classwjrpc_1_1handler.html#a45b1843d7decb7bc455c93fbc74233a9">wjrpc::handler::clone</a></div><div class="ttdeci">std::shared_ptr&lt; self &gt; clone()</div><div class="ttdef"><b>Definition:</b> handler.hpp:156</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a29f68adf3a4e0ef9c78927d9fe85fa80"><div class="ttname"><a href="classwjrpc_1_1handler.html#a29f68adf3a4e0ef9c78927d9fe85fa80">wjrpc::handler::ptr</a></div><div class="ttdeci">std::shared_ptr&lt; self &gt; ptr</div><div class="ttdef"><b>Definition:</b> handler.hpp:36</div></div>
 <div class="ttc" id="anamespacewjrpc_html_afa70994f3457dbea5dc8718ca70972ed"><div class="ttname"><a href="namespacewjrpc.html#afa70994f3457dbea5dc8718ca70972ed">wjrpc::io_id_t</a></div><div class="ttdeci">size_t io_id_t</div><div class="ttdef"><b>Definition:</b> basic_types.hpp:15</div></div>
 <div class="ttc" id="atypes_8hpp_html"><div class="ttname"><a href="types_8hpp.html">types.hpp</a></div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a90b4445a23b271ff32eb29169465034d"><div class="ttname"><a href="classwjrpc_1_1handler.html#a90b4445a23b271ff32eb29169465034d">wjrpc::handler::interface_type</a></div><div class="ttdeci">super::interface_type interface_type</div><div class="ttdef"><b>Definition:</b> handler.hpp:38</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_a19010e5bd8827963334c6c85fe6c5efd"><div class="ttname"><a href="classwjrpc_1_1handler.html#a19010e5bd8827963334c6c85fe6c5efd">wjrpc::handler::start</a></div><div class="ttdeci">void start(O &amp;&amp;opt, io_id_t io_id)</div><div class="ttdef"><b>Definition:</b> handler.hpp:95</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_a19010e5bd8827963334c6c85fe6c5efd"><div class="ttname"><a href="classwjrpc_1_1handler.html#a19010e5bd8827963334c6c85fe6c5efd">wjrpc::handler::start</a></div><div class="ttdeci">void start(O &amp;&amp;opt, io_id_t io_id)</div><div class="ttdef"><b>Definition:</b> handler.hpp:103</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_ab07b0f92d46d02fe89ea63ab6ce4dec0"><div class="ttname"><a href="classwjrpc_1_1handler.html#ab07b0f92d46d02fe89ea63ab6ce4dec0">wjrpc::handler::super</a></div><div class="ttdeci">MethodList super</div><div class="ttdef"><b>Definition:</b> handler.hpp:37</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_acbba418dd6561c30ae397ff9cfde7be7"><div class="ttname"><a href="classwjrpc_1_1handler.html#acbba418dd6561c30ae397ff9cfde7be7">wjrpc::handler::options_type</a></div><div class="ttdeci">handler_options&lt; target_type, peeper_type &gt; options_type</div><div class="ttdef"><b>Definition:</b> handler.hpp:42</div></div>
 <div class="ttc" id="aclasswjrpc_1_1incoming__holder_html_af94aa95f7bf81780dbc98b7b73a18753"><div class="ttname"><a href="classwjrpc_1_1incoming__holder.html#af94aa95f7bf81780dbc98b7b73a18753">wjrpc::incoming_holder::parse</a></div><div class="ttdeci">data_ptr parse(json_error *e)</div><div class="ttdoc">Парсит буфер с jsonrpc-сообщением</div></div>
 <div class="ttc" id="aincoming__holder_8hpp_html"><div class="ttname"><a href="incoming__holder_8hpp.html">incoming_holder.hpp</a></div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_a1acbb24ff51d980ba3fd27c784144598"><div class="ttname"><a href="classwjrpc_1_1handler.html#a1acbb24ff51d980ba3fd27c784144598">wjrpc::handler::initialize</a></div><div class="ttdeci">void initialize(O &amp;&amp;opt)</div><div class="ttdef"><b>Definition:</b> handler.hpp:111</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_a1acbb24ff51d980ba3fd27c784144598"><div class="ttname"><a href="classwjrpc_1_1handler.html#a1acbb24ff51d980ba3fd27c784144598">wjrpc::handler::initialize</a></div><div class="ttdeci">void initialize(O &amp;&amp;opt)</div><div class="ttdef"><b>Definition:</b> handler.hpp:119</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_ad86b86e3c04200427c9e148dddd352a2"><div class="ttname"><a href="classwjrpc_1_1handler.html#ad86b86e3c04200427c9e148dddd352a2">wjrpc::handler::callback</a></div><div class="ttdeci">std::function&lt; void(std::unique_ptr&lt; Result &gt;)&gt; callback(T &amp;t, std::function&lt; void(std::unique_ptr&lt; Result &gt;)&gt; cb)</div><div class="ttdef"><b>Definition:</b> handler.hpp:74</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a2730f8f93b60a5f75ddfe8ab0f2f2303"><div class="ttname"><a href="classwjrpc_1_1handler.html#a2730f8f93b60a5f75ddfe8ab0f2f2303">wjrpc::handler::context</a></div><div class="ttdeci">const context_type &amp; context() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:67</div></div>
 <div class="ttc" id="anamespacewjrpc_html_a6d73d298cd081819906e55cb2b29cca9"><div class="ttname"><a href="namespacewjrpc.html#a6d73d298cd081819906e55cb2b29cca9">wjrpc::outgoing_handler_t</a></div><div class="ttdeci">std::function&lt; void(outgoing_holder) &gt; outgoing_handler_t</div><div class="ttdef"><b>Definition:</b> types.hpp:15</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_aeef80630208913a5e615fc900c7e5531"><div class="ttname"><a href="classwjrpc_1_1handler.html#aeef80630208913a5e615fc900c7e5531">wjrpc::handler::get_methods</a></div><div class="ttdeci">std::vector&lt; std::string &gt; get_methods() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:72</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_a73da229fb10d97d4684abad57fc05c62"><div class="ttname"><a href="classwjrpc_1_1handler.html#a73da229fb10d97d4684abad57fc05c62">wjrpc::handler::stop</a></div><div class="ttdeci">void stop()</div><div class="ttdef"><b>Definition:</b> handler.hpp:103</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_aeef80630208913a5e615fc900c7e5531"><div class="ttname"><a href="classwjrpc_1_1handler.html#aeef80630208913a5e615fc900c7e5531">wjrpc::handler::get_methods</a></div><div class="ttdeci">std::vector&lt; std::string &gt; get_methods() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:80</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_a73da229fb10d97d4684abad57fc05c62"><div class="ttname"><a href="classwjrpc_1_1handler.html#a73da229fb10d97d4684abad57fc05c62">wjrpc::handler::stop</a></div><div class="ttdeci">void stop()</div><div class="ttdef"><b>Definition:</b> handler.hpp:111</div></div>
 <div class="ttc" id="anamespacewjrpc_html_a743adeb08a0fa4f7c974a409f9c13c1c"><div class="ttname"><a href="namespacewjrpc.html#a743adeb08a0fa4f7c974a409f9c13c1c">wjrpc::output_handler_t</a></div><div class="ttdeci">std::function&lt; void(data_ptr) &gt; output_handler_t</div><div class="ttdef"><b>Definition:</b> basic_types.hpp:23</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a4540447af6b026f1470da29b8438e0a0"><div class="ttname"><a href="classwjrpc_1_1handler.html#a4540447af6b026f1470da29b8438e0a0">wjrpc::handler::context_type</a></div><div class="ttdeci">super::context_type context_type</div><div class="ttdef"><b>Definition:</b> handler.hpp:41</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_a6f5f99b05b677c333da4e2eae5d50f09"><div class="ttname"><a href="classwjrpc_1_1handler.html#a6f5f99b05b677c333da4e2eae5d50f09">wjrpc::handler::mutex_type</a></div><div class="ttdeci">super::mutex_type mutex_type</div><div class="ttdef"><b>Definition:</b> handler.hpp:48</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_af79feae0b429c2e07dc6429ea856ff77"><div class="ttname"><a href="classwjrpc_1_1handler.html#af79feae0b429c2e07dc6429ea856ff77">wjrpc::handler::context</a></div><div class="ttdeci">context_type &amp; context()</div><div class="ttdef"><b>Definition:</b> handler.hpp:62</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_a5d7ff546482634e9d4a948a2d7fb70f3"><div class="ttname"><a href="classwjrpc_1_1handler.html#a5d7ff546482634e9d4a948a2d7fb70f3">wjrpc::handler::perform_data</a></div><div class="ttdeci">void perform_data(data_ptr d, output_handler_t h)</div><div class="ttdef"><b>Definition:</b> handler.hpp:117</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_a5d7ff546482634e9d4a948a2d7fb70f3"><div class="ttname"><a href="classwjrpc_1_1handler.html#a5d7ff546482634e9d4a948a2d7fb70f3">wjrpc::handler::perform_data</a></div><div class="ttdeci">void perform_data(data_ptr d, output_handler_t h)</div><div class="ttdef"><b>Definition:</b> handler.hpp:125</div></div>
 <div class="ttc" id="anamespacewjrpc_html"><div class="ttname"><a href="namespacewjrpc.html">wjrpc</a></div><div class="ttdef"><b>Definition:</b> engine.hpp:19</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_adb1fd892f2dbec6982e71380c54349fc"><div class="ttname"><a href="classwjrpc_1_1handler.html#adb1fd892f2dbec6982e71380c54349fc">wjrpc::handler::get_id</a></div><div class="ttdeci">io_id_t get_id() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:89</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_aa0f34ba6fea54a1f78a5fed0c1651159"><div class="ttname"><a href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">wjrpc::handler::invoke</a></div><div class="ttdeci">void invoke(incoming_holder holder, outgoing_handler_t outgoing_handler)</div><div class="ttdef"><b>Definition:</b> handler.hpp:78</div></div>
-<div class="ttc" id="aclasswjrpc_1_1handler_html_aa2b90d6be4ece84285bca6d675f2fcd8"><div class="ttname"><a href="classwjrpc_1_1handler.html#aa2b90d6be4ece84285bca6d675f2fcd8">wjrpc::handler::status</a></div><div class="ttdeci">bool status() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:84</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_aa0f34ba6fea54a1f78a5fed0c1651159"><div class="ttname"><a href="classwjrpc_1_1handler.html#aa0f34ba6fea54a1f78a5fed0c1651159">wjrpc::handler::invoke</a></div><div class="ttdeci">void invoke(incoming_holder holder, outgoing_handler_t outgoing_handler)</div><div class="ttdef"><b>Definition:</b> handler.hpp:86</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_aa2b90d6be4ece84285bca6d675f2fcd8"><div class="ttname"><a href="classwjrpc_1_1handler.html#aa2b90d6be4ece84285bca6d675f2fcd8">wjrpc::handler::status</a></div><div class="ttdeci">bool status() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:92</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html"><div class="ttname"><a href="classwjrpc_1_1handler.html">wjrpc::handler</a></div><div class="ttdoc">JSONRPC обработчик.</div><div class="ttdef"><b>Definition:</b> handler.hpp:30</div></div>
+<div class="ttc" id="aclasswjrpc_1_1handler_html_aa6df2455c7bb57bf3dca678d66e90f4f"><div class="ttname"><a href="classwjrpc_1_1handler.html#aa6df2455c7bb57bf3dca678d66e90f4f">wjrpc::handler::get_io_id</a></div><div class="ttdeci">io_id_t get_io_id() const</div><div class="ttdef"><b>Definition:</b> handler.hpp:97</div></div>
 <div class="ttc" id="anamespacewjrpc_html_ab41235f2f2855017ca69215c09b3cc9c"><div class="ttname"><a href="namespacewjrpc.html#ab41235f2f2855017ca69215c09b3cc9c">wjrpc::data_ptr</a></div><div class="ttdeci">std::unique_ptr&lt; data_type &gt; data_ptr</div><div class="ttdef"><b>Definition:</b> basic_types.hpp:17</div></div>
 <div class="ttc" id="aclasswjrpc_1_1handler_html_aa179036d38062878a3045f2d9e344481"><div class="ttname"><a href="classwjrpc_1_1handler.html#aa179036d38062878a3045f2d9e344481">wjrpc::handler::target_type</a></div><div class="ttdeci">super::target_type target_type</div><div class="ttdef"><b>Definition:</b> handler.hpp:39</div></div>
 <!-- start footer part -->

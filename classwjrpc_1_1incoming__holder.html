@@ -197,9 +197,15 @@ $(function() {
 <tr class="memitem:ab68b761d268062b611e3dd1ef7721455"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacewjrpc.html#ab41235f2f2855017ca69215c09b3cc9c">data_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1incoming__holder.html#ab68b761d268062b611e3dd1ef7721455">acquire_params</a> ()</td></tr>
 <tr class="memdesc:ab68b761d268062b611e3dd1ef7721455"><td class="mdescLeft">&#160;</td><td class="mdescRight">в буфере сообщения оставить только JSON-объект <b>params</b> и извлечь его  <a href="classwjrpc_1_1incoming__holder.html#ab68b761d268062b611e3dd1ef7721455">Подробнее...</a><br /></td></tr>
 <tr class="separator:ab68b761d268062b611e3dd1ef7721455"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a810dc7ffd35707cbbb4c1ce624f130fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1incoming__holder.html#a810dc7ffd35707cbbb4c1ce624f130fd">clone</a> () const</td></tr>
-<tr class="memdesc:a810dc7ffd35707cbbb4c1ce624f130fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">сделать дубликат текущего объекта  <a href="classwjrpc_1_1incoming__holder.html#a810dc7ffd35707cbbb4c1ce624f130fd">Подробнее...</a><br /></td></tr>
-<tr class="separator:a810dc7ffd35707cbbb4c1ce624f130fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af36125b04d80320615b012fd26212118"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1incoming__holder.html#af36125b04d80320615b012fd26212118">clone_request</a> (<a class="el" href="namespacewjrpc.html#a54ce9913ec564ec008003f81f4d25a81">call_id_t</a> new_id) const</td></tr>
+<tr class="memdesc:af36125b04d80320615b012fd26212118"><td class="mdescLeft">&#160;</td><td class="mdescRight">сделать дубликат запроса с новым id. Уведомление клонируеться как запрос  <a href="classwjrpc_1_1incoming__holder.html#af36125b04d80320615b012fd26212118">Подробнее...</a><br /></td></tr>
+<tr class="separator:af36125b04d80320615b012fd26212118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35621b0acb1d36a0439a1e91c3472a7a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1incoming__holder.html#a35621b0acb1d36a0439a1e91c3472a7a">clone_notify</a> () const</td></tr>
+<tr class="memdesc:a35621b0acb1d36a0439a1e91c3472a7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">сделать дубликат уведомления. Запрос клонируеться как уведомление  <a href="classwjrpc_1_1incoming__holder.html#a35621b0acb1d36a0439a1e91c3472a7a">Подробнее...</a><br /></td></tr>
+<tr class="separator:a35621b0acb1d36a0439a1e91c3472a7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79085f242a473f93594a210005d45ce9"><td class="memTemplParams" colspan="2">template&lt;typename Id &gt; </td></tr>
+<tr class="memitem:a79085f242a473f93594a210005d45ce9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1incoming__holder.html#a79085f242a473f93594a210005d45ce9">clone</a> (Id &amp;id) const</td></tr>
+<tr class="separator:a79085f242a473f93594a210005d45ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a637a3c9ecc8311222e6e04c048bf7e80"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwjrpc_1_1incoming__holder.html#a637a3c9ecc8311222e6e04c048bf7e80">str</a> () const</td></tr>
 <tr class="memdesc:a637a3c9ecc8311222e6e04c048bf7e80"><td class="mdescLeft">&#160;</td><td class="mdescRight">строка с исходным JSONRPC-сообщением  <a href="classwjrpc_1_1incoming__holder.html#a637a3c9ecc8311222e6e04c048bf7e80">Подробнее...</a><br /></td></tr>
 <tr class="separator:a637a3c9ecc8311222e6e04c048bf7e80"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -642,14 +648,42 @@ $(function() {
 
 </div>
 </div>
-<a id="a810dc7ffd35707cbbb4c1ce624f130fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a810dc7ffd35707cbbb4c1ce624f130fd">&#9670;&nbsp;</a></span>clone()</h2>
+<a id="a79085f242a473f93594a210005d45ce9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79085f242a473f93594a210005d45ce9">&#9670;&nbsp;</a></span>clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Id &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> wjrpc::incoming_holder::clone </td>
+          <td>(</td>
+          <td class="paramtype">Id &amp;&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a35621b0acb1d36a0439a1e91c3472a7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35621b0acb1d36a0439a1e91c3472a7a">&#9670;&nbsp;</a></span>clone_notify()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> wjrpc::incoming_holder::clone </td>
+          <td class="memname"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> wjrpc::incoming_holder::clone_notify </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -657,7 +691,27 @@ $(function() {
       </table>
 </div><div class="memdoc">
 
-<p>сделать дубликат текущего объекта </p>
+<p>сделать дубликат уведомления. Запрос клонируеться как уведомление </p>
+
+</div>
+</div>
+<a id="af36125b04d80320615b012fd26212118"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af36125b04d80320615b012fd26212118">&#9670;&nbsp;</a></span>clone_request()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwjrpc_1_1incoming__holder.html">incoming_holder</a> wjrpc::incoming_holder::clone_request </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacewjrpc.html#a54ce9913ec564ec008003f81f4d25a81">call_id_t</a>&#160;</td>
+          <td class="paramname"><em>new_id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>сделать дубликат запроса с новым id. Уведомление клонируеться как запрос </p>
 
 </div>
 </div>
