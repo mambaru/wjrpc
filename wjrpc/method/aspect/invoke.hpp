@@ -64,36 +64,36 @@ struct invoke: Handler
       return;
     }
 
-    if ( holder.is_notify() || outgoing_handler==nullptr )
+    /*if ( holder.is_notify() || outgoing_handler==nullptr )
     {
       Handler::operator()( t, std::move(req) );
     }
     else
-    {
-      using namespace std::placeholders;
-      auto ph = std::make_shared<incoming_holder>( std::move(holder) );
-      Handler::operator()( t, std::move(req), 
-        [ph, outgoing_handler]( result_ptr result, error_ptr err )
+    {*/
+    using namespace std::placeholders;
+    auto ph = std::make_shared<incoming_holder>( std::move(holder) );
+    Handler::operator()( t, std::move(req),
+      [ph, outgoing_handler]( result_ptr result, error_ptr err )
+      {
+        if (err == nullptr )
         {
-          if (err == nullptr )
-          {
-            TT::template send_result<T, result_json_t>( 
-              std::move(*ph),
-              std::move(result),
-              std::move(outgoing_handler) 
-            );
-          }
-          else
-          {
-            TT::template send_error<T, error_json_t>( 
-              std::move(*ph), 
-              std::move(err), 
-              std::move(outgoing_handler)
-            );
-          }
+          TT::template send_result<T, result_json_t>(
+            std::move(*ph),
+            std::move(result),
+            std::move(outgoing_handler)
+          );
         }
-      );
-    }
+        else
+        {
+          TT::template send_error<T, error_json_t>(
+            std::move(*ph),
+            std::move(err),
+            std::move(outgoing_handler)
+          );
+        }
+      }
+    );
+    /*}*/
   }
   
   template <typename OItr>

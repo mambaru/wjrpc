@@ -40,7 +40,8 @@ struct mem_fun_handler2
   typedef std::unique_ptr< error> json_error_ptr;
   typedef std::function< void(responce_ptr, json_error_ptr) > jsonrpc_callback;
 
-    template<typename T>
+  /*
+  template<typename T>
   void operator()(T& t, request_ptr req) const
   {
     if ( auto i = t.target() )
@@ -54,6 +55,7 @@ struct mem_fun_handler2
       );
     }
   }
+  */
 
   template<typename T>
   void operator()(T& t, request_ptr req, jsonrpc_callback cb) const
