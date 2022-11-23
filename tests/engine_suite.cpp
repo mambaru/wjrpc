@@ -145,13 +145,9 @@ UNIT(engine1, "")
   engine_type::options_type opt;
   auto pcalc = std::make_shared<calc>();
   opt.target = pcalc;
-  /*opt.sender_handler = [](const char*, notify_serializer_t, request_serializer_t, result_handler_t )
-  {
-
-  };*/
   auto e = std::make_shared<engine_type>();
   e->start(opt, 1);
-  std::string sreq = "{\"method\":\"plus\",\"params\":{\"first\":2, \"second\":3},\"id\":1}";
+  std::string sreq = "{'method':'plus','params':{'first':2, 'second':3},'id':1}"_json;
   e->perform_io( std::make_unique<data_type>(sreq.begin(), sreq.end()), 1, [&t](data_ptr d)
   {
     using namespace ::fas::testing;
@@ -159,6 +155,18 @@ UNIT(engine1, "")
     t << message("responce: ") << ress;
     t << equal<expect, std::string>( ress, "{'jsonrpc':'2.0','result':{'value':5},'id':1}"_json);
   });
+
+  std::string sntf = "{'method':'plus','params':{'first':2, 'second':3}}"_json;
+  e->perform_io( std::make_unique<data_type>(sntf.begin(), sntf.end()), 1, [&t](data_ptr d)
+  {
+    abort();
+    using namespace ::fas::testing;
+    t << not_equal<assert, data_ptr>(d, nullptr) << FAS_FL;
+    t << stop;
+    t << is_true<expect>(false) << "Received a response from a notification: "
+      << std::string(d->begin(), d->end()) << FAS_FL;
+  });
+
 
   auto schl = e->create_schema({});
   std::string sch_json;

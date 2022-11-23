@@ -64,36 +64,50 @@ struct invoke: Handler
       return;
     }
 
-    /*if ( holder.is_notify() || outgoing_handler==nullptr )
+    if ( holder.is_notify() )
     {
-      Handler::operator()( t, std::move(req) );
+      // Для уведомления функция обратного вызова не требуется, но nullptr не компилируется
+      Handler::operator()( t, std::move(req), std::function<void(result_ptr, error_ptr)>() );
+    }
+    else if (holder.is_request() )
+    {
+      using namespace std::placeholders;
+      auto ph = std::make_shared<incoming_holder>( std::move(holder) );
+      Handler::operator()( t, std::move(req),
+        [ph, outgoing_handler]( result_ptr result, error_ptr err )
+        {
+          if (err == nullptr )
+          {
+            TT::template send_result<T, result_json_t>(
+              std::move(*ph),
+              std::move(result),
+              std::move(outgoing_handler)
+            );
+          }
+          else
+          {
+            TT::template send_error<T, error_json_t>(
+              std::move(*ph),
+              std::move(err),
+              std::move(outgoing_handler)
+            );
+          }
+        }
+      );
     }
     else
-    {*/
-    using namespace std::placeholders;
-    auto ph = std::make_shared<incoming_holder>( std::move(holder) );
-    Handler::operator()( t, std::move(req),
-      [ph, outgoing_handler]( result_ptr result, error_ptr err )
+    {
+      WJRPC_LOG_ERROR("jsonrpc::invoke Invalid Request or Notify: " << holder.str() );
+
+      if ( holder.has_id() && outgoing_handler!=nullptr )
       {
-        if (err == nullptr )
-        {
-          TT::template send_result<T, result_json_t>(
-            std::move(*ph),
-            std::move(result),
-            std::move(outgoing_handler)
-          );
-        }
-        else
-        {
-          TT::template send_error<T, error_json_t>(
-            std::move(*ph),
-            std::move(err),
-            std::move(outgoing_handler)
-          );
-        }
+        TT::template send_error<T, error_json_t>(
+          std::move(holder),
+          std::make_unique<invalid_request>(),
+          std::move(outgoing_handler)
+        );
       }
-    );
-    /*}*/
+    }
   }
   
   template <typename OItr>
@@ -113,7 +127,6 @@ struct invoke: Handler
   {
     return typename error_json_t::serializer()(error, oitr);
   }
-  
 };
 
 
