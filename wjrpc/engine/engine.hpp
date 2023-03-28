@@ -317,12 +317,12 @@ private:
       {
         auto call_id = pthis->_call_counter.fetch_add(1);
         pthis->_call_map.set(call_id, std::move(rh1));
-        auto d = std::move(rs1(name, call_id));
+        auto d = rs1(name, call_id);
         handler(std::move(d));
       }
       else if (ns1!=nullptr)
       {
-        auto d = std::move(ns1(name));
+        auto d = ns1(name);
         handler( std::move(d));
       }
       else
@@ -347,7 +347,7 @@ private:
         auto cid = pthis->_call_counter.fetch_add(1);
 
         pthis->_call_map.set(cid, std::move(rh1));
-        auto d = std::move( rs1(name, cid) );
+        auto d = rs1(name, cid);
 
         handler( std::move(d), io_id, [wthis, handler, io_id, cid](data_ptr d2)
         {
@@ -385,7 +385,7 @@ private:
       }
       else if ( ns1!=nullptr)
       {
-        auto d = std::move(ns1(name));
+        auto d = ns1(name);
         handler( std::move(d), io_id, nullptr);
       }
     };
@@ -446,7 +446,7 @@ private:
       }
       else
       {
-        handler( std::move(outgoing_holder()) );
+        handler( outgoing_holder() );
       }
     }; // opt.sender_handler
   }
