@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(wjrpc)
+project(wjrpc VERSION "0.9.8")
 
 include(cmake/ci.cmake)
 
@@ -21,7 +21,7 @@ if ( CMAKE_CXX_STANDARD EQUAL 20 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
 endif()
 
 wci_targets(wjrpc)
-target_include_directories(wjrpc PUBLIC ${wjrpc_SOURCE_DIR})
+target_include_directories(wjrpc PUBLIC $<BUILD_INTERFACE:${wjrpc_SOURCE_DIR}>)
 target_link_libraries(wjrpc PUBLIC wlog)
 
 
@@ -33,14 +33,4 @@ if ( BUILD_TESTING )
   endif()
 endif()
 
-set(CPACK_PACKAGE_NAME "wjrpc")
-set(CPACK_PACKAGE_VERSION_MAJOR "0")
-set(CPACK_PACKAGE_VERSION_MINOR "9")
-set(CPACK_PACKAGE_VERSION_PATCH "4")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/Readme.md")
-set(CPACK_PACKAGE_CONTACT "migashko@gmail.com")
-
-install(DIRECTORY wjrpc DESTINATION include FILES_MATCHING PATTERN "*.hpp" )
-install(TARGETS wjrpc LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-include(CPack)
+include(cmake/install.cmake)
