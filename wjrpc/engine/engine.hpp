@@ -73,6 +73,7 @@ public:
   {
     typename std::decay<O>::type opt = opt1;
 
+    _ignore_unknown_id = opt.ignore_unknown_id;
     if ( opt.disable_handler_map )
     {
       auto handler = std::make_shared<handler_type>();
@@ -299,7 +300,8 @@ private:
       {
         WJRPC_LOG_ERROR( "jsonrpc::engin incoming response with call_id=" << call_id << " id error. " << ::wjson::strerror::message_trace( e, holder.get().id.first, holder.get().id.second ) )
       }
-      handler( outgoing_holder() );
+      if ( !_ignore_unknown_id )
+        handler( outgoing_holder() );
     }
   }
 
@@ -487,6 +489,7 @@ private:
   handler_ptr _default_handler;
   std::atomic<time_t> _log_time1;
   std::atomic<time_t> _lost_results;
+  std::atomic<bool> _ignore_unknown_id;
 };
 
 }
