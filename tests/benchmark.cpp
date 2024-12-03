@@ -6,12 +6,15 @@
 #include <chrono>
 #include <iostream>
 
+namespace {
+
 typedef std::vector<int> param_type;
 typedef std::unique_ptr<param_type> param_ptr;
 typedef std::vector<char> data_type;
 typedef std::unique_ptr<data_type> data_ptr;
 
 typedef wjson::array< std::vector< wjson::value<int> > > param_json;
+
 void test1();
 void test2();
 void test3();
@@ -106,6 +109,8 @@ void test3()
   std::cout << std::string( output.begin(), output.end() ) << std::endl;
   std::cout << "test3: " << span << " microseconds " << rate << " persec" << std::endl;
 }
+
+} //namespace
 
 int main()
 {

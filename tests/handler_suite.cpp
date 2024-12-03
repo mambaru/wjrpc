@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <memory>
 
+namespace {
+
 struct nomethod:
   ::wjrpc::method_list<>
 {
@@ -318,6 +320,9 @@ UNIT(gen3, "")
   t << equal<assert, std::string>(schl[1].params, "[]") << FAS_FL;
   t << equal<assert, std::string>(schl[1].result, "[]") << FAS_FL;
 }
+
+}
+
 
 BEGIN_SUITE(handler_suite, "")
   ADD_UNIT(nohandler_unit)

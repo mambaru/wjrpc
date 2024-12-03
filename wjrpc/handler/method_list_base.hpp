@@ -196,7 +196,8 @@ public:
     }
     else
     {
-      WJRPC_LOG_FATAL(" (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this->_sender_handler==nullptr")
+      WJRPC_LOG_FATAL(" (ABORT) wjrpc::jsonrpc::method_list_base: The sender's handler is not specified. "
+                      "This is possible because the disable_handler_map option is installed on the client.")
     }
   }
 
