@@ -216,76 +216,77 @@ $(function() {
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    }</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    {</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      WJRPC_LOG_FATAL(<span class="stringliteral">&quot; (ABORT) wjrpc::jsonrpc::method_list_base::sender_handler this-&gt;_sender_handler==nullptr&quot;</span>)</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    }</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  }</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Schema&gt;</div>
-<div class="line"><a name="l00204"></a><span class="lineno"><a class="line" href="classwjrpc_1_1method__list__base.html#acb95713d18cea7f94501f9d428027907">  204</a></span>&#160;  <span class="keyword">static</span> std::vector&lt;Schema&gt; <a class="code" href="classwjrpc_1_1method__list__base.html#acb95713d18cea7f94501f9d428027907">create_schema_t</a>(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; names)</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  {</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> super::aspect::template select_group&lt;_method_&gt;::type method_tag_list_t;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    std::vector&lt;Schema&gt; sch_list;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    create_schema_(&amp;sch_list, names, method_tag_list_t());</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keywordflow">return</span> sch_list;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  }</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno"><a class="line" href="classwjrpc_1_1method__list__base.html#a34bac4cc8205d4310a085c929a5df4e0">  212</a></span>&#160;  <span class="keyword">typedef</span> std::vector&lt;default_schema&gt; <a class="code" href="classwjrpc_1_1method__list__base.html#a34bac4cc8205d4310a085c929a5df4e0">schema_list_t</a>;</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00214"></a><span class="lineno"><a class="line" href="classwjrpc_1_1method__list__base.html#a9e201adf86d01fcf4ce2d5a3e9f15d31">  214</a></span>&#160;  <span class="keyword">static</span> <a class="code" href="classwjrpc_1_1method__list__base.html#a34bac4cc8205d4310a085c929a5df4e0">schema_list_t</a> <a class="code" href="classwjrpc_1_1method__list__base.html#a9e201adf86d01fcf4ce2d5a3e9f15d31">create_schema</a>(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; names)</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;  {</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="keywordflow">return</span> create_schema_t&lt;default_schema&gt;(names);</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;  }</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Schema, <span class="keyword">typename</span> L, <span class="keyword">typename</span> R&gt;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> create_schema_(std::vector&lt;Schema&gt;* sch_list, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; names, fas::type_list&lt;L, R&gt;)</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;  {</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="keyword">typedef</span> L head_tag;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keyword">typedef</span> R tail_type;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> super::aspect::template advice_cast&lt;head_tag&gt;::type method_type;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    sch_list-&gt;push_back( method_type::template create_schema_t&lt;Schema&gt;(names) );</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    create_schema_(sch_list, names, tail_type() );</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;  }</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Schema&gt;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> create_schema_(std::vector&lt;Schema&gt;*,  <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp;, fas::empty_list)</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;  {</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;  }</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      WJRPC_LOG_FATAL(<span class="stringliteral">&quot; (ABORT) wjrpc::jsonrpc::method_list_base: The sender&#39;s handler is not specified. &quot;</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                      <span class="stringliteral">&quot;This is possible because the disable_handler_map option is installed on the client.&quot;</span>)</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    }</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  }</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Schema&gt;</div>
+<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="classwjrpc_1_1method__list__base.html#acb95713d18cea7f94501f9d428027907">  205</a></span>&#160;  <span class="keyword">static</span> std::vector&lt;Schema&gt; <a class="code" href="classwjrpc_1_1method__list__base.html#acb95713d18cea7f94501f9d428027907">create_schema_t</a>(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; names)</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  {</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> super::aspect::template select_group&lt;_method_&gt;::type method_tag_list_t;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    std::vector&lt;Schema&gt; sch_list;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    create_schema_(&amp;sch_list, names, method_tag_list_t());</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keywordflow">return</span> sch_list;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;  }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno"><a class="line" href="classwjrpc_1_1method__list__base.html#a34bac4cc8205d4310a085c929a5df4e0">  213</a></span>&#160;  <span class="keyword">typedef</span> std::vector&lt;default_schema&gt; <a class="code" href="classwjrpc_1_1method__list__base.html#a34bac4cc8205d4310a085c929a5df4e0">schema_list_t</a>;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno"><a class="line" href="classwjrpc_1_1method__list__base.html#a9e201adf86d01fcf4ce2d5a3e9f15d31">  215</a></span>&#160;  <span class="keyword">static</span> <a class="code" href="classwjrpc_1_1method__list__base.html#a34bac4cc8205d4310a085c929a5df4e0">schema_list_t</a> <a class="code" href="classwjrpc_1_1method__list__base.html#a9e201adf86d01fcf4ce2d5a3e9f15d31">create_schema</a>(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; names)</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;  {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <span class="keywordflow">return</span> create_schema_t&lt;default_schema&gt;(names);</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;  }</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Schema, <span class="keyword">typename</span> L, <span class="keyword">typename</span> R&gt;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> create_schema_(std::vector&lt;Schema&gt;* sch_list, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; names, fas::type_list&lt;L, R&gt;)</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;  {</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keyword">typedef</span> L head_tag;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keyword">typedef</span> R tail_type;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> super::aspect::template advice_cast&lt;head_tag&gt;::type method_type;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    sch_list-&gt;push_back( method_type::template create_schema_t&lt;Schema&gt;(names) );</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    create_schema_(sch_list, names, tail_type() );</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;  }</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Schema&gt;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> create_schema_(std::vector&lt;Schema&gt;*,  <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp;, fas::empty_list)</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;  {</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;  }</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Tg&gt;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;  <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> response_handler(</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="keyword">typename</span> <a class="code" href="structwjrpc_1_1method__list__base_1_1call__result__ptr.html#a1771663455375dfe4ba41e8a29f60d2c">call_result_ptr&lt;Tg&gt;::type</a> res,</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="keyword">typename</span> <a class="code" href="structwjrpc_1_1method__list__base_1_1call__error__ptr.html#a9128ed3bc577a7c674f62e4f57958d49">call_error_ptr&lt;Tg&gt;::type</a> err,</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">typename</span> <a class="code" href="structwjrpc_1_1method__list__base_1_1call__result__ptr.html#a1771663455375dfe4ba41e8a29f60d2c">call_result_ptr&lt;Tg&gt;::type</a>)&gt; result_callback,</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">typename</span> <a class="code" href="structwjrpc_1_1method__list__base_1_1call__error__ptr.html#a9128ed3bc577a7c674f62e4f57958d49">call_error_ptr&lt;Tg&gt;::type</a>)&gt; error_callback</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;  )</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;  {</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    self::aspect::template advice_cast&lt;_response_handler_&gt;::type</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        ::template process&lt;Tg&gt;(</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            std::move(res),</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            std::move(err),</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            std::move(result_callback),</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            std::move(error_callback)</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        );</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;  }</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;  <span class="keyword">friend</span> <span class="keyword">typename</span> super::aspect::template advice_cast&lt; _initialize_ &gt;::type;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> handler_types::sender_handler_t   sender_handler_t;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;  sender_handler_t _sender_handler = sender_handler_t(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;};</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;} <span class="comment">// wjrpc</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Tg&gt;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;  <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> response_handler(</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="keyword">typename</span> <a class="code" href="structwjrpc_1_1method__list__base_1_1call__result__ptr.html#a1771663455375dfe4ba41e8a29f60d2c">call_result_ptr&lt;Tg&gt;::type</a> res,</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keyword">typename</span> <a class="code" href="structwjrpc_1_1method__list__base_1_1call__error__ptr.html#a9128ed3bc577a7c674f62e4f57958d49">call_error_ptr&lt;Tg&gt;::type</a> err,</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">typename</span> <a class="code" href="structwjrpc_1_1method__list__base_1_1call__result__ptr.html#a1771663455375dfe4ba41e8a29f60d2c">call_result_ptr&lt;Tg&gt;::type</a>)&gt; result_callback,</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">typename</span> <a class="code" href="structwjrpc_1_1method__list__base_1_1call__error__ptr.html#a9128ed3bc577a7c674f62e4f57958d49">call_error_ptr&lt;Tg&gt;::type</a>)&gt; error_callback</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;  )</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;  {</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    self::aspect::template advice_cast&lt;_response_handler_&gt;::type</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        ::template process&lt;Tg&gt;(</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            std::move(res),</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            std::move(err),</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            std::move(result_callback),</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;            std::move(error_callback)</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        );</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;  }</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;  <span class="keyword">friend</span> <span class="keyword">typename</span> super::aspect::template advice_cast&lt; _initialize_ &gt;::type;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;  <span class="keyword">typedef</span> <span class="keyword">typename</span> handler_types::sender_handler_t   sender_handler_t;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;  sender_handler_t _sender_handler = sender_handler_t(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;};</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160; </div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;} <span class="comment">// wjrpc</span></div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html">wjrpc::method_list_base</a></div><div class="ttdoc">базовый класс для wjrpc::method_list</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:26</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a01a4776e0fa20b0a1a843756ebde1c95"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a01a4776e0fa20b0a1a843756ebde1c95">wjrpc::method_list_base::mutex_type</a></div><div class="ttdeci">super::aspect::template advice_cast&lt; _mutex_type_ &gt;::type mutex_type</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:51</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a186e75f68366f8dd43622a7e43a8a4ac"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a186e75f68366f8dd43622a7e43a8a4ac">wjrpc::method_list_base::~method_list_base</a></div><div class="ttdeci">~method_list_base()</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:87</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a27614bbfeae6db01aadb6d4254d2f6e6"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a27614bbfeae6db01aadb6d4254d2f6e6">wjrpc::method_list_base::call</a></div><div class="ttdeci">void call(ReqPtr req, std::function&lt; void(typename call_result_ptr&lt; Tg &gt;::type, typename call_error_ptr&lt; Tg &gt;::type)&gt; callback) const</div><div class="ttdoc">вызов &quot;удаленного&quot; метода</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:136</div></div>
-<div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a34bac4cc8205d4310a085c929a5df4e0"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a34bac4cc8205d4310a085c929a5df4e0">wjrpc::method_list_base::schema_list_t</a></div><div class="ttdeci">std::vector&lt; default_schema &gt; schema_list_t</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:212</div></div>
+<div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a34bac4cc8205d4310a085c929a5df4e0"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a34bac4cc8205d4310a085c929a5df4e0">wjrpc::method_list_base::schema_list_t</a></div><div class="ttdeci">std::vector&lt; default_schema &gt; schema_list_t</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:213</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a383c49fb56d62e9283491a7ac5b2c716"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a383c49fb56d62e9283491a7ac5b2c716">wjrpc::method_list_base::call_id_t</a></div><div class="ttdeci">handler_types::call_id_t call_id_t</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:54</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a3b09c223ffafda056f2845da53ff9327"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a3b09c223ffafda056f2845da53ff9327">wjrpc::method_list_base::peeper_type</a></div><div class="ttdeci">super::aspect::template advice_cast&lt; _peeper_ &gt;::type peeper_type</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:39</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a431e9d2828eae9744c1d80372971c645"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a431e9d2828eae9744c1d80372971c645">wjrpc::method_list_base::context_type</a></div><div class="ttdeci">super::aspect::template advice_cast&lt; _context_ &gt;::type context_type</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:47</div></div>
@@ -295,7 +296,7 @@ $(function() {
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a6f6ef1b19c0d9e41f40838ae555e31eb"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a6f6ef1b19c0d9e41f40838ae555e31eb">wjrpc::method_list_base::method_list_base</a></div><div class="ttdeci">method_list_base(method_list_base &amp;&amp;)=default</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a7a5debdc07545920b6a22ea066a5395e"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a7a5debdc07545920b6a22ea066a5395e">wjrpc::method_list_base::sender_handler</a></div><div class="ttdeci">void sender_handler(const char *method_name, notify_serializer_t ns1, request_serializer_t rs1, result_handler_t rh1) const</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:191</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a7af9e9bf6223ec14f09f87f809d8ee1d"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a7af9e9bf6223ec14f09f87f809d8ee1d">wjrpc::method_list_base::data_ptr</a></div><div class="ttdeci">handler_types::data_ptr data_ptr</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:63</div></div>
-<div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a9e201adf86d01fcf4ce2d5a3e9f15d31"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a9e201adf86d01fcf4ce2d5a3e9f15d31">wjrpc::method_list_base::create_schema</a></div><div class="ttdeci">static schema_list_t create_schema(const std::vector&lt; std::string &gt; &amp;names)</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:214</div></div>
+<div class="ttc" id="aclasswjrpc_1_1method__list__base_html_a9e201adf86d01fcf4ce2d5a3e9f15d31"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#a9e201adf86d01fcf4ce2d5a3e9f15d31">wjrpc::method_list_base::create_schema</a></div><div class="ttdeci">static schema_list_t create_schema(const std::vector&lt; std::string &gt; &amp;names)</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:215</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_aa2757af853cab5a19d5e1f762026a272"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#aa2757af853cab5a19d5e1f762026a272">wjrpc::method_list_base::request_serializer_t</a></div><div class="ttdeci">handler_types::request_serializer_t request_serializer_t</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:78</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_aa89e9497a563898bd8b36dfd0ccb174b"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#aa89e9497a563898bd8b36dfd0ccb174b">wjrpc::method_list_base::target_type</a></div><div class="ttdeci">super::aspect::template advice_cast&lt; _target_ &gt;::type target_type</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:35</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_aaa589badca6e68ab4010a9741b4705f8"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#aaa589badca6e68ab4010a9741b4705f8">wjrpc::method_list_base::error_ptr</a></div><div class="ttdeci">handler_types::error_ptr error_ptr</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:72</div></div>
@@ -306,7 +307,7 @@ $(function() {
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_ac6dc12511369015a462b6aeb5ed6e311"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#ac6dc12511369015a462b6aeb5ed6e311">wjrpc::method_list_base::method_list_base</a></div><div class="ttdeci">method_list_base(const method_list_base &amp;)=default</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_ac7afc41dba738763527601de6789ead9"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#ac7afc41dba738763527601de6789ead9">wjrpc::method_list_base::outgoing_handler_t</a></div><div class="ttdeci">handler_types::outgoing_handler_t outgoing_handler_t</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:75</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_ac86bdd14448e8dd5cad2a7509046935e"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#ac86bdd14448e8dd5cad2a7509046935e">wjrpc::method_list_base::result_handler_t</a></div><div class="ttdeci">handler_types::result_handler_t result_handler_t</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:84</div></div>
-<div class="ttc" id="aclasswjrpc_1_1method__list__base_html_acb95713d18cea7f94501f9d428027907"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#acb95713d18cea7f94501f9d428027907">wjrpc::method_list_base::create_schema_t</a></div><div class="ttdeci">static std::vector&lt; Schema &gt; create_schema_t(const std::vector&lt; std::string &gt; &amp;names)</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:204</div></div>
+<div class="ttc" id="aclasswjrpc_1_1method__list__base_html_acb95713d18cea7f94501f9d428027907"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#acb95713d18cea7f94501f9d428027907">wjrpc::method_list_base::create_schema_t</a></div><div class="ttdeci">static std::vector&lt; Schema &gt; create_schema_t(const std::vector&lt; std::string &gt; &amp;names)</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:205</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_ade86a6b0ceabe37ceed846ed15b21eb0"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#ade86a6b0ceabe37ceed846ed15b21eb0">wjrpc::method_list_base::io_id_t</a></div><div class="ttdeci">handler_types::io_id_t io_id_t</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:57</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_adf6f5f8eacd876550e91493545493dcc"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#adf6f5f8eacd876550e91493545493dcc">wjrpc::method_list_base::notify_serializer_t</a></div><div class="ttdeci">handler_types::notify_serializer_t notify_serializer_t</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:81</div></div>
 <div class="ttc" id="aclasswjrpc_1_1method__list__base_html_ae1c8efef1ee410236e99645b677cdfbc"><div class="ttname"><a href="classwjrpc_1_1method__list__base.html#ae1c8efef1ee410236e99645b677cdfbc">wjrpc::method_list_base::method_list_base</a></div><div class="ttdeci">method_list_base()</div><div class="ttdef"><b>Definition:</b> method_list_base.hpp:92</div></div>
