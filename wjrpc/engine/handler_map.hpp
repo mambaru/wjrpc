@@ -46,25 +46,31 @@ public:
 
   handler_ptr findocre(io_id_t io_id, bool reg_io, bool& reinit)
   {
+    handler_ptr handler;
+
     std::lock_guard<mutex_type> lk(_mutex);
     
     if ( _default!=nullptr )
     {
       reinit = false;
-      return _default->clone();
+      handler = _default->clone();
     }
-
-    auto itr = _handlers.find(io_id);
-    if ( itr != _handlers.end() )
+    else
     {
-      reinit = itr->second.reinit;
-      itr->second.reinit = reg_io;
-      return itr->second.first;
+      auto itr = _handlers.find(io_id);
+      if ( itr != _handlers.cend() )
+      {
+        reinit = itr->second.reinit;
+        itr->second.reinit = reg_io;
+        handler = itr->second.first;
+      }
+      else
+      {
+        reinit = true;
+        handler = std::make_shared<handler_type>();
+        _handlers[io_id] = data{handler, reg_io};
+      }
     }
-
-    reinit = true;
-    auto handler = std::make_shared<handler_type>();
-    _handlers[io_id] = data{handler, reg_io};
     return handler;
   }
 
