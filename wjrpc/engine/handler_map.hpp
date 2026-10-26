@@ -76,12 +76,17 @@ public:
 
   bool erase(io_id_t io_id)
   {
-    std::lock_guard<mutex_type> lk(_mutex);
-    auto itr = _handlers.find(io_id);
-    if ( itr == _handlers.end() )
-      return false;
-    itr->second.first->stop();
-    _handlers.erase(itr);
+    handler_ptr handler;
+    {
+      std::lock_guard<mutex_type> lk(_mutex);
+      auto itr = _handlers.find(io_id);
+      if ( itr == _handlers.end() )
+        return false;
+      handler = itr->second.first;
+      _handlers.erase(itr);
+    }
+    if ( handler != nullptr )
+      handler->stop();
     return true;
   }
 
